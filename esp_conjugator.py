@@ -1,3 +1,11 @@
+# TODO:
+# - Ver la forma de extraer el listado de verbos irregulares a un listado
+# externo que se cargue al cargar el conjugador.
+# - Agregar a verbos irregulares verbos finalizados con 'truir' y 'decir',
+# quitando las entradas individuales en el codigo para las distintas conjugaciones.
+# - Clarificar codificación.
+# - Testing.
+
 import fnmatch
 import copy
 from terminaltables import AsciiTable
@@ -5,6 +13,53 @@ from terminaltables import AsciiTable
 # Función auxiliar utilizada para reemplazar en una cadena de derecha a izquierda
 def replace_right(source, target, replacement, replacements=None):
     return replacement.join(source.rsplit(target, replacements))
+
+
+class Noun_modifier:
+    nacionalidades = ['inglés', 'francés', 'holandés', 'portugués', 'japonés']
+
+    grupo_01 = ['*a', '*e', '*o', '*á', '*é', '*ó']
+
+    grupo_02 = ['*ón', '*l', '*y', '*d', '*r']
+
+    grupo_03 = ['*ás', '*és', '*ís', '*ós', '*ús']
+
+    grupo_04 = ['*s', '*x']
+
+    grupo_05 = ['*z']
+
+    no_plural = ['este', 'oeste', 'norte', 'sur', 'sed', 'cariz', 'tez',
+    'caos', 'salud', 'grima', 'fénix', 'lsd', 'cocaína', 'merca']
+
+    def __init__(self):
+        pass
+
+    def a_plural(self, noun):
+        words = noun.split()
+        line = ''
+        first_flag = True
+        for word in words:
+            if first_flag:
+                first_flag = False
+            else:
+                line += ' '
+            if not word in self.no_plural:
+                if any(fnmatch.fnmatch(word, suffix) for suffix in self.grupo_01):
+                    line += word + 's'
+                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.grupo_02):
+                    line += word + 'es'
+                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.grupo_03):
+                    line += word + 'es'
+                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.grupo_04):
+                    line += word
+                else:
+                    line += word[:len(word)-1] + 'ces'
+            else:
+                line += word
+        if line == noun:
+            return ''
+        return line
+
 
 # Conjugator: provee diferentes funciones para conjugar verbos en español a los
 # siguientes tiempos:
@@ -144,10 +199,7 @@ class Conjugator:
     # singular para adaptarlo al "voseo" caracteristico del dialecto.
     # --> != 0: dialecto general. Se deja como valor numerico y no como booleano
     # pensando en la posibilidad de adaptar el conjugador a nuevos modos.
-    #
-    #
-    # TODO: Ver la forma de extraer el listado de verbos irregulares a un listado
-    # externo que se cargue al cargar el conjugador.
+
     def __init__(self, mode):
         self.mode = mode
         self.irregular_verbs['ir'] = {
@@ -606,7 +658,7 @@ class Conjugator:
                 'pret_perf': ['','','','','',''],
                 'pret_imperf': ['','','','','',''],
                 'fut': ['','','','','',''],
-                'impA': ['','','','','',''],
+                'impA': ['  ','','','','',''],
                 'impB': ['','','','','',''],
                 'impC': ['','','','','',''],
                 'condA': ['','','','','',''],
@@ -1465,7 +1517,7 @@ class Conjugator:
     # Las funciones/métodos implementados a continuación definen los cambios
     # a realizar para cada grupo particular de verbos irregulares.
     # Esto no incluye a los verbos incluidos en el diccionario de verbos
-    # irregulares, sino que atañe a los verbos en los 
+    # irregulares, sino que atañe a los verbos en los
     def irregular_cast_group_01(self, verb, base_verb):
         if verb in self.irregular_verbs_grupo_01_ar or verb in self.irregular_verbs_grupo_01_er or verb in self.irregular_verbs_grupo_01_ir:
             return replace_right(base_verb, 'e', 'ie', 1)
