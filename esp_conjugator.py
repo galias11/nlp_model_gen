@@ -29,7 +29,21 @@ class Noun_modifier:
     grupo_05 = ['*z']
 
     no_plural = ['este', 'oeste', 'norte', 'sur', 'sed', 'cariz', 'tez',
-    'caos', 'salud', 'grima', 'fénix', 'lsd', 'cocaína', 'merca']
+    'caos', 'salud', 'grima', 'fénix', 'lsd', 'cocaína', 'merca', 'ak47',
+    'alquitran negro', 'angel face nevada', 'azucar glass nevadito', 'azúcar mascabado',
+    'blanca nieve', 'blanca nieves papel', 'bolsa pase', 'botón de mezcal',
+    'bóxer', 'bud', 'burundanga', 'caspa del diablo', 'champiñones magicos',
+    'chespi piedra', 'chulas pops', 'cigarrillo de la risa', 'coca pericazo',
+    'cois pipian', 'coke polvo', 'crystal meth', 'dama blanca', 'de la buena',
+    'demonios amarillos', 'demonios rojos', 'dick', 'dios oculto', 'demonios azules',
+    'dulce nasal raya', 'ecstasy', 'farla rayuela', 'farlopa', 'fiesta blanca rieles',
+    'fafafa', 'fifi soda', 'flufli', 'flunitrazepam', 'fly', 'ganya', 'ghb',
+    'gis soplido', 'grapa suavena', 'h-eich', 'hielos rockstars', 'hofman',
+    'la dama', 'la droga del amor', 'la fina', 'la que tomaba maradona',
+    'ladys', 'n bomb', 'nieve boliviana', 'ninvana ice', 'northern lights',
+    'pasta base', 'polvo de angel', 'poxiran', 'resina de cannabis', 'rivotril',
+    'rohypnol', 'roofies', 'sales de baño', 'semillitas de la virgen', 'soña blanca',
+    'triki trakets', 'white rhine', 'white widow']
 
     def __init__(self):
         pass
@@ -52,8 +66,10 @@ class Noun_modifier:
                     line += word + 'es'
                 elif any(fnmatch.fnmatch(word, suffix) for suffix in self.grupo_04):
                     line += word
-                else:
+                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.grupo_05):
                     line += word[:len(word)-1] + 'ces'
+                else:
+                    line += word
             else:
                 line += word
         if line == noun:

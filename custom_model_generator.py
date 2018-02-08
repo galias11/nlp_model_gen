@@ -17,6 +17,7 @@
 
 import spacy
 from spacy.symbols import ORTH, LEMMA, POS, TAG, SHAPE
+from spacy.tokens import Doc, Span, Token
 import ast
 import os
 from os import scandir, getcwd
@@ -26,6 +27,9 @@ import fnmatch
 from .esp_conjugator import Conjugator
 from .esp_conjugator import Noun_modifier
 from termcolor import colored, cprint
+import importlib.util
+import sys
+
 
 DIC_PATH = "/home/infolab/Documentos/SAVE/Dictionaries/dictionary-es_A/"
 
@@ -81,7 +85,7 @@ class Tokenizer_rules_generator:
             os.mkdir(default_tmp_path)
 
 
-    def add_category(self, cat_name, cat_type, detection_msg, word_dict=[], search_dist=0):
+    def add_category(self, cat_name, cat_type, detection_msg='', word_dict=[], search_dist=0):
         if cat_type + '_' + cat_name in self.categories.keys():
             print('ERROR: La categoría ya existe')
             return
@@ -94,14 +98,14 @@ class Tokenizer_rules_generator:
             'name' : cat_name,
             'type' : cat_type,
             'default_dir' : cat_type + '__' + cat_name,
-            'dictionary' : word_dict
-            'search_dist' : search_dist
+            'dictionary' : word_dict,
+            'search_dist' : search_dist,
             'detection_msg' : detection_msg
         }
 
         self.categories[cat_type + '_' + cat_name] = new_category
 
-    def create_spacy_model(self, base_model, output_path):
+    def create_spacy_model(self, base_model):
         self.generate_verb_rules()
 
         self.generate_noun_rules()
@@ -118,59 +122,73 @@ class Tokenizer_rules_generator:
 
         generated_model = nlp
 
-        self.generate_search_functions()
+        print('Generando archivo de personalización de filtros...', end='')
+        self.generate_search_functions_file()
+        print('OK')
 
         print('Guardando nuevo modelo...', end=' ')
-        nlp.to_disk(output_path)
+        nlp.to_disk(self.default_path + self.path_separator() + 'spacy_model')
+        print('OK')
+
+    def load_custom_model(self, path):
+        print('Cargando modelo...', end='')
+        nlp = spacy.load(path + self.path_separator() + 'spacy_model')
+        print('OK')
+
+        print('Cargando funciones de busqueda...', end='')
+
+        sys.path.append(path)
+
+        import search_function_load_file
+
+        exec('search_function_load_file.load_search_functions()')
+
         print('OK')
 
 
-    def add_search_functions(self):
+        return nlp
 
-        dictionaries = []
-        for category in categories:
+    def generate_search_functions_file(self):
+
+        search_targets = []
+        for cat in self.categories:
+            category = self.categories[cat]
             if category['type'] == 'noun':
-                for topic in category['dictionary']
-                    dictionaries.append(topic[1])
+                for topic in category['dictionary']:
+                    search_targets.append({category['name'] + '_' + topic[0]:[topic[1], category['detection_msg'] + ' - ' + topic[0]]})
             else:
-                dictionaries.append(category['dictionary']) 
-        #target_comercio_dinero_sing = ast.literal_eval(open("Training/Models/Diccionarios/v2/Changed_words/len_1/Compra_venta/Nouns/Dinero/Diccionario/dict_dinero_sing.dic", "r").read())
-        #target_comercio_dinero_plur = ast.literal_eval(open("Training/Models/Diccionarios/v2/Changed_words/len_1/Compra_venta/Nouns/Dinero/Diccionario/dict_dinero_plur.dic", "r").read())
-        #target_comercio_vendor_sing = ast.literal_eval(open("/home/infolab/Documentos/SAVE/Training/Models/Diccionarios/v2/Changed_words/len_1/Compra_venta/Nouns/Vendedores/Diccionario/dict_vendors_sing.dic", "r").read())
-        #target_comercio_vendor_plur = ast.literal_eval(open("/home/infolab/Documentos/SAVE/Training/Models/Diccionarios/v2/Changed_words/len_1/Compra_venta/Nouns/Vendedores/Diccionario/dict_vendors_plur.dic", "r").read())
+                search_targets.append({category['name'] + '_acto':[category['dictionary'], category['detection_msg']]})
 
-        #target_droga_consumo = ['aspirar', 'consumir', 'fumanchar', 'fumar', 'inyectar', 'jalar', 'tomar']
-        #target_droga_droga = ast.literal_eval(open("Training/Models/Diccionarios/v2/Changed_words/len_1/Consumo/Nouns/Drogas/Dicccionario/diccionario_drogas.dic", "r").read())
+        arch = open(self.default_path + self.path_separator() + '__init__.py', 'w')
+        arch.write('from .search_function_load_file import *')
+        arch.close()
 
-        #is_comercio_acto_getter = lambda token: token.lemma_ in target_comercio_acto
-        #Token.set_extension('is_comercio_acto', getter=is_comercio_acto_getter)
-        #has_comercio_acto_getter = lambda obj: any([t._.is_comercio_acto for t in obj])
-        #Doc.set_extension('has_comercio_acto', getter=has_comercio_acto_getter)
-        #Span.set_extension('has_comercio_acto', getter=has_comercio_acto_getter)
+        arch = open(self.default_path + self.path_separator() + 'search_function_load_file.py', 'w')
 
-        #is_comercio_dinero_getter = lambda token: token.text in target_comercio_dinero_sing or token.text in target_comercio_dinero_plur
-        #Token.set_extension('is_comercio_dinero', getter=is_comercio_dinero_getter)
-        #has_comercio_dinero_getter = lambda obj: any([t._.is_comercio_dinero for t in obj])
-        #Doc.set_extension('has_comercio_dinero', getter=has_comercio_dinero_getter)
-        #Span.set_extension('has_comercio_dinero', getter=has_comercio_dinero_getter)
+        arch.write('from spacy.tokens import Doc, Span, Token\n\n')
+        arch.write('def load_search_functions():\n')
 
-        #is_comercio_vendor_getter = lambda token: token.text in target_comercio_vendor_sing or token.text in target_comercio_vendor_plur
-        #Token.set_extension('is_comercio_vendor', getter=is_comercio_vendor_getter)
-        #has_comercio_vendor_getter = lambda obj: any([t._.is_comercio_vendor for t in obj])
-        #Doc.set_extension('has_comercio_vendor', getter=has_comercio_vendor_getter)
-        #Span.set_extension('has_comercio_vendor', getter=has_comercio_vendor_getter)
+        for target in search_targets:
+            target_key = next(iter(target))
+            is_key = 'is_' + target_key
+            has_key = 'has_' + target_key
+            is_key_quoted = '\'is_' + target_key + '\''
+            has_key_quoted = '\'has_' + target_key + '\''
+            is_getter_key = 'is_' + target_key + '_getter'
+            has_getter_key = 'has_' + target_key + '_getter'
+            search_list = target_key + '_dict'
+            exec_string = '\t' + search_list + ' = ' + str(target[target_key][0]) + '\n'
+            exec_string += '\t' + is_getter_key + ' = lambda token: token.lemma_ in ' + search_list + '\n'
+            exec_string += '\t' + 'Token.set_extension(' + is_key_quoted + ', getter=' + is_getter_key + ') \n'
+            exec_string += '\t' + has_getter_key + '= lambda obj: any([t._.' + is_key + ' for t in obj]) \n'
+            exec_string += '\t' + 'Doc.set_extension(' + has_key_quoted + ', getter=' + has_getter_key + ') \n'
+            exec_string += '\t' + 'Span.set_extension(' + has_key_quoted + ', getter=' + has_getter_key + ') \n'
+            arch.write(exec_string)
+            arch.write('')
 
-        #is_droga_consumo_getter = lambda token: token.lemma_ in target_droga_consumo
-        #Token.set_extension('is_droga_consumo', getter=is_droga_consumo_getter)
-        #has_droga_consumo_getter = lambda obj: any([t._.is_droga_consumo for t in obj])
-        #Doc.set_extension('has_droga_consumo', getter=has_droga_consumo_getter)
-        #Span.set_extension('has_droga_consumo', getter=has_droga_consumo_getter)
+        arch.close()
 
-        #is_droga_getter = lambda token: token.text in target_droga_droga
-        #Token.set_extension('is_droga', getter=is_droga_getter)
-        #has_droga_getter = lambda obj: any([t._.is_droga for t in obj])
-        #Doc.set_extension('has_droga', getter=has_droga_getter)
-        #Span.set_extension('has_droga', getter=has_droga_getter)
+
 
     # Genera las conjugaciones para cada categoria del tipo verbo almacenada
     # junto con un diccionario de la misma.
@@ -361,11 +379,11 @@ class Tokenizer_rules_generator:
 
         self.token_selector(conj_dict['inf'][0], conj_dict['inf'][0], 'VERB', 'VERB_INF', output_dir + conj_dict['inf'][0] + ".rl", max_dist)
 
-        self.token_selector(conj_dict['ger'][0], conj_dict['ger'][0], 'VERB', 'VERB_GER', output_dir + conj_dict['ger'][0] + ".rl", max_dist)
+        self.token_selector(conj_dict['ger'][0], conj_dict['inf'][0], 'VERB', 'VERB_GER', output_dir + conj_dict['ger'][0] + ".rl", max_dist)
 
-        self.token_selector(conj_dict['part'][0], conj_dict['part'][0], 'VERB', 'VERB_PART_MASC', output_dir + conj_dict['part'][0] + ".rl", max_dist)
-        self.token_selector(conj_dict['part'][1], conj_dict['part'][1], 'VERB', 'VERB_PART_FEM', output_dir + conj_dict['part'][1] + ".rl", max_dist)
-        self.token_selector(conj_dict['part'][2], conj_dict['part'][2], 'VERB', 'VERB_PART_MASC', output_dir + conj_dict['part'][2] + ".rl", max_dist)
+        self.token_selector(conj_dict['part'][0], conj_dict['inf'][0], 'VERB', 'VERB_PART_MASC', output_dir + conj_dict['part'][0] + ".rl", max_dist)
+        self.token_selector(conj_dict['part'][1], conj_dict['inf'][0], 'VERB', 'VERB_PART_FEM', output_dir + conj_dict['part'][1] + ".rl", max_dist)
+        self.token_selector(conj_dict['part'][2], conj_dict['inf'][0], 'VERB', 'VERB_PART_MASC', output_dir + conj_dict['part'][2] + ".rl", max_dist)
 
         self.gen_lote_reglas(conj_dict['pres'][0], conj_dict['pres'][1], conj_dict['pres'][2], conj_dict['pres'][3], conj_dict['pres'][4], conj_dict['pres'][5], infinitive, 'PRES', output_dir, max_dist)
 

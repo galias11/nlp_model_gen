@@ -1,2 +1,2 @@
 from .esp_conjugator import *
-from .custom_token_generator import *
+from .custom_model_generator import *
