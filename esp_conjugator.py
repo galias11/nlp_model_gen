@@ -331,7 +331,7 @@ class Conjugator:
         self.irregular_verbs['estar'] = {
             'inf': ['estar'],
             'ger' : self.gerundio('estar', True),
-            'part': self.participio('erguir', True),
+            'part': self.participio('estar, True),
             'pres': ['estoy', 'estás', 'está', 'estamos', 'estáis', 'están'],
             'pret_perf': ['estuve', 'estuviste', 'estuvo', 'estuvimos', 'estuvisteis', 'estuvieron'],
             'pret_imperf': self.preterito_imperf_conj('estar', True ),
