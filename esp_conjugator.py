@@ -171,7 +171,7 @@ class Conjugator:
     irregular_verbs_grupo_05_ullir =['bullir', 'engullir', 'escabullir', 'zambullir']
 
     irregular_verbs_grupo_06_ir = ['comedir', 'competir', 'concebir', 'conseguir',
-    'corregir', 'derretir', 'despedir', 'desvestir', 'elegir', 'embestir', 'expedir',
+    'corregir', 'derretir', 'despedir', 'desvestir', 'distinguir', 'elegir', 'embestir', 'expedir',
     'gemir', 'impedir', 'investir', 'medir', 'pedir', 'perseguir', 'proseguir',
     'reelegir', 'regir', 'rendir', 'repetir', 'reseguir', 'revestir', 'seguir', 'servir',
     'transgredir', 'trasgredir', 'trasvestir', 'vestir']
@@ -331,7 +331,7 @@ class Conjugator:
         self.irregular_verbs['estar'] = {
             'inf': ['estar'],
             'ger' : self.gerundio('estar', True),
-            'part': self.participio('estar, True),
+            'part': self.participio('estar', True),
             'pres': ['estoy', 'estás', 'está', 'estamos', 'estáis', 'están'],
             'pret_perf': ['estuve', 'estuviste', 'estuvo', 'estuvimos', 'estuvisteis', 'estuvieron'],
             'pret_imperf': self.preterito_imperf_conj('estar', True ),
@@ -876,14 +876,15 @@ class Conjugator:
         base_verb = verb[0:len(verb)-2]
         car_flag = False
         zar_flag = False
+        guar_flag = False
         if not verb in self.irregular_verbs.keys() or force_conj:
             if fnmatch.fnmatch(verb, '*ar') or fnmatch.fnmatch(verb, '*ár'):
                 if fnmatch.fnmatch(verb, '*car'):
                     car_flag = True
                 if fnmatch.fnmatch(verb, '*zar'):
                     zar_flag = True
-                if fnmatch.fnmatch(verb, '*zar'):
-                    zar_flag = True
+                if fnmatch.fnmatch(verb, '*guar'):
+                    guar_flag = True
                 if fnmatch.fnmatch(verb, '*gar'):
                     suffix_conj = ['ué', 'aste', 'ó', 'amos', 'asteis', 'aron']
                 elif fnmatch.fnmatch(verb, '*guar'):
@@ -905,16 +906,23 @@ class Conjugator:
                 base_form = base_verb
 
             # Si el verbo infinitivo termina en ncer se modifica el singular
-            # de la tercera persona:
+            # de la primera persona:
             # c --> qu
             if car_flag and i in self.primera_persona and i in self.singular:
                 base_form = base_form[:len(base_form)-1] + 'qu'
 
             # Si el verbo infinitivo termina en zar se modifica el singular
-            # de la tercera persona:
+            # de la primera persona:
             # z --> c
             if zar_flag and i in self.primera_persona and i in self.singular:
                 base_form = base_form[:len(base_form)-1] + 'c'
+
+            # Si el verbo infinitivo termina en guar se modifica el singular
+            # de la primera persona:
+            # z --> c
+            if guar_flag and i in self.primera_persona and i in self.singular:
+                base_form = base_form[:len(base_form)-1]
+
 
             # Para los verbos contenidos en el grupo 04 se aplica el cambio de base
             # según lo definido para el preterito del grupo 04 de verbos irregulares.
@@ -955,7 +963,7 @@ class Conjugator:
 
 
             # Elimina la i sobrante que queda al conjugar estos verbos.
-            if i in self.tercera_persona and (verb in self.irregular_verbs_grupo_07_eir or verb in self.irregular_verbs_grupo_07_eñir or fnmatch.fnmatch(verb, '*uir')):
+            if i in self.tercera_persona and (verb in self.irregular_verbs_grupo_07_eir or verb in self.irregular_verbs_grupo_07_eñir or (fnmatch.fnmatch(verb, '*uir') and not verb in self.irregular_verbs_grupo_06_ir)):
                 suffix_conj[i] = suffix_conj[i][1:]
 
             # Elimina la i sobrante que queda al conjugar los verbos del grupo 04
@@ -1143,13 +1151,13 @@ class Conjugator:
 
             # Para los verbos terminados en 'uir' agrega una 'y' a la forma
             # base.
-            if fnmatch.fnmatch(verb, '*uir'):
+            if fnmatch.fnmatch(verb, '*uir') and not verb in self.irregular_verbs_grupo_06_ir:
                 base_form += 'y'
 
 
             # Elimina la i del sufijo para los verbos del grupo 04, 05 y los
             # terminados en 'uir'.
-            if verb in self.irregular_verbs_grupo_04_ducir or verb in self.irregular_verbs_grupo_05_er or verb in self.irregular_verbs_grupo_05_ñir or verb in self.irregular_verbs_grupo_05_ullir or verb in self.irregular_verbs_grupo_07_eir or verb in self.irregular_verbs_grupo_07_eñir or fnmatch.fnmatch(verb, '*uir') or fnmatch.fnmatch(verb, '*decir'):
+            if verb in self.irregular_verbs_grupo_04_ducir or verb in self.irregular_verbs_grupo_05_er or verb in self.irregular_verbs_grupo_05_ñir or verb in self.irregular_verbs_grupo_05_ullir or verb in self.irregular_verbs_grupo_07_eir or verb in self.irregular_verbs_grupo_07_eñir or (fnmatch.fnmatch(verb, '*uir') and not verb in self.irregular_verbs_grupo_06_ir) or fnmatch.fnmatch(verb, '*decir'):
                 if fnmatch.fnmatch(suffix_conj[i], 'i*'):
                     suffix_conj[i] = suffix_conj[i][1:]
 
@@ -1198,7 +1206,7 @@ class Conjugator:
             if fnmatch.fnmatch(verb, '*ir'):
                 if fnmatch.fnmatch(verb, '*gir'):
                     ger_gir_flag = True
-                if fnmatch.fnmatch(verb, '*guír'):
+                if fnmatch.fnmatch(verb, '*guir'):
                     guir_flag = True
                 if self.mode == 0:
                     suffix_conj = ['', 'í', 'a', 'amos', 'id', 'an']
@@ -1250,6 +1258,7 @@ class Conjugator:
                 # Cambio según los dispuesto para los verbos del grupo 06.
                 # e --> i
                 base_form = self.irregular_cast_group_06(verb, base_form)
+
 
                 # Cambio según los dispuesto para los verbos del grupo 07.
                 # e --> i
@@ -1324,11 +1333,11 @@ class Conjugator:
                 # Si el verbo infinitivo termina en guir:
                 # gu --> g
                 if guir_flag:
-                    base_form = base_form[:len(base_form)-2] + 'g'
+                    base_form = base_form[:len(base_form)-1]
 
-                # Si el verbo infinitivo termina en guir:
+                # Si el verbo infinitivo termina en guar:
                 # u --> ü
-                if guir_flag:
+                if guar_flag:
                     base_form = base_form[:len(base_form)-1] + 'ü'
 
             # Conjugacion para primera persona y tercera persona

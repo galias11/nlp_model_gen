@@ -549,9 +549,9 @@ class custom_token_generator:
     def __init__(self,token_text, token_lemma, token_pos, token_tag, min_dist):
         self.confuse_chars = {'v':['b'],'b':['v'],'n':['m'],'m':['n'],'c':['s', 'k', 'z'],
         's':['c','z'],'z':['s','c'],'q':['k'],'k':['q'],'qu':['k'],'k':['qu', 'c'],
-        'll':['y'],'y':['ll','i'],'i':['y'],'á':['a', 'ha'],'é':['e'],
-        'í':['i'],'ó':['o'],'ú':['u'], 'ha':['a'], 'he':['e'], 'hi':['i'], 'ho':['o'],
-        'hu':['u']}
+        'll':['y'],'y':['ll','i'],'i':['y'],'á':['a', 'ha'], 'a': ['ha'], 'é':['e'],
+        'e': ['he'], 'í':['i'],'ó':['o'],'ú':['u'], 'ha':['a'], 'he':['e'], 'hi':['i'],
+        'ho':['o'], 'hu':['u']}
 
         self.token_lemma = token_lemma
         self.token_pos = token_pos
