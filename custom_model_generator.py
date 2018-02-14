@@ -86,6 +86,32 @@ class Tokenizer_rules_generator:
 
 
     def add_category(self, cat_name, cat_type, detection_msg='', word_dict=[], search_dist=0):
+        """
+        Agrega una categoria con verbos o sustantivos a buscar por el modelo a generar.
+
+        Ejemplo de uso:
+        --> Verbos:
+        generator.add_category('compra_venta', 'verb', 'Detectado compra y venta',
+        ['comprar', 'vender', 'pagar', 'cobrar'], 2)
+
+        --> Sustantivos (Contiene una o más subcategorias)
+        generator.add_category('compra_venta', 'noun', 'Detectado compra y venta',
+        [['dinero', ['plata','peso','dinero']], ['agente', ['vendedor', 'comprador']]], 2)
+
+        :param cat_name: Cadena de caracteres con el nombre de la categoria.
+
+        :param cat_type: Cadena de caracteres con el tipo de la categoria, actualmente
+        solo se soportan 'verb' y 'noun'
+
+        :param detection_msg: Cadena de caracteres con un texto a mostrar cuando se detecta
+        indicios de lo buscado.
+
+        :param word_dict: Diccionarios de terminos, ver ejemplos para sustantivos y para
+        verbos.
+
+        :param search_dist: Distancia máxima de demerau_levenshtein admitiva para
+        una variación.
+        """
         if cat_type + '_' + cat_name in self.categories.keys():
             print('ERROR: La categoría ya existe')
             return
@@ -106,6 +132,18 @@ class Tokenizer_rules_generator:
         self.categories[cat_type + '_' + cat_name] = new_category
 
     def create_spacy_model(self, base_model):
+        """
+        A partir de las categorias guardadas en la clase genera las reglas personalizadas
+        para verbos y sustantivos. Luego carga un modelo de spacy base y modifica
+        su tokenizer con las reglas generadas previamente. Finalmente genera
+        un archivo .py con un modulo de funciones personalizadas para el analisis
+        de Token, Doc y Span.
+        Todo esto es salvado a disco en el directorio establecido como ruta por
+        defecto al momento de instanciar la clase.
+
+        :param base_model: Modelo de spacy base para generar el modelo personalizado.
+        Se recomienda descargar y utilizar 'es_core_news_md'
+        """
         self.generate_verb_rules()
 
         self.generate_noun_rules()
@@ -131,6 +169,13 @@ class Tokenizer_rules_generator:
         print('OK')
 
     def load_custom_model(self, path):
+        """
+        Carga un modelo personalizado generado con esta clase y carga su
+        modulo de funciones personalizadas a las clases Doc, Span y Token.
+
+        :return: Objeto con las mismas caracteristicas y funcionalidades que
+        brinda lo devuelto por 'spacy.load'
+        """
         print('Cargando modelo...', end='')
         nlp = spacy.load(path + self.path_separator() + 'spacy_model')
         print('OK')
@@ -149,6 +194,15 @@ class Tokenizer_rules_generator:
         return nlp
 
     def generate_search_functions_file(self):
+        """
+        Genera un archivo python con la definicion de las funciones personalizadas
+        para la busqueda de los topicos de cada una de las categorias definidas
+        en el atributo categories de esta clase. Dicho archivo queda disponible
+        para ser cargado y agregar las extensiones a las clases Token, Doc y Span.
+
+        La carga se realiza automáticamente si el modelo personalizado es cargado
+        mediante la función load_custom_model de esta clase.
+        """
 
         search_targets = []
         for cat in self.categories:
@@ -189,11 +243,15 @@ class Tokenizer_rules_generator:
         arch.close()
 
 
-
-    # Genera las conjugaciones para cada categoria del tipo verbo almacenada
-    # junto con un diccionario de la misma.
     def generate_verb_rules(self):
+        """
+        Genera todas las reglas necesarias para generar un nuevo modelo con el
+        tokenizer modificado a partir de las categorias guardadas en el atributo
+        categories de la clase. Para cada una de dichas categorias genera un
+        directorio separado dentro del directorio maestro del nuevo modelo.
 
+        Solo toma aquellas categorias que sean de tipo 'verb'
+        """
         for key in self.categories.keys():
             if self.categories[key]['type'] == 'verb':
 
@@ -221,6 +279,14 @@ class Tokenizer_rules_generator:
 
 
     def generate_noun_rules(self):
+        """
+        Genera todas las reglas necesarias para generar un nuevo modelo con el
+        tokenizer modificado a partir de las categorias guardadas en el atributo
+        categories de la clase. Para cada una de dichas categorias genera un
+        directorio separado dentro del directorio maestro del nuevo modelo.
+
+        Solo toma aquellas categorias que sean de tipo 'noun'
+        """
 
         for key in self.categories.keys():
             if self.categories[key]['type'] == 'noun':
@@ -253,51 +319,63 @@ class Tokenizer_rules_generator:
                 print('---> Archivos temporales de modelo generados.')
 
     def dictionary_to_disk(self, path, dictionary):
+        """
+        Guarda un diccionario a un archivo en disco.
+
+        :param path: ruta absoluta o relativa al archivo a crear.
+
+        :param dictionary: diccionario a guardar.
+        """
         arch = open(path, 'w')
         arch.write(str(dictionary))
         arch.close()
 
     def create_dir_if_not_exist(self, path):
+        """
+        Crea un directorio con el path pasado como parametro si es que no existe.
+
+        :param path: ruta absoluta o relativa del directorio.
+        """
         try:
             os.stat(path)
         except:
             os.mkdir(path)
 
     def path_separator(self):
-        if self.windows_mode:
-            path_split_token = '\\'
-        else:
-            path_split_token = '/'
+        """
+        Devuelve un separador de ruta estandár, modificar si se agregan nuevos
+        S.O.
+        """
+        path_split_token = '/'
         return path_split_token
 
     # Extrae un diccionario de un archivo y genera a partir de cada elemento del mismo
     # un archivo que contiene las deformaciones para dicho termino.
-    def dictionary_token_selector(self, dict_file, pos, tag, output_path, max_dist):
-        dictionary = self.extract_dict_from_file(dict_file)
-        for token in dictionary:
-            self.token_selector(token, token, pos, tag, output_path + token + ".rl", max_dist)
+    #def dictionary_token_selector(self, dict_file, pos, tag, output_path, max_dist):
+    #    dictionary = self.extract_dict_from_file(dict_file)
+    #    for token in dictionary:
+    #        self.token_selector(token, token, pos, tag, output_path + token + ".rl", max_dist)
 
 
-    def extract_dict_from_file(self, file_path):
-        arch = open(file_path, "r").read().replace("\'", "\"")
-        return ast.literal_eval(arch)
+    #def extract_dict_from_file(self, file_path):
+    #    arch = open(file_path, "r").read().replace("\'", "\"")
+    #    return ast.literal_eval(arch)
 
 
-    # add_rules_to_tokenizer()
-    # ***************************************************************************************
-    # Agrega a un determinado tokenizer las reglas adicionales para determinados tokens
-    # especificadas en un archivo.
-    # -> input:
-    #   <tokenizer>: Se trata de un tokenizer correspondiente a un nlp de spaCy. La sintaxis
-    #   estándar para obtener el tokenizer es:
-    #   cargar modelo de spaCy --> <spaCy model>.tokenizer
-    #   <file_name>: Nombre de archivo de un archivo de reglas para reconocimiento de token.
-    #   Es recomendable que solo se usen los archivos generados como output de la función
-    #   token_selector.
-    # -> output:
-    #   El tokenizer pasado como parametro se actualizar con las reglas especificadas
-    #   en el archivo.
+
     def add_rules_to_tokenizer(self, tokenizer, file_name):
+        """
+        Agrega a un determinado tokenizer las reglas adicionales para determinados tokens
+        especificadas en un archivo.
+
+        :param tokenizer: Se trata de un tokenizer correspondiente a un nlp de spaCy.
+        La sintaxis estándar para obtener el tokenizer es:
+        --> Cargar modelo de spaCy --> <spaCy model>.tokenizer
+
+        :param file_name>: Nombre de archivo de un archivo de reglas para reconocimiento
+        de token. Es recomendable que solo se usen los archivos generados como output
+        de la función token_selector.
+        """
         print('Agregando archivo ' + colored(file_name, 'green') + '...', end=' ')
         for token in ast.literal_eval(open(file_name, "r").read()):
             for key in token:
@@ -306,6 +384,15 @@ class Tokenizer_rules_generator:
 
 
     def add_changed_word_model(self, tokenizer, path):
+        """
+        Busca todos los archivos .rl contenidos en un directorio y todos sus
+        subdirectorios y los agrega al tokenizer pasado como parametro.
+
+        :param tokenizer: Debe ser un objeto instanciado de la clase Tokenizer
+        de la librería de spaCy.
+
+        :param path: Directorio base a partir del cual buscar los archivos .rl.
+        """
         for arch in scandir(path):
             if arch.is_dir():
                 self.add_changed_word_model(tokenizer, abspath(arch.path))
@@ -314,10 +401,21 @@ class Tokenizer_rules_generator:
 
 
     def gen_lote_reglas_sustantivos_completo(self, singular, max_dist, output_dir):
-        if not fnmatch.fnmatch(output_dir, '*/') and not self.windows_mode:
-            output_dir += '/'
-        elif self.windows_mode:
-            output_dir += '\\'
+        """
+        Recibe el singular de un sustantivo, a partir de este obtiene su plural
+        utilizando el la clase Noun_modifier del modulo esp_conjugator y genera
+        dos archivos de reglas para el tokenizer en el directorio pasado compo
+        parametro.
+
+        :param singular: Cadena de caracteres con la forma en singular del
+        termino.
+
+        :param max_dist: Distancia de levenshtein máxima admitida para las variaciones
+        de la palabra.
+
+        :param output_dir: Directorio donde se guardarán los nuevos archivos.
+        """
+        output_dir += self.path_separator()
 
         modifier = Noun_modifier()
         plural = modifier.a_plural(singular)
@@ -329,6 +427,26 @@ class Tokenizer_rules_generator:
 
 
     def gen_lote_reglas_sustantivo(self, singular, plural, lemma, path, max_dist):
+        """
+        Genera un lote de dos archivos de reglas para excepciones. Uno de los
+        archivo contiene las variaciones para el singular de la palbra y otro para
+        el plural de la misma.
+
+        Importante: Solo utilizar para sustantivo.
+
+        :param singular: Cadena de caracteres con la forma en singular de la
+        palabra.
+
+        :param plural: Cadena de caracteres con la forma en plural de la palabra.
+
+        :param lemma: Cadena de caracteres con la forma base o termino raíz
+        de la palabra.
+
+        :param path: Directorio de output para los archivos a generar.
+
+        :param max_dist: Distancia de demerau_levenshtein máxima a admitir para
+        las variaciones de las palabras.
+        """
         singular_conj = "self.token_selector(\"" + singular + "\",\"" + lemma + "\",\"NOUN\",\"NOUN_BASE_SING\",\"" + path + singular + ".rl\", " + str(max_dist) + ")"
         eval(singular_conj)
         if not (plural == '' or plural == singular):
@@ -336,28 +454,30 @@ class Tokenizer_rules_generator:
             eval(plural_conj)
 
 
-
-    # gen_lote_reglas_verbo_completo()
-    # ******************************************************************************
-    # Recibe un verbo en infinitivo, una distancia de demerau-levenshtein máxima y
-    # un directorio de output. A partir del verbo recibido genera las conjugaciones
-    # posibles utilizando esp_verb_conjugator y llama a token_selector para que lo
-    # deforme y lo guarde a disco en el directorio de output seleccionado.
-    #  -> input:
-    #   <Infinitivo> Verbo en infinitivo que debe ser conjugado. Debe ser una
-    #   cadena de caracteres terminada en uno de {'*ar', '*er', '*ir', '*ár',
-    #   '*ér', '*ír'}
-    #   <max_dist> Distancia de demerau_levenshtein máxima que se admite en las
-    #   deformaciones.
-    #   <output_dir> Directorio donde se guardarán los archivos de reglas. Debe
-    #   ser una cadena de caracteres que contenga una ruta válida a un directorio.
-    #   <mode> Valor entero, determina el modo del conjugador, con el parametro
-    #   en 0, se activa el modo 'vos' para la segunda persona singular. En otro,
-    #   caso esta desactivado.
-    #  -> output:
-    #   ... : Un archivo por cada conjugación conteniendo las variantes en la
-    #  escritura para cada uno.
     def gen_lote_reglas_verbos_completo(self, infinitive, max_dist, output_dir):
+        """
+        Recibe un verbo en infinitivo, una distancia de demerau-levenshtein máxima y
+        un directorio de output. A partir del verbo recibido genera las conjugaciones
+        posibles utilizando esp_verb_conjugator y llama a token_selector para que lo
+        deforme y lo guarde a disco en el directorio de output seleccionado.
+
+        :param infinitive: Verbo en infinitivo que debe ser conjugado. Debe ser una
+        cadena de caracteres terminada en uno de {'*ar', '*er', '*ir', '*ár',
+        '*ér', '*ír'}
+
+        :param max_dist: Distancia de demerau_levenshtein máxima que se admite en las
+        deformaciones.
+
+        :param output_dir: Directorio donde se guardarán los archivos de reglas. Debe
+        ser una cadena de caracteres que contenga una ruta válida a un directorio.
+
+        :param mode: Valor entero, determina el modo del conjugador, con el parametro
+        en 0, se activa el modo 'vos' para la segunda persona singular. En otro,
+        caso esta desactivado.
+
+        :output: Un archivo por cada conjugación conteniendo las variantes en la
+        escritura para cada uno.
+        """
         conj = Conjugator(0)
 
         if not any(fnmatch.fnmatch(infinitive, suffix) for suffix in ['*ar', '*er', '*ir', '*ár', '*ér', '*ír']):
@@ -368,10 +488,7 @@ class Tokenizer_rules_generator:
 
         print("Generando conjugaciones...", end='')
 
-        if not fnmatch.fnmatch(output_dir, '*/') and not self.windows_mode:
-            output_dir += '/'
-        elif self.windows_mode:
-            output_dir += '\\'
+        output_dir += self.path_separator()
 
         conj_dict = conj.generar_diccionario_conjugacion(infinitive)
 
@@ -406,28 +523,38 @@ class Tokenizer_rules_generator:
         print("Lote de reglas generado.")
 
 
-    # gen_lote_reglas()
-    # ***************************************************************************************
-    # Genera un lote completo de archivos de reglas para excepciones. Cada archivos
-    # contiene variantes de la conjugación para cada persona de un verbo en un
-    # determinado tiempo.
-    #  -> input:
-    #   <yo> Verbo conjugado para primera persona singular, escrito correctamente.
-    #   <tu> Verbo conjugado para segunda persona singular, escrito correctamente.
-    #   <el> Verbo conjugado para tercera persona singular, escrito correctamente.
-    #   <nos> Verbo conjugado para primera persona plural, escrito correctamento.
-    #   <vos> Verbo conjugado para segunda persona plural, escrito correctamento.
-    #   <ellos> Verbo conjugado para tercera persona plural, escrito correctamente.
-    #   <lemma> Verbo en infinitivo.
-    #   <tiempo> Tiempo verbal. Uno de: {PRES, PAST, FUT}
-    #   <path> Ruta de acceso al directorio del archivo a crear. Ej:
-    #   "/home/user/.../"
-    #   <max_dist> distancia de levenshtein máxima para que una variación de una palabra
-    #   sea tomada como tal.
-    #  -> output:
-    #   ... : Un archivo por cada conjugación conteniendo las variantes en la
-    #  escritura para cada uno.
     def gen_lote_reglas(self, yo, tu, el, nos, vos, ellos, lemma, tiempo, path, max_dist):
+        """
+        Genera un lote completo de archivos de reglas para excepciones. Cada archivo
+        contiene variantes de la conjugación para cada persona de un verbo en un
+        determinado tiempo.
+
+        Importante: Solo utilizar para verbos.
+
+        :param yo: Verbo conjugado para primera persona singular, escrito correctamente.
+
+        :param tu: Verbo conjugado para segunda persona singular, escrito correctamente.
+
+        :param el: Verbo conjugado para tercera persona singular, escrito correctamente.
+
+        :param nos: Verbo conjugado para primera persona plural, escrito correctamento.
+
+        :param vos: Verbo conjugado para segunda persona plural, escrito correctamento.
+
+        :param ellos: Verbo conjugado para tercera persona plural, escrito correctamente.
+
+        :param lemma: Verbo en infinitivo.
+
+        :param tiempo: Tiempo verbal. Uno de: {PRES, PAST, FUT, COND, IMP}
+
+        :param path: Ruta de acceso al directorio del archivo a crear. Ej: "/home/user/.../"
+
+        :param max_dist: Distancia de levenshtein máxima para que una variación de una
+        palabra para que sea tomada como válida.
+
+        : output: Un archivo por cada conjugación conteniendo las variantes en la
+        escritura para cada uno.
+        """
         if tiempo == 'IMP':
             yo_conj = "self.token_selector(\"" + yo + "\",\"" + lemma + "\",\"VERB\",\"VERB_PRES_1STPER_PLUR\",\"" + path + yo + ".rl\", " + str(max_dist) + ")"
         else:
@@ -446,23 +573,28 @@ class Tokenizer_rules_generator:
 
     # token_selector()
     # ************************************************************************************
-    # Genera una serie de entradas al tokenizer del procesador de lenguaje natural.
-    # A partir de un token bien escrito genera diferentes variaciones de dicho token
-    # y los muestra al usuario para que defina si dicha variaciòn puede ser tomada
-    # como una forma válida.
-    # -> Input:
-    #   <token_text>: Forma "bien escrita" de la palabra a deformar.
-    #   <lemma>: Forma base de la palabra (Ej. vende --> vender)
-    #   <pos>: (Part of speech) Define la funciòn que tendra la palabra en el texto.
-    #   (Ej. vender --> verbo)
-    #   <tag>: Es el <pos> profundizado. Por el momento se dispone de tags limitados.
-    #   Básicamente, extiende la descripción de la función del token en el documento.
-    #   <max_dist> distancia de levenshtein máxima para que una variación de una palabra
-    #   sea tomada como tal.
-    # -> Output:
-    #   Archivo (de texto plano) con una lista de la forma [<token_rule>]
-    #   <token_rule> = {<token_text>, [{<variation_text>, <lemma>, <pos>, <tag>, <shape>}]}
+    #
     def token_selector(self, token, lemma, pos, tag, output_file, max_dist):
+        """
+        Genera una serie de entradas al tokenizer del procesador de lenguaje natural.
+        A partir de un token bien escrito genera diferentes variaciones de dicho token
+        apoyandose en la clase custom_token_generator y los guarda a disco como
+        un archivo con el siguiente nombre: '<token>.rl'.
+        :param token: Cadena de caracteres con la forma "bien escrita" de la
+        palabra a deformar.
+
+        :param lemma: Forma base de la palabra (Ej. vende --> vender)
+
+        :param pos: (Part of speech) Define la funciòn que tendra la palabra
+        en el texto. (Ej. vender --> VERB)
+
+        :param tag: Es el <pos> profundizado. Por el momento se dispone de
+        tags limitados. Básicamente, extiende la descripción de la función del
+        token en el documento.
+
+        :param max_dist: Distancia de levenshtein máxima para que una variación
+        de una palabra sea tomada como válida.
+        """
         generator = custom_token_generator(token, lemma, pos, custom_token_generator.TAG_KEY[tag], max_dist)
         arch = open(output_file, 'w')
         if max_dist == 0:
@@ -472,12 +604,12 @@ class Tokenizer_rules_generator:
         arch.close()
 
 
-# Class: custom_token_generator()
-# ****************************************************************************************
-# Esta clase sirve como generador de variaciones para un token. Recibe un token, su
-# lemma, su pos (part of speech) y su tag. A partir de esto permite generar diferentes
-# variaciones en su escritura.
 class custom_token_generator:
+    """
+    Esta clase sirve como generador de variaciones para un token. Recibe un token, su
+    lemma, su pos (part of speech) y su tag. A partir de esto permite generar diferentes
+    variaciones en su escritura.
+    """
 
     # TAGs de modos verbales y sustantivos del modelo es_core_news_md de spaCy
     TAG_KEY = {
@@ -555,25 +687,85 @@ class custom_token_generator:
     'e': ['he'], 'í':['i'],'ó':['o'],'ú':['u'], 'ha':['a'], 'he':['e'], 'hi':['i'],
     'ho':['o'], 'hu':['u']}
 
-    # Constructor de clase
     def __init__(self,token_text, token_lemma, token_pos, token_tag, min_dist):
+        """
+        Constructor de la clase.
+
+        :param token_text: Cadena de caracteres con la palabra o termino
+        escrito correctamente, a partir de la misma se generarán reglas para
+        sus diferentes variaciones o deformaciones.
+
+        :param token_lemma: Cadena de caracteres con el termino raíz o fuente
+        de la palabra.
+        Por ejemplo en el caso de un verbo, la conjugación 'vendo', tiene como
+        raíz el termino 'vender'.
+
+        :param token_pos: Part of speech, es una cadena de caracteres que
+        describe la función de la palabra dentro de una oración.
+        Por ejemplo la palabra 'mercaderia' es un sustantivo, que se denotará
+        con 'NOUN'.
+        Por el momento solo se utilizan 'NOUN' y 'VERB'.
+
+        :param token_tag: Esta cadena de caracteres se utiliza como clave de
+        busqueda en la estructura TAG_KEY de esta clase. La función de los TAGs
+        es ampliar la descripción del termino dada por el POS.
+        Por ejemplo: 'vendió'' tiene como POS a 'VERB', sin embargo su TAG explica
+        un poco más, el tag correspondiente a este termino sería
+        'VERB_PAST_3RDPER_SING'.
+
+        :param min_dist: Refiere a cual es la máxima distancia de
+        demerau_levenshtein que puede tener la variación de un termino con
+        su correspondiente forma bien escrita. Es decir, si se inicializa
+        un objeto con min_dist = 2, las variaciones generadas podrán tener
+        una distancia de a lo sumo 2.
+        """
         self.token_lemma = token_lemma
         self.token_pos = token_pos
         self.token_tag = token_tag
         self.token_text = token_text
         self.min_dist = min_dist
 
-    # Devuelve la entrada del tokenizer sin realizarle ninguna variación.
     def no_variation_tokenizer_rule(self):
+        """
+        Genera una regla para el tokenizer con la forma:
+
+        {<variation>: [{ORTH:<variation>, LEMMA:<palabra raíz a la que refiere>,
+                        POS:<part of speech (verbo, sust, etc)>,
+                        TAG:<tag (profundiza el part of speech)>,
+                        SHAPE:<xxxxxxxxx (Ej. para 'variation')>]}
+
+        Donde en lugar de utilizar una variación utiliza el termino escrito
+        correctamente.
+
+        :return: Cadena de caracteres con una regla de entrada al tokenizer
+        para el termino escrito correctamente.
+        """
         return [{self.token_text:
         [{ORTH:self.token_text, LEMMA:self.token_lemma,
         POS:self.token_pos, TAG:self.token_tag,
         SHAPE:self.shape(self.token_text)}]}]
 
-    # Genera diferentes variaciones posibles para una palabra y genera un
-    # arreglo con tantas entradas al tokenizer como variaciones generadas.
     def gen_tokenizer_rules(self):
+        """
+        Genera diferentes variaciones posibles para la palabra con la que
+        fue instanciada la clase (ver string_variations()) y para cada una de
+        ellas genera una entrada en un arreglo con el formato de regla de
+        tokenizer de spacy.
+
+        {<variation>: [{ORTH:<variation>, LEMMA:<palabra raíz a la que refiere>,
+                        POS:<part of speech (verbo, sust, etc)>,
+                        TAG:<tag (profundiza el part of speech)>,
+                        SHAPE:<xxxxxxxxx (Ej. para 'variation')>]}
+
+        El LEMMA, POS y TAG son tomados de los valores con que es instanciada
+        la clase. Mientras que ORTH coindice con la variacion generada y SHAPE
+        se obtiene para cada variacion.
+
+        :return: Arreglo con una relga de tokenizer para cada variación generada
+        para la palabra con la que se instanció la clase.
+        """
         rules = []
+        rules.append(self.no_variation_tokenizer_rule())
         for variation in self.string_variations():
             rules.append({variation:
             [{ORTH:variation, LEMMA:self.token_lemma,
@@ -581,8 +773,20 @@ class custom_token_generator:
             SHAPE:self.shape(variation)}]})
         return rules
 
-    
+
     def string_variations(self):
+        """
+        Genera todas las posibles variaciones de la palabra con la que esta
+        instanciada la clase (eliminación, trasposición, sustitución y
+        duplicación) soportadas. De todas ellas filtra únicamente aquellas
+        cuya distancia de demerau_levenshtein sea menor a la distancia máxima
+        establecida para la clase y retorna un arreglo con aquellas que cumplan
+        dicha condición.
+
+        :return: Arreglo con todas las variaciones que puede generar la clase
+        para la palabra con la que fue instanciada, cuya distancia de
+        demerau_levenshtein es igual o menor a la establecida.
+        """
         variations_list = set([])
         char_del = self.random_char_del()
         char_duplicate = self.random_duplicate_char()
@@ -622,6 +826,15 @@ class custom_token_generator:
         return selected_variations
 
     def shape(self, string):
+        """
+        Da la forma de la palabra pasada como parametro. Por ejemplo si la
+        palabra pasada como parametro es 'Hola' devuelve 'Xxxx'
+
+        :param string: Palabra a partir de la cual se quiere obtener la forma.
+
+        :return: Cadena de caracteres que contiene la forma de la palabra
+        pasada como parametro.
+        """
         shape_string = ''
         for char in string:
             if not str(char).isspace():
@@ -631,6 +844,16 @@ class custom_token_generator:
         return shape_string
 
     def random_confuse_char(self, string):
+        """
+        Aplica cuatro veces consecutivas la confusión de caracteres a una
+        palabra.
+
+        :param string: palabra a la cual se le aplicarán los cambios de
+        caracter.
+
+        :return: Arreglo con todas las modificaciones a la palabra por cambio
+        de caracter.
+        """
         new_string_arr = []
         char_confuse = self.rnd_confuse_char(string)
         for token in char_confuse:
@@ -639,7 +862,8 @@ class custom_token_generator:
             char_confuse2 = self.rnd_confuse_char(string)
             for token in char_confuse:
                 new_string_arr.append(token)
-            for string2 in char_confuse2:
+            for string2 in c
+            har_confuse2:
                 char_confuse3 = self.rnd_confuse_char(string2)
                 for token in char_confuse3:
                     new_string_arr.append(token)
@@ -654,6 +878,16 @@ class custom_token_generator:
         return string_arr_sr
 
     def rnd_confuse_char(self, string):
+        """
+        Intercambia un caracter de la palabra pasada por parametro por otro
+        definido en el diccionario de confusiones.
+
+        :param string: Palabra a la cual se le deben aplicar los cambios
+        de caracter.
+
+        :return: Arreglo con las posibles confusiones de caracteres para una
+        palabra.
+        """
         new_string_arr = []
         counter = Counter()
         i = 0
@@ -686,6 +920,12 @@ class custom_token_generator:
         return new_string_arr
 
     def random_char_del(self):
+        """
+        Elimina un caracter de la palabra con la que fue instanciada la clase.
+
+        :return: Arreglo con todas las posibles eliminaciones de letras para
+        la palabra.
+        """
         i = len(self.token_text)
         j = 0
         new_string_arr = []
@@ -700,6 +940,9 @@ class custom_token_generator:
         return new_string_arr
 
     def swap(self, arr, p0, p1):
+        """
+        Función interna de swap.
+        """
         arr_list = list(arr)
         aux = arr_list[p0]
         arr_list[p0] = arr_list[p1]
@@ -707,6 +950,13 @@ class custom_token_generator:
         return "".join(arr_list)
 
     def random_char_change(self):
+        """
+        Realiza un intercambio entre dos caracteres consecutivos de la palabra
+        con la que fue instanciada la clase.
+
+        :return: Arreglo con todos los cambios de caracteres consecutivos posibles
+        para la palabra
+        """
         i = 0
         j = i + 1
         aux = ''
@@ -721,6 +971,11 @@ class custom_token_generator:
         return new_string_arr
 
     def random_duplicate_char(self):
+        """
+        Duplica un caracter de la palabra con la que fue instanciada la clase.
+
+        :return: Arreglo con todas las duplicaciones de caracteres posibles.
+        """
         i = 0
         j = len(self.token_text)
         new_string_arr = []
