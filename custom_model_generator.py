@@ -478,7 +478,8 @@ class Tokenizer_rules_generator:
 # lemma, su pos (part of speech) y su tag. A partir de esto permite generar diferentes
 # variaciones en su escritura.
 class custom_token_generator:
-    #TAGs de modos verbales (no incluye condicionales por ahora):
+
+    # TAGs de modos verbales y sustantivos del modelo es_core_news_md de spaCy
     TAG_KEY = {
     'VERB_INF' : "VERB__VerbForm=Inf",
     'VERB_GER' : "VERB__VerbForm=Ger",
@@ -546,25 +547,31 @@ class custom_token_generator:
     'NOUN_BASE_PLUR' : "NOUN__Number=Plur",
     'NOUN_BASE_SING' : "NOUN__Number=Sing"}
 
-    def __init__(self,token_text, token_lemma, token_pos, token_tag, min_dist):
-        self.confuse_chars = {'v':['b'],'b':['v'],'n':['m'],'m':['n'],'c':['s', 'k', 'z'],
-        's':['c','z'],'z':['s','c'],'q':['k'],'k':['q'],'qu':['k'],'k':['qu', 'c'],
-        'll':['y'],'y':['ll','i'],'i':['y'],'á':['a', 'ha'], 'a': ['ha'], 'é':['e'],
-        'e': ['he'], 'í':['i'],'ó':['o'],'ú':['u'], 'ha':['a'], 'he':['e'], 'hi':['i'],
-        'ho':['o'], 'hu':['u']}
+    # Diccionario de intercambios de letras. Contiene las confusiones más comunes
+    # al escribir en español.
+    confuse_chars = {'v':['b'],'b':['v'],'n':['m'],'m':['n'],'c':['s', 'k', 'z'],
+    's':['c','z'],'z':['s','c'],'q':['k'],'k':['q'],'qu':['k'],'k':['qu', 'c'],
+    'll':['y'],'y':['ll','i'],'i':['y'],'á':['a', 'ha'], 'a': ['ha'], 'é':['e'],
+    'e': ['he'], 'í':['i'],'ó':['o'],'ú':['u'], 'ha':['a'], 'he':['e'], 'hi':['i'],
+    'ho':['o'], 'hu':['u']}
 
+    # Constructor de clase
+    def __init__(self,token_text, token_lemma, token_pos, token_tag, min_dist):
         self.token_lemma = token_lemma
         self.token_pos = token_pos
         self.token_tag = token_tag
         self.token_text = token_text
         self.min_dist = min_dist
 
+    # Devuelve la entrada del tokenizer sin realizarle ninguna variación.
     def no_variation_tokenizer_rule(self):
         return [{self.token_text:
         [{ORTH:self.token_text, LEMMA:self.token_lemma,
         POS:self.token_pos, TAG:self.token_tag,
         SHAPE:self.shape(self.token_text)}]}]
 
+    # Genera diferentes variaciones posibles para una palabra y genera un
+    # arreglo con tantas entradas al tokenizer como variaciones generadas.
     def gen_tokenizer_rules(self):
         rules = []
         for variation in self.string_variations():
@@ -574,6 +581,7 @@ class custom_token_generator:
             SHAPE:self.shape(variation)}]})
         return rules
 
+    
     def string_variations(self):
         variations_list = set([])
         char_del = self.random_char_del()
