@@ -1,0 +1,9 @@
+{
+  "wordProcessor": {
+    "nounGroups": "src/packages/wordProcessor/spanishNounConversor/assets/nounGroups.json",
+    "nounPluralExceptions": "src/packages/wordProcessor/spanishNounConversor/assets/nounPluralExceptions.json",
+    "verbConfig": "src/packages/wordProcessor/spanishConjugator/assets/config.json",
+    "verbIrregularExceptions": "src/packages/wordProcessor/spanishConjugator/assets/verbIrregularExceptions.json",
+    "verbIrregularGroups": "src/packages/wordProcessor/spanishConjugator/assets/verbIrregularGroups.json"
+  }
+}

@@ -1,0 +1,3 @@
+constants = {
+    'PATH_SEPARATOR': '-'
+}
