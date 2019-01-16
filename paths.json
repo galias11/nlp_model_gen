@@ -1,5 +1,6 @@
 {
   "wordProcessor": {
+    "fuzzyTermsConfig": "src/packages/wordProcessor/spanishFuzzyTermsGenerator/assets/config.json",
     "nounGroups": "src/packages/wordProcessor/spanishNounConversor/assets/nounGroups.json",
     "nounPluralExceptions": "src/packages/wordProcessor/spanishNounConversor/assets/nounPluralExceptions.json",
     "verbConfig": "src/packages/wordProcessor/spanishConjugator/assets/config.json",
