@@ -1,2 +1,5 @@
 # Python cache
 __pycache__
+
+# VS code settings
+.vscode/*
