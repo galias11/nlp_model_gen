@@ -4,6 +4,9 @@ import itertools
 # @Utils
 from src.utils.fileUtils import loadDictFromJSONFile
 
+# @Constants
+from src.constants.constants import (WORD_PROCESOR_DEFAULT_THEME, WORD_PROCESOR_RESERVED_THEME)
+
 # @Helpers
 from .helpers.demerauDistanceHelper import damerau_levenshtein_distance
 from .helpers.fuzzyHelper import (
@@ -16,17 +19,29 @@ from .helpers.fuzzyHelper import (
 # @Assets
 config = loadDictFromJSONFile('wordProcessor-fuzzyTermsConfig')
 
-
-class CustomTokenGenerator:
+class FuzzyTermsGenerator:
     """
     Esta clase sirve como generador de variaciones para un token. A partir de un
     token permite generar diferentes variaciones en su escritura.
     """
 
-    def __init__(self):
+    def __init__(self, config_theme=WORD_PROCESOR_DEFAULT_THEME):
         self.transformations = [rnd_confuse_char, rnd_char_del, rnd_char_change, rnd_duplicate_char]
+        self.config_theme = config_theme if config_theme in config.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME else WORD_PROCESOR_DEFAULT_THEME
+        self.configs = {
+            'confuse_chars': config[self.config_theme]['char_confusions'],
+            'confuse_chars_max_length': config[self.config_theme]['char_confusions_max_length']
+        }
+        
+    def set_config_theme(self, config_theme):
+        if config_theme in config.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME:
+            self.config_theme = config_theme
+            self.configs = {
+                'confuse_chars': config[self.config_theme]['char_confusions'],
+                'confuse_chars_max_length': config[self.config_theme]['char_confusions_max_length']
+            }
 
-    def get_fuzzy_tokens(self, token, max_distance):
+    def get_fuzzy_tokens(self, token, max_distance=0):
         """
         Genera todas las posibles variaciones de la palabra con la que esta
         instanciada la clase (eliminación, trasposición, sustitución y
@@ -98,7 +113,7 @@ class CustomTokenGenerator:
         """
         aux_list = []
         for token in token_list:
-            aux_list += transformation(token)
+            aux_list += transformation(token, self.configs)
         token_list += aux_list
 
     def get_transform_permutations(self):

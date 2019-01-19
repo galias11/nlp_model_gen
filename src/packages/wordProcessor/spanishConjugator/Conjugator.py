@@ -6,6 +6,13 @@ from terminaltables import AsciiTable
 # @Utils
 from src.utils.fileUtils import loadDictFromJSONFile
 
+# @Constants
+from src.constants.constants import (
+    WORD_PROCESOR_DEFAULT_MODE,
+    WORD_PROCESOR_DEFAULT_THEME,
+    WORD_PROCESOR_RESERVED_THEME
+)
+
 # @Helpers
 from .helpers.presenteIndicativoHelper import presente_conj
 from .helpers.preteritoPerfSimpleHelper import preterito_perf_simple_conj
@@ -24,8 +31,9 @@ from .helpers.irregularVerbGeneratorHelper import get_irregular_verbs
 # A continuación se enumeran grupos de verbos irregulares que comparten
 # caracteristicas similares en cuanto a los cambios que debe realizarceles
 # al momento de conjugarlos.
-irregularVerbData = loadDictFromJSONFile('wordProcessor-verbIrregularGroups')
 config = loadDictFromJSONFile('wordProcessor-verbConfig')
+irregular_verb_groups = loadDictFromJSONFile('wordProcessor-verbIrregularGroups')
+irregular_verb_exceptions_config = loadDictFromJSONFile('wordProcessor-verbIrregularExceptions')
 
 # Conjugator: provee diferentes funciones para conjugar verbos en español a los
 # siguientes tiempos:
@@ -45,10 +53,30 @@ class Conjugator:
     # singular para adaptarlo al "voseo" caracteristico del dialecto.
     # --> != 0: dialecto general. Se deja como valor numerico y no como booleano
     # pensando en la posibilidad de adaptar el conjugador a nuevos modos.
-    def __init__(self, mode):
+    def __init__(self, mode=WORD_PROCESOR_DEFAULT_MODE, config_theme=WORD_PROCESOR_DEFAULT_THEME):
         self.mode = mode
-        self.irregular_verbs = {}
-        get_irregular_verbs(self.irregular_verbs, self.mode)
+        self.config_theme = config_theme if config_theme in config.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME else WORD_PROCESOR_DEFAULT_THEME
+        self.configs = {
+            'config': config[self.config_theme],
+            'irregular_verb_exceptions': {},
+            'irregular_verb_groups': irregular_verb_groups[self.config_theme],
+            'irregular_verb_exceptions_config': irregular_verb_exceptions_config[self.config_theme]
+        }
+        get_irregular_verbs(self.configs['irregular_verb_exceptions'], self.mode, self.configs)
+
+    def set_config_theme(self, config_theme):
+        if config_theme in config.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME:
+            self.config_theme = config_theme
+            self.configs = {
+                'config': config[self.config_theme],
+                'irregular_verb_exceptions': {},
+                'irregular_verb_groups': irregular_verb_groups[self.config_theme],
+                'irregular_verb_exceptions_config': irregular_verb_exceptions_config[self.config_theme]
+            }
+            get_irregular_verbs(self.configs['irregular_verb_exceptions'], self.mode, self.configs)
+
+    def apply_conjugation(self, verb, conjugation):
+        return conjugation(verb, False, self.mode, self.configs)
 
     # Crea un diccionario de conjugación aplicando todos los helpers de conjugación,
     # en este caso no se utiliza ninguna de las excepciones de verbos completamente
@@ -56,17 +84,17 @@ class Conjugator:
     def generar_conjugaciones(self, verb):
         return {
             'inf': [verb],
-            'ger' : gerundio(verb, False, self.mode, self.irregular_verbs),
-            'part': participio(verb, False, self.mode, self.irregular_verbs),
-            'pres': presente_conj(verb, False, self.mode, self.irregular_verbs),
-            'pret_perf': preterito_perf_simple_conj(verb, False, self.mode, self.irregular_verbs),
-            'pret_imperf': preterito_imperf_conj(verb, False, self.mode, self.irregular_verbs),
-            'fut': futuro_simple_conj(verb, False, self.mode, self.irregular_verbs),
-            'impA': imperativo_A_conj(verb, False, self.mode, self.irregular_verbs),
-            'impB': imperativo_B_conj(verb, False, self.mode, self.irregular_verbs),
-            'impC': imperativo_C_conj(verb, False, self.mode, self.irregular_verbs),
-            'condA': condicional_simple_A_conj(verb, False, self.mode, self.irregular_verbs),
-            'condB': condicional_simple_B_conj(verb, False, self.mode, self.irregular_verbs),
+            'ger': self.apply_conjugation(verb, gerundio),
+            'part': self.apply_conjugation(verb, participio),
+            'pres': self.apply_conjugation(verb, presente_conj),
+            'pret_perf': self.apply_conjugation(verb, preterito_perf_simple_conj),
+            'pret_imperf': self.apply_conjugation(verb, preterito_imperf_conj),
+            'fut': self.apply_conjugation(verb, futuro_simple_conj),
+            'impA': self.apply_conjugation(verb, imperativo_A_conj),
+            'impB': self.apply_conjugation(verb, imperativo_B_conj),
+            'impC': self.apply_conjugation(verb, imperativo_C_conj),
+            'condA': self.apply_conjugation(verb, condicional_simple_A_conj),
+            'condB': self.apply_conjugation(verb, condicional_simple_B_conj)
         }
     
     # Crea un diccionario de conjugación a partir de la conjugación para un verbo irregular
@@ -74,10 +102,10 @@ class Conjugator:
     # concatenará la base del verbo con el sufijo conjugado.
     def generar_dict_irregular_concatenado(self, key, verb):
         if key == '':
-            conjugation = copy.deepcopy(self.irregular_verbs[verb])
+            conjugation = copy.deepcopy(self.configs['irregular_verb_exceptions'][verb])
             base_verb = ''
         else:
-            conjugation = copy.deepcopy(self.irregular_verbs[key])
+            conjugation = copy.deepcopy(self.configs['irregular_verb_exceptions'][key])
             base_verb = verb.replace(key, '')
         for key in conjugation.keys():
             i = 0
@@ -92,7 +120,7 @@ class Conjugator:
     # <verb> : debe ser una cadena de caracteres finalizada en uno de {ar, er, ir,
     # ár, ér, ír}. De no ser así se devuelve un diccionario vacio.
     def generar_diccionario_conjugacion(self, verb):
-        if not any(fnmatch.fnmatch(verb, suffix) for suffix in config['verb_suffixes']):
+        if not any(fnmatch.fnmatch(verb, suffix) for suffix in config[self.config_theme]['verb_suffixes']):
             return {}
         key = self.extract_key(verb)
         if key is not None:
@@ -107,8 +135,8 @@ class Conjugator:
     # una clave vacia. O si es una subcadena, devuelve la subcadena que ha
     # matcheado.
     def extract_key(self, verb):
-        for key in self.irregular_verbs:
-            if fnmatch.fnmatch(verb, '*' + key) and key not in config['irregular_suffix_exceptions']:
+        for key in self.configs['irregular_verb_exceptions']:
+            if fnmatch.fnmatch(verb, '*' + key) and key not in config[self.config_theme]['irregular_suffix_exceptions']:
                 if key != verb:
                     return key
                 else:
@@ -119,41 +147,41 @@ class Conjugator:
     # pero con cadenas vacias. Se utiliza para cuando table_view recibe un
     # verbo no válido.
     def empty_dict(self):
-        return config['empty_conj_dict']
+        return config[self.config_theme]['empty_conj_dict']
 
     # Construye la primera fila de la tabla de conjugación
     def contruir_primera_fila(self, conjugation):
         return [
-            config['table_headers'][0],
-            [config['row_headers'][0][0], conjugation['pres'][0], conjugation['pret_imperf'][0], conjugation['pret_perf'][0], conjugation['condA'][0]],
-            [config['row_headers'][0][1], conjugation['pres'][1], conjugation['pret_imperf'][1], conjugation['pret_perf'][1], conjugation['condA'][1]],
-            [config['row_headers'][0][2], conjugation['pres'][2], conjugation['pret_imperf'][2], conjugation['pret_perf'][2], conjugation['condA'][2]],
-            [config['row_headers'][0][3], conjugation['pres'][3], conjugation['pret_imperf'][3], conjugation['pret_perf'][3], conjugation['condA'][3]],
-            [config['row_headers'][0][4], conjugation['pres'][4], conjugation['pret_imperf'][4], conjugation['pret_perf'][4], conjugation['condA'][4]],
-            [config['row_headers'][0][5], conjugation['pres'][5], conjugation['pret_imperf'][5], conjugation['pret_perf'][5], conjugation['condA'][5]]
+            config[self.config_theme]['table_headers'][0],
+            [config[self.config_theme]['row_headers'][0][0], conjugation['pres'][0], conjugation['pret_imperf'][0], conjugation['pret_perf'][0], conjugation['condA'][0]],
+            [config[self.config_theme]['row_headers'][0][1], conjugation['pres'][1], conjugation['pret_imperf'][1], conjugation['pret_perf'][1], conjugation['condA'][1]],
+            [config[self.config_theme]['row_headers'][0][2], conjugation['pres'][2], conjugation['pret_imperf'][2], conjugation['pret_perf'][2], conjugation['condA'][2]],
+            [config[self.config_theme]['row_headers'][0][3], conjugation['pres'][3], conjugation['pret_imperf'][3], conjugation['pret_perf'][3], conjugation['condA'][3]],
+            [config[self.config_theme]['row_headers'][0][4], conjugation['pres'][4], conjugation['pret_imperf'][4], conjugation['pret_perf'][4], conjugation['condA'][4]],
+            [config[self.config_theme]['row_headers'][0][5], conjugation['pres'][5], conjugation['pret_imperf'][5], conjugation['pret_perf'][5], conjugation['condA'][5]]
         ]
 
     # Construye la segunda fila de la tabla de conjugación
     def construir_segunda_fila(self, conjugation):
         return [
-            config['table_headers'][1],
-            [config['row_headers'][0][0], conjugation['fut'][0], conjugation['condB'][0], conjugation['impA'][0], conjugation['impB'][0], conjugation['impC'][0]],
-            [config['row_headers'][0][1], conjugation['fut'][1], conjugation['condB'][1], conjugation['impA'][1], conjugation['impB'][1], conjugation['impC'][1]],
-            [config['row_headers'][0][2], conjugation['fut'][2], conjugation['condB'][2], conjugation['impA'][2], conjugation['impB'][2], conjugation['impC'][2]],
-            [config['row_headers'][0][3], conjugation['fut'][3], conjugation['condB'][3], conjugation['impA'][3], conjugation['impB'][3], conjugation['impC'][3]],
-            [config['row_headers'][0][4], conjugation['fut'][4], conjugation['condB'][4], conjugation['impA'][4], conjugation['impB'][4], conjugation['impC'][4]],
-            [config['row_headers'][0][5], conjugation['fut'][5], conjugation['condB'][5], conjugation['impA'][5], conjugation['impB'][5], conjugation['impC'][5]]
+            config[self.config_theme]['table_headers'][1],
+            [config[self.config_theme]['row_headers'][0][0], conjugation['fut'][0], conjugation['condB'][0], conjugation['impA'][0], conjugation['impB'][0], conjugation['impC'][0]],
+            [config[self.config_theme]['row_headers'][0][1], conjugation['fut'][1], conjugation['condB'][1], conjugation['impA'][1], conjugation['impB'][1], conjugation['impC'][1]],
+            [config[self.config_theme]['row_headers'][0][2], conjugation['fut'][2], conjugation['condB'][2], conjugation['impA'][2], conjugation['impB'][2], conjugation['impC'][2]],
+            [config[self.config_theme]['row_headers'][0][3], conjugation['fut'][3], conjugation['condB'][3], conjugation['impA'][3], conjugation['impB'][3], conjugation['impC'][3]],
+            [config[self.config_theme]['row_headers'][0][4], conjugation['fut'][4], conjugation['condB'][4], conjugation['impA'][4], conjugation['impB'][4], conjugation['impC'][4]],
+            [config[self.config_theme]['row_headers'][0][5], conjugation['fut'][5], conjugation['condB'][5], conjugation['impA'][5], conjugation['impB'][5], conjugation['impC'][5]]
         ]
 
     # Construye la tercera fila de la tabla de conjugación
     def construir_tercera_fila(self, conjugation):
         return [
-            config['table_headers'][2],
-            [config['row_headers'][1][0], conjugation['inf'][0]],
-            [config['row_headers'][1][1], conjugation['ger'][0]],
-            [config['row_headers'][1][2], conjugation['part'][0]],
-            [config['row_headers'][1][3], conjugation['part'][1]],
-            [config['row_headers'][1][4], conjugation['part'][2]]
+            config[self.config_theme]['table_headers'][2],
+            [config[self.config_theme]['row_headers'][1][0], conjugation['inf'][0]],
+            [config[self.config_theme]['row_headers'][1][1], conjugation['ger'][0]],
+            [config[self.config_theme]['row_headers'][1][2], conjugation['part'][0]],
+            [config[self.config_theme]['row_headers'][1][3], conjugation['part'][1]],
+            [config[self.config_theme]['row_headers'][1][4], conjugation['part'][2]]
         ]
 
     # Recibe un verbo, lo conjuga y devuelve por consola una tabla con las

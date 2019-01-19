@@ -1,38 +1,41 @@
 {
-    "nacionalidades": [
-        "inglés", 
-        "francés", 
-        "holandés", 
-        "portugués", 
-        "japonés"
-    ],
-    "grupo_01": [
-        "*a", 
-        "*e", 
-        "*o", 
-        "*á", 
-        "*é", 
-        "*ó"
-    ],
-    "grupo_02": [
-        "*ón", 
-        "*l", 
-        "*y", 
-        "*d", 
-        "*r"
-    ],
-    "grupo_03": [
-        "*ás", 
-        "*és", 
-        "*ís", 
-        "*ós", 
-        "*ús"
-    ],
-    "grupo_04": [
-        "*s", 
-        "*x"
-    ],
-    "grupo_05": [
-        "*z"
-    ]
+    "selected_theme": "default",
+    "default": {
+        "nacionalidades": [
+            "inglés", 
+            "francés", 
+            "holandés", 
+            "portugués", 
+            "japonés"
+        ],
+        "grupo_01": [
+            "*a", 
+            "*e", 
+            "*o", 
+            "*á", 
+            "*é", 
+            "*ó"
+        ],
+        "grupo_02": [
+            "*ón", 
+            "*l", 
+            "*y", 
+            "*d", 
+            "*r"
+        ],
+        "grupo_03": [
+            "*ás", 
+            "*és", 
+            "*ís", 
+            "*ós", 
+            "*ús"
+        ],
+        "grupo_04": [
+            "*s", 
+            "*x"
+        ],
+        "grupo_05": [
+            "*z"
+        ]
+    }
 }

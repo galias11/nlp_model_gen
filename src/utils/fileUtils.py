@@ -4,7 +4,7 @@
 import json
 
 # @Constants
-from src.constants.constants import constants
+from src.constants.constants import PATH_SEPARATOR
 
 # Loads a json file as dict
 def loadJSONFile(pathFromRoot):
@@ -18,7 +18,7 @@ paths = loadJSONFile('paths.json')
 
 # Parses path and gets path from path file
 def getPath(element):
-    pathComponents = element.split(constants['PATH_SEPARATOR'])
+    pathComponents = element.split(PATH_SEPARATOR)
     if len(pathComponents) == 2 :
         pathFromRoot = paths[pathComponents[0]][pathComponents[1]]
         return pathFromRoot

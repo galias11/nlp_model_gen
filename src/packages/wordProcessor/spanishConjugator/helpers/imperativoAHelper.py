@@ -8,9 +8,6 @@
 # @Vendors
 import fnmatch
 
-# @Utils
-from src.utils.fileUtils import loadDictFromJSONFile
-
 # @Helpers
 from .irregularVerbCastHelper import (
     irregular_cast_group_01,
@@ -29,13 +26,12 @@ from .irregularVerbCastHelper import (
     irregular_cast_group_13_a
 )
 
-# @Config
-irregularVerbData = loadDictFromJSONFile('wordProcessor-verbIrregularGroups')
-config = loadDictFromJSONFile('wordProcessor-verbConfig')
-
-def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
+def imperativo_A_conj(verb, force_conj, mode, configs):
+    irregular_verb_exceptions = configs['irregular_verb_exceptions'] 
+    irregular_verb_groups = configs['irregular_verb_groups']
+    config = configs['config']
     if not any(fnmatch.fnmatch(verb, suffix) for suffix in ['*ar', '*er', '*ir', '*ár', '*ér', '*ír']):
-        return ['','','','','','']
+        return ['', '', '', '', '', '']
     verb_conj = []
     suffix_conj = []
     base_verb = verb[0:len(verb)-2]
@@ -45,7 +41,7 @@ def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
     zar_flag = False
     guir_flag = False
     guar_flag = False
-    if not verb in irregular_verbs.keys() or force_conj:
+    if not verb in irregular_verb_exceptions.keys() or force_conj:
         if fnmatch.fnmatch(verb, '*ar') or fnmatch.fnmatch(verb, '*ár'):
             if fnmatch.fnmatch(verb, '*car'):
                 car_flag = True
@@ -84,7 +80,7 @@ def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
             else:
                 suffix_conj = ['', 'íe', 'ía', 'iamos', 'eíd', 'ían']
     else:
-        return irregular_verbs[verb]['impA']
+        return irregular_verb_exceptions[verb]['impA']
     verb_conj.append('')
     for i in range(1, 6):
         base_form = base_verb
@@ -96,10 +92,10 @@ def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
 
             # Cambio a la forma definida para el grupo de irregulares 01
             # e --> ie
-            base_form = irregular_cast_group_01(verb, base_form)
+            base_form = irregular_cast_group_01(verb, base_form, irregular_verb_groups)
             # Cambio a la forma definida para el grupo de irregulares 02
             # o --> ue
-            base_form = irregular_cast_group_02(verb, base_form)
+            base_form = irregular_cast_group_02(verb, base_form, irregular_verb_groups)
 
 
         # Conjugación para todas las formas con excepción del singular de
@@ -108,31 +104,31 @@ def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
 
             # Cambio a la forma definida pra el grupo de irregulares 03
             # c --> zc
-            base_form = irregular_cast_group_03(verb, base_form)
+            base_form = irregular_cast_group_03(verb, base_form, irregular_verb_groups)
 
             # Cambio a la forma definida para el grupo de irregulares 04,
             # c --> zc
-            base_form = irregular_cast_group_04_b(verb, base_form)
+            base_form = irregular_cast_group_04_b(verb, base_form, irregular_verb_groups)
 
         # Conjugación para todas las formas con excepción del plural de la
         # segunda persona (en modo "vos" se omite también la segunda).
         if mode != 0 and not (i in config['segunda_persona'] and i in config['plural']) or not i in config['segunda_persona']:
             # Cambio según los dispuesto para los verbos del grupo 06.
             # e --> i
-            base_form = irregular_cast_group_06(verb, base_form)
+            base_form = irregular_cast_group_06(verb, base_form, irregular_verb_groups)
 
 
             # Cambio según los dispuesto para los verbos del grupo 07.
             # e --> i
-            base_form = irregular_cast_group_07(verb, base_form)
+            base_form = irregular_cast_group_07(verb, base_form, irregular_verb_groups)
 
             # Cambio según los dispuesto para los verbos del grupo 10.
             # e --> ie
-            base_form = irregular_cast_group_10(verb, base_form)
+            base_form = irregular_cast_group_10(verb, base_form, irregular_verb_groups)
 
             # Cambio a la forma base según grupo 09 de los verbos irregulares.
             # i --> y
-            base_form = irregular_cast_group_11(verb, base_form)
+            base_form = irregular_cast_group_11(verb, base_form, irregular_verb_groups)
 
         # Conjugación para todas las formas con excepción del plural de la
         # segunda y primea persona (en modo "vos" se omite también la segunda singular).
@@ -140,29 +136,29 @@ def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
 
             # Cambio según los dispuesto para los verbos del grupo 08.
             # e --> ie
-            base_form = irregular_cast_group_08_a(verb, base_form)
+            base_form = irregular_cast_group_08_a(verb, base_form, irregular_verb_groups)
 
             # Cambio según los dispuesto para los verbos del grupo 12.
             # o --> u
-            base_form = irregular_cast_group_12_a(verb, base_form)
+            base_form = irregular_cast_group_12_a(verb, base_form, irregular_verb_groups)
 
         # Conjugación para tercera persona plural.
         if i in config['primera_persona'] and i in config['plural']:
 
             # Cambio según los dispuesto para los verbos del grupo 08.
             # e --> i
-            base_form = irregular_cast_group_08_b(verb, base_form)
+            base_form = irregular_cast_group_08_b(verb, base_form, irregular_verb_groups)
 
             # Cambio según los dispuesto para los verbos del grupo 12.
             # o --> u
-            base_form = irregular_cast_group_12_b(verb, base_form)
+            base_form = irregular_cast_group_12_b(verb, base_form, irregular_verb_groups)
 
 
         if i in config['tercera_persona']:
 
             # Cambio según los dispuesto para los verbos del grupo 09.
             # u --> ue
-            base_form = irregular_cast_group_09(verb, base_form)
+            base_form = irregular_cast_group_09(verb, base_form, irregular_verb_groups)
 
         # Conjugación para tercera persona y primera persona
         if i in config['primera_persona'] or i in config['tercera_persona']:
@@ -207,7 +203,7 @@ def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
 
             # Cambio según los dispuesto para los verbos del grupo 13.
             # base_form + g
-            base_form = irregular_cast_group_13_a(verb, base_form)
+            base_form = irregular_cast_group_13_a(verb, base_form, irregular_verb_groups)
 
             # Cambio para los verbos terminados en 'decir'
             # dec --> dig
@@ -238,13 +234,13 @@ def imperativo_A_conj(verb, force_conj, mode, irregular_verbs):
             # Cambio para los verbos en el grupo 09 (modo vos desactivado).
             # u --> ue
             if mode != 0:
-                base_form = irregular_cast_group_09(verb, base_form)
+                base_form = irregular_cast_group_09(verb, base_form, irregular_verb_groups)
 
 
         # Elimina el último caracter a los verbos del grupo 07, de modo
         # de aprovechar el sufijo especifico para los verbor terminado en
         # ír.
-        if verb in irregularVerbData['irregular_verbs_grupo_07_eir']:
+        if verb in irregular_verb_groups['irregular_verbs_grupo_07_eir']:
             base_form = base_form[:len(base_form)-1]
 
         verb_conj.append(base_form + suffix_conj[i])

@@ -4,10 +4,6 @@ from src.utils.fileUtils import loadDictFromJSONFile
 # @Assets
 config = loadDictFromJSONFile('wordProcessor-fuzzyTermsConfig')
 
-# @Cosntants
-confuse_chars = config['char_confusions']
-confuse_chars_max_length = config['char_confusions_max_length']
-
 def replace_char(string_as_list, position, length, replacements):
     """
     Reemplaza una aparición de un potencial termino de confusión por
@@ -41,7 +37,7 @@ def swap(arr, p0, p1):
     arr_list[p1] = aux
     return "".join(arr_list)
 
-def rnd_confuse_char(string, new_string_arr=None, init_position=0):
+def rnd_confuse_char(string, configs, new_string_arr=None, init_position=0):
     """
     Intercambia un caracter de la palabra pasada por parametro por otro
     definido en el diccionario de confusiones. Aplica recursivamente los
@@ -54,6 +50,8 @@ def rnd_confuse_char(string, new_string_arr=None, init_position=0):
     :return: Arreglo con las posibles confusiones de caracteres para una
     palabra.
     """
+    confuse_chars = configs['confuse_chars']
+    confuse_chars_max_length = configs['confuse_chars_max_length']
     length = len(string)
     if init_position >= length: 
         return []
@@ -68,12 +66,12 @@ def rnd_confuse_char(string, new_string_arr=None, init_position=0):
             if string[i:position_to] in confuse_chars and position_to < length:
                 replaced_strings = replace_char(string_as_list, i, token_length, confuse_chars[string[i:position_to]])
                 for replaced_string in replaced_strings:
-                    rnd_confuse_char(replaced_string, new_string_arr, i + 1)
+                    rnd_confuse_char(replaced_string, configs, new_string_arr, i + 1)
                 new_string_arr.extend(replaced_strings)
         i += 1
     return new_string_arr
 
-def rnd_char_del(string):
+def rnd_char_del(string, configs):
     """
     Elimina un caracter de la palabra.
 
@@ -89,7 +87,7 @@ def rnd_char_del(string):
         new_string_arr.append(new_string)
     return new_string_arr
 
-def rnd_char_change(string):
+def rnd_char_change(string, configs):
     """
     Realiza un intercambio entre dos caracteres consecutivos de la palabra
     con la que fue instanciada la clase.
@@ -109,7 +107,7 @@ def rnd_char_change(string):
         j += 1
     return new_string_arr
 
-def rnd_duplicate_char(string):
+def rnd_duplicate_char(string, configs):
     """
     Duplica un caracter de la palabra con la que fue instanciada la clase.
 
