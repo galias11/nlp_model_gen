@@ -1,276 +1,279 @@
-[
-    {
-        "key": "ir",
-        "exceptions": {
-            "ger" : ["yendo"],
-            "pres": ["voy", "vas", "vas", "vamos", "vais", "van"],
-            "pret_perf": ["fuí", "fuiste", "fue", "fuimos", "fuisteis", "fueron"],
-            "pret_imperf": ["iba", "ibas", "iba", "ibamos", "ibais", "iban"],
-            "impA": ["", "ve", "vaya", "vayamos", "id", "vayan"],
-            "impB": ["","","","","",""],
-            "condB": ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"],
-            "alternatives": [{ "key": "pres", "person": 1, "value": "andá"}]
+{
+    "selected_theme": "default",
+    "default": [
+        {
+            "key": "ir",
+            "exceptions": {
+                "ger" : ["yendo"],
+                "pres": ["voy", "vas", "vas", "vamos", "vais", "van"],
+                "pret_perf": ["fuí", "fuiste", "fue", "fuimos", "fuisteis", "fueron"],
+                "pret_imperf": ["iba", "ibas", "iba", "ibamos", "ibais", "iban"],
+                "impA": ["", "ve", "vaya", "vayamos", "id", "vayan"],
+                "impB": ["","","","","",""],
+                "condB": ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"],
+                "alternatives": [{ "key": "pres", "person": 1, "value": "andá"}]
+            }
+        },
+        {
+            "key": "asir",
+            "exceptions": {
+                "pres": ["asgo", "ases", "ase", "asimos", "asís", "asen"],
+                "alternatives": [{ "key": "pres", "person": 1, "value": "asís"}]
+            }
+        },
+        {
+            "key": "caber",
+            "exceptions": {
+                "pres": ["quepo", "cabes", "cabe", "cabemos", "cabéis", "caben"],
+                "pret_perf": ["cupe", "cupiste", "cupo", "cupimos", "cupisteis", "cupieron"],
+                "condA": ["cabría", "cabrías", "cabría", "cabríamos", "cambríais", "cabriamos"],
+                "condB": ["cupiese", "cupieses", "cupiese", "cupiésemos", "cupieseis", "cupiesen"],
+                "alternatives": [{ "key": "pres", "person": 1, "value": "cabés"}]
+              }
+        },
+        {
+            "key": "dar",
+            "exceptions": {
+                "pres": ["doy", "das", "da", "damos", "dáis", "dan"],
+                "pret_perf": ["dí", "diste", "dió", "dimos", "disteis", "dieron"],
+                "condB": ["diese", "dieses", "diese", "diesemos", "dieseis", "diesen"]
+            }
+        },
+        {
+            "key": "erguir",
+            "exceptions": {
+                "ger" : ["irguiendo"],
+                "pres": ["yergo", "yergues", "yergue", "erguimos", "erguis", "yerguen"],
+                "pret_perf": ["erguí", "erguiste", "irguió", "erguimos", "erguisteis", "irguieron"],
+                "impA": ["", "yergue", "yerga", "yergamos", "erguid", "yergan"],
+                "condB": ["irguiese", "irguieses", "irguiese", "irguiésemos", "irguieseis", "irguiesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "erguís"},
+                    { "key": "impA", "person": 1, "value": "erguí"}
+                ]
+            }
+        },
+        {
+            "key": "estar",
+            "exceptions": {
+                "pres": ["estoy", "estás", "está", "estamos", "estáis", "están"],
+                "pret_perf": ["estuve", "estuviste", "estuvo", "estuvimos", "estuvisteis", "estuvieron"],
+                "condB": ["estuviese", "estuvieses", "estuviese", "estuviesemos", "estuvieseis", "estuviesemos"],
+                "alternatives": [{ "key": "pres", "person": 1, "value": "estate"}]
+            }
+        },
+        {
+            "key": "haber",
+            "exceptions": {
+                "pres": ["he", "has", "ha", "hemos", "habéis", "han"],
+                "pret_perf": ["hube", "hubiste", "hubo", "hubimos", "hubistéis", "hubieron"],
+                "fut": ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"],
+                "impA": ["", "", "", "", "", ""],
+                "condA": ["habría", "habrías", "habría", "habríamos", "habríais", "habrían"],
+                "condB": ["hubiese", "hubieses", "hubiese", "hubiésemos", "hubieseis", "hubiesen"]
+            }
+        },
+        {
+            "key": "leer",
+            "exceptions": {
+                "ger" : ["leyendo"],
+                "part": ["leído", "leída", "leerse"],
+                "pret_perf": ["leí", "leiste", "leyó", "leimos", "leístes", "leyeron"],
+                "condB": ["leyese", "leyeses", "leyese", "leyésemos", "leyeseis", "leyesen"],
+                "alternatives": [{ "key": "impA", "person": 1, "value": "lee"}]
+            }
+        },
+        {
+            "key": "morir",
+            "exceptions": {
+                "part": ["muerto", "muerta", "morirse"]
+            }
+        },
+        {
+            "key": "oir",
+            "exceptions": {
+                "ger" : ["oyendo"],
+                "pres": ["oigo", "oyes", "oye", "oimos", "oís", "oyen"],
+                "pret_perf": ["oí", "oiste", "oyó", "oimos", "oisteis", "oyeron"],
+                "impA": ["", "oye", "oiga", "oigamos", "oíd", "oigan"],
+                "condB": ["oyese", "oyeses", "oyese", "oyésemos", "oyeseis", "oyesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "oís"},
+                    { "key": "impA", "person": 1, "value": "oí"}
+                ]
+            }
+        },
+        {
+            "key": "poder",
+            "exceptions": {
+                "ger" : ["pudiendo"],
+                "pres": ["puedo", "puedes", "pueden", "podemos", "podéis", "pueden"],
+                "pret_perf": ["pude", "pudiste", "pudo", "pudimos", "pudisteis", "pudieron"],
+                "fut": ["podré", "podrás", "podrá", "podremos", "podréis", "podrán"],
+                "impA": ["", "puede", "pueda", "podamos", "poded", "puedan"],
+                "condA": ["podría", "podrías", "podría", "podríamos", "podríais", "podrían"],
+                "condB": ["pudiese", "pudieses", "pudiese", "pudiésemos", "pudieseis", "pudiesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "podés"},
+                    { "key": "impA", "person": 1, "value": "podé"}
+                ]
+            }
+        },
+        {
+            "key": "poner",
+            "exceptions": {
+                "part": ["puesto", "puesta", "ponerse"],
+                "pres": ["pongo", "pones", "pone", "ponemos", "ponéis", "ponen"],
+                "pret_perf": ["puse", "pusiste", "puso", "pusimos", "pusisteis", "pusieron"],
+                "fut": ["pondré", "pondrás", "pondrá", "pondremos", "pondréis", "pondrán"],
+                "impA": ["", "pon", "ponga", "pongamos", "poned", "pongan"],
+                "condA": ["pondría", "pondrías", "pondría", "pondríamos", "pondríais", "pondrían"],
+                "condB": ["pusiese", "pusieses", "pusiese", "pusiésemos", "pusieseis", "pusiesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "ponés"},
+                    { "key": "impA", "person": 1, "value": "poné"}
+                ]
+            }
+        },
+        {
+            "key": "pudrir",
+            "exceptions": {
+                "part": ["podrido", "podrida", "pudrirse"]
+            }
+        },
+        {
+            "key": "querer",
+            "exceptions": {
+                "pres": ["quiero", "quieres", "quiere", "queremos", "queréis", "quieren"],
+                "pret_perf": ["quise", "quisiste", "quiso", "quisimos", "quisisteis", "quisieron"],
+                "fut": ["querré", "querrás", "querrá", "querremos", "querréis", "querrán"],
+                "impA": ["", "quiere", "quiera", "queramos", "quered", "quieran"],
+                "condA": ["querría", "querrías", "querría", "querriamos", "querríais", "querrían"],
+                "condB": ["quisiese", "quisieses", "quisiese", "quisiésemos", "quisieseis", "quisiesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "querés"},
+                    { "key": "impA", "person": 1, "value": "queré"}
+                ]
+            }
+        },
+        {
+            "key": "roer",
+            "exceptions": {
+                "ger" : ["royendo"],
+                "pret_perf": ["roí", "roiste", "royó", "roimos", "roísteis", "royeron"],
+                "condB": ["royese", "royeses", "royese", "royésemos", "royeseis", "royesen"]
+            }
+        },
+        {
+            "key": "saber",
+            "exceptions": {
+                "pres": ["sé", "sabes", "sabe", "sabemos", "sabéis", "saben"],
+                "pret_perf": ["supe", "supiste", "supo", "supimos", "supisteis", "supieron"],
+                "fut": ["sabré", "sabrás", "sabrá", "sabremos", "sabréis", "sabrán"],
+                "impA": ["", "sabe", "sepa", "sepamos", "sabed", "sepan"],
+                "condA": ["sabría", "sabrías", "sabría", "sabríamos", "sabríais", "sabrían"],
+                "condB": ["supiese", "supieses", "supiese", "supiésemos", "supieseis", "supiesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "sabés"},
+                    { "key": "impA", "person": 1, "value": "sabé"}
+                ]
+            }
+        },
+        {
+            "key": "ser",
+            "exceptions": {
+                "part": ["sido", "", ""],
+                "pres": ["soy", "eres", "es", "somos", "sois", "son"],
+                "pret_perf": ["fui", "fuiste", "fue", "fuimos", "fuisteis", "fueron"],
+                "pret_imperf": ["era", "eras", "era", "eramos", "eraís", "eran"],
+                "impA": ["", "se", "sea", "seamos", "sed", "sean"],
+                "condB": ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "sos"},
+                    { "key": "impA", "person": 1, "value": "sé"}
+                ]
+            }
+        },
+        {
+            "key": "tener",
+            "exceptions": {
+                "pres": ["tengo", "tienes", "tiene", "tenemos", "tenéis", "tienen"],
+                "pret_perf": ["tuve", "tuviste", "tuvo", "tuvimos", "tuvisteis", "tuvieron"],
+                "fut": ["tendré", "tendrás", "tendrá", "tendremos", "tendréis", "tendrán"],
+                "impA": ["", "ten", "tenga", "tengamos", "tened", "tengan"],
+                "condA": ["tendría", "tendrías", "tendría", "tendríamos", "tendríais", "tendrían"],
+                "condB": ["tuviese", "tuvieses", "tuviese", "tuviésemos", "tuvieseis", "tuviesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "tenés"},
+                    { "key": "impA", "person": 1, "value": "tené"}
+                ]
+            }
+        },
+        {
+            "key": "traer",
+            "exceptions": {
+                "ger" : ["trayendo"],
+                "pres": ["traigo", "traes", "trae", "traemos", "traéis", "traen"],
+                "pret_perf": ["traje", "trajiste", "trajo", "trajimos", "trajisteis", "trajeron"],
+                "impA": ["", "trae", "traiga", "traigamos", "traed", "traigan"],
+                "condB": ["trajese", "trajeses", "trajese", "trajésemos", "trajeseis", "trajesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "traés"},
+                    { "key": "impA", "person": 1, "value": "traé"}
+                ]
+            }
+        },
+        {
+            "key": "venir",
+            "exceptions": {
+                "ger" : ["viniendo"],
+                "pres": ["vengo", "vienes", "viene", "venimos", "venís", "vienen"],
+                "pret_perf": ["vine", "viniste", "vino", "vinimos", "vinisteis", "vinieron"],
+                "fut": ["vendré", "vendrás", "vendrá", "vendremos", "vendréis", "vendrán"],
+                "impA": ["", "ven", "venga", "vengamos", "venid", "vengan"],
+                "condA": ["vendría", "vendrías", "vendría", "vendríamos", "vendríais", "vendrían"],
+                "condB": ["viniese", "vinieses", "viniese", "viniésemos", "vinieseis", "viniesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "venís"},
+                    { "key": "impA", "person": 1, "value": "vení"}
+                ]
+            }
+        },
+        {
+            "key": "ver",
+            "exceptions": {
+                "part": ["visto", "vista", "verse"],
+                "pres": ["veo", "ves", "ve", "vemos", "véis", "ven"],
+                "pret_imperf": ["veía", "veías", "veía", "veiamos", "veíais", "veían"],
+                "impA": ["", "ve", "vea", "veamos", "ved", "vean"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "ves"},
+                    { "key": "impA", "person": 1, "value": "ve"}
+                ]
+            }
+        },
+        {
+            "key": "yacer",
+            "exceptions": {
+                "pres": ["yazgo", "yaces", "yace", "yacemos", "yacéis", "yacen"],
+                "impA": ["", "yace", "yazga", "yazgamos", "yaced", "yazgan"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "yacés"},
+                    { "key": "impA", "person": 1, "value": "yacé"}
+                ]
+            }
+        },
+        {
+            "key": "creer",
+            "exceptions": {
+                "ger" : ["creyendo"],
+                "pret_perf": ["creí", "creiste", "creyó", "creimos", "creisteis", "creyeron"],
+                "condB": ["creyese", "creyeses", "creyese", "creyésemos", "creyeseis", "creyesen"],
+                "alternatives": [
+                    { "key": "pres", "person": 1, "value": "yacés"},
+                    { "key": "impA", "person": 1, "value": "yacé"}
+                ]
+            }
         }
-    },
-    {
-        "key": "asir",
-        "exceptions": {
-            "pres": ["asgo", "ases", "ase", "asimos", "asís", "asen"],
-            "alternatives": [{ "key": "pres", "person": 1, "value": "asís"}]
-        }
-    },
-    {
-        "key": "caber",
-        "exceptions": {
-            "pres": ["quepo", "cabes", "cabe", "cabemos", "cabéis", "caben"],
-            "pret_perf": ["cupe", "cupiste", "cupo", "cupimos", "cupisteis", "cupieron"],
-            "condA": ["cabría", "cabrías", "cabría", "cabríamos", "cambríais", "cabriamos"],
-            "condB": ["cupiese", "cupieses", "cupiese", "cupiésemos", "cupieseis", "cupiesen"],
-            "alternatives": [{ "key": "pres", "person": 1, "value": "cabés"}]
-          }
-    },
-    {
-        "key": "dar",
-        "exceptions": {
-            "pres": ["doy", "das", "da", "damos", "dáis", "dan"],
-            "pret_perf": ["dí", "diste", "dió", "dimos", "disteis", "dieron"],
-            "condB": ["diese", "dieses", "diese", "diesemos", "dieseis", "diesen"]
-        }
-    },
-    {
-        "key": "erguir",
-        "exceptions": {
-            "ger" : ["irguiendo"],
-            "pres": ["yergo", "yergues", "yergue", "erguimos", "erguis", "yerguen"],
-            "pret_perf": ["erguí", "erguiste", "irguió", "erguimos", "erguisteis", "irguieron"],
-            "impA": ["", "yergue", "yerga", "yergamos", "erguid", "yergan"],
-            "condB": ["irguiese", "irguieses", "irguiese", "irguiésemos", "irguieseis", "irguiesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "erguís"},
-                { "key": "impA", "person": 1, "value": "erguí"}
-            ]
-        }
-    },
-    {
-        "key": "estar",
-        "exceptions": {
-            "pres": ["estoy", "estás", "está", "estamos", "estáis", "están"],
-            "pret_perf": ["estuve", "estuviste", "estuvo", "estuvimos", "estuvisteis", "estuvieron"],
-            "condB": ["estuviese", "estuvieses", "estuviese", "estuviesemos", "estuvieseis", "estuviesemos"],
-            "alternatives": [{ "key": "pres", "person": 1, "value": "estate"}]
-        }
-    },
-    {
-        "key": "haber",
-        "exceptions": {
-            "pres": ["he", "has", "ha", "hemos", "habéis", "han"],
-            "pret_perf": ["hube", "hubiste", "hubo", "hubimos", "hubistéis", "hubieron"],
-            "fut": ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"],
-            "impA": ["", "", "", "", "", ""],
-            "condA": ["habría", "habrías", "habría", "habríamos", "habríais", "habrían"],
-            "condB": ["hubiese", "hubieses", "hubiese", "hubiésemos", "hubieseis", "hubiesen"]
-        }
-    },
-    {
-        "key": "leer",
-        "exceptions": {
-            "ger" : ["leyendo"],
-            "part": ["leído", "leída", "leerse"],
-            "pret_perf": ["leí", "leiste", "leyó", "leimos", "leístes", "leyeron"],
-            "condB": ["leyese", "leyeses", "leyese", "leyésemos", "leyeseis", "leyesen"],
-            "alternatives": [{ "key": "impA", "person": 1, "value": "lee"}]
-        }
-    },
-    {
-        "key": "morir",
-        "exceptions": {
-            "part": ["muerto", "muerta", "morirse"]
-        }
-    },
-    {
-        "key": "oir",
-        "exceptions": {
-            "ger" : ["oyendo"],
-            "pres": ["oigo", "oyes", "oye", "oimos", "oís", "oyen"],
-            "pret_perf": ["oí", "oiste", "oyó", "oimos", "oisteis", "oyeron"],
-            "impA": ["", "oye", "oiga", "oigamos", "oíd", "oigan"],
-            "condB": ["oyese", "oyeses", "oyese", "oyésemos", "oyeseis", "oyesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "oís"},
-                { "key": "impA", "person": 1, "value": "oí"}
-            ]
-        }
-    },
-    {
-        "key": "poder",
-        "exceptions": {
-            "ger" : ["pudiendo"],
-            "pres": ["puedo", "puedes", "pueden", "podemos", "podéis", "pueden"],
-            "pret_perf": ["pude", "pudiste", "pudo", "pudimos", "pudisteis", "pudieron"],
-            "fut": ["podré", "podrás", "podrá", "podremos", "podréis", "podrán"],
-            "impA": ["", "puede", "pueda", "podamos", "poded", "puedan"],
-            "condA": ["podría", "podrías", "podría", "podríamos", "podríais", "podrían"],
-            "condB": ["pudiese", "pudieses", "pudiese", "pudiésemos", "pudieseis", "pudiesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "podés"},
-                { "key": "impA", "person": 1, "value": "podé"}
-            ]
-        }
-    },
-    {
-        "key": "poner",
-        "exceptions": {
-            "part": ["puesto", "puesta", "ponerse"],
-            "pres": ["pongo", "pones", "pone", "ponemos", "ponéis", "ponen"],
-            "pret_perf": ["puse", "pusiste", "puso", "pusimos", "pusisteis", "pusieron"],
-            "fut": ["pondré", "pondrás", "pondrá", "pondremos", "pondréis", "pondrán"],
-            "impA": ["", "pon", "ponga", "pongamos", "poned", "pongan"],
-            "condA": ["pondría", "pondrías", "pondría", "pondríamos", "pondríais", "pondrían"],
-            "condB": ["pusiese", "pusieses", "pusiese", "pusiésemos", "pusieseis", "pusiesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "ponés"},
-                { "key": "impA", "person": 1, "value": "poné"}
-            ]
-        }
-    },
-    {
-        "key": "pudrir",
-        "exceptions": {
-            "part": ["podrido", "podrida", "pudrirse"]
-        }
-    },
-    {
-        "key": "querer",
-        "exceptions": {
-            "pres": ["quiero", "quieres", "quiere", "queremos", "queréis", "quieren"],
-            "pret_perf": ["quise", "quisiste", "quiso", "quisimos", "quisisteis", "quisieron"],
-            "fut": ["querré", "querrás", "querrá", "querremos", "querréis", "querrán"],
-            "impA": ["", "quiere", "quiera", "queramos", "quered", "quieran"],
-            "condA": ["querría", "querrías", "querría", "querriamos", "querríais", "querrían"],
-            "condB": ["quisiese", "quisieses", "quisiese", "quisiésemos", "quisieseis", "quisiesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "querés"},
-                { "key": "impA", "person": 1, "value": "queré"}
-            ]
-        }
-    },
-    {
-        "key": "roer",
-        "exceptions": {
-            "ger" : ["royendo"],
-            "pret_perf": ["roí", "roiste", "royó", "roimos", "roísteis", "royeron"],
-            "condB": ["royese", "royeses", "royese", "royésemos", "royeseis", "royesen"]
-        }
-    },
-    {
-        "key": "saber",
-        "exceptions": {
-            "pres": ["sé", "sabes", "sabe", "sabemos", "sabéis", "saben"],
-            "pret_perf": ["supe", "supiste", "supo", "supimos", "supisteis", "supieron"],
-            "fut": ["sabré", "sabrás", "sabrá", "sabremos", "sabréis", "sabrán"],
-            "impA": ["", "sabe", "sepa", "sepamos", "sabed", "sepan"],
-            "condA": ["sabría", "sabrías", "sabría", "sabríamos", "sabríais", "sabrían"],
-            "condB": ["supiese", "supieses", "supiese", "supiésemos", "supieseis", "supiesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "sabés"},
-                { "key": "impA", "person": 1, "value": "sabé"}
-            ]
-        }
-    },
-    {
-        "key": "ser",
-        "exceptions": {
-            "part": ["sido", "", ""],
-            "pres": ["soy", "eres", "es", "somos", "sois", "son"],
-            "pret_perf": ["fui", "fuiste", "fue", "fuimos", "fuisteis", "fueron"],
-            "pret_imperf": ["era", "eras", "era", "eramos", "eraís", "eran"],
-            "impA": ["", "se", "sea", "seamos", "sed", "sean"],
-            "condB": ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "sos"},
-                { "key": "impA", "person": 1, "value": "sé"}
-            ]
-        }
-    },
-    {
-        "key": "tener",
-        "exceptions": {
-            "pres": ["tengo", "tienes", "tiene", "tenemos", "tenéis", "tienen"],
-            "pret_perf": ["tuve", "tuviste", "tuvo", "tuvimos", "tuvisteis", "tuvieron"],
-            "fut": ["tendré", "tendrás", "tendrá", "tendremos", "tendréis", "tendrán"],
-            "impA": ["", "ten", "tenga", "tengamos", "tened", "tengan"],
-            "condA": ["tendría", "tendrías", "tendría", "tendríamos", "tendríais", "tendrían"],
-            "condB": ["tuviese", "tuvieses", "tuviese", "tuviésemos", "tuvieseis", "tuviesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "tenés"},
-                { "key": "impA", "person": 1, "value": "tené"}
-            ]
-        }
-    },
-    {
-        "key": "traer",
-        "exceptions": {
-            "ger" : ["trayendo"],
-            "pres": ["traigo", "traes", "trae", "traemos", "traéis", "traen"],
-            "pret_perf": ["traje", "trajiste", "trajo", "trajimos", "trajisteis", "trajeron"],
-            "impA": ["", "trae", "traiga", "traigamos", "traed", "traigan"],
-            "condB": ["trajese", "trajeses", "trajese", "trajésemos", "trajeseis", "trajesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "traés"},
-                { "key": "impA", "person": 1, "value": "traé"}
-            ]
-        }
-    },
-    {
-        "key": "venir",
-        "exceptions": {
-            "ger" : ["viniendo"],
-            "pres": ["vengo", "vienes", "viene", "venimos", "venís", "vienen"],
-            "pret_perf": ["vine", "viniste", "vino", "vinimos", "vinisteis", "vinieron"],
-            "fut": ["vendré", "vendrás", "vendrá", "vendremos", "vendréis", "vendrán"],
-            "impA": ["", "ven", "venga", "vengamos", "venid", "vengan"],
-            "condA": ["vendría", "vendrías", "vendría", "vendríamos", "vendríais", "vendrían"],
-            "condB": ["viniese", "vinieses", "viniese", "viniésemos", "vinieseis", "viniesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "venís"},
-                { "key": "impA", "person": 1, "value": "vení"}
-            ]
-        }
-    },
-    {
-        "key": "ver",
-        "exceptions": {
-            "part": ["visto", "vista", "verse"],
-            "pres": ["veo", "ves", "ve", "vemos", "véis", "ven"],
-            "pret_imperf": ["veía", "veías", "veía", "veiamos", "veíais", "veían"],
-            "impA": ["", "ve", "vea", "veamos", "ved", "vean"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "ves"},
-                { "key": "impA", "person": 1, "value": "ve"}
-            ]
-        }
-    },
-    {
-        "key": "yacer",
-        "exceptions": {
-            "pres": ["yazgo", "yaces", "yace", "yacemos", "yacéis", "yacen"],
-            "impA": ["", "yace", "yazga", "yazgamos", "yaced", "yazgan"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "yacés"},
-                { "key": "impA", "person": 1, "value": "yacé"}
-            ]
-        }
-    },
-    {
-        "key": "creer",
-        "exceptions": {
-            "ger" : ["creyendo"],
-            "pret_perf": ["creí", "creiste", "creyó", "creimos", "creisteis", "creyeron"],
-            "condB": ["creyese", "creyeses", "creyese", "creyésemos", "creyeseis", "creyesen"],
-            "alternatives": [
-                { "key": "pres", "person": 1, "value": "yacés"},
-                { "key": "impA", "person": 1, "value": "yacé"}
-            ]
-        }
-    }
-]
+    ]
+}

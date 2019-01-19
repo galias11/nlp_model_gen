@@ -1,5 +1,4 @@
 # @Utils
-from src.utils.fileUtils import loadDictFromJSONFile
 from src.utils.objectUtils import fillDict
 
 # @Helpers
@@ -15,26 +14,26 @@ from .imperativoCHelper import imperativo_C_conj
 from .participioHelper import participio
 from .gerundioHelper import gerundio
 
-# @Assets
-irregularVerbExceptions = loadDictFromJSONFile('wordProcessor-verbIrregularExceptions')
+def apply_conjugation_or_exception(exceptions, conjugation_func, verb, mode, configs):
+    return exceptions if exceptions is not None else conjugation_func(verb, True, mode, configs)
 
 # Recibe un verbo y las excepciones en sus conjugaciones. En los casos en los que 
 # no existe una excepción se utilizaran los helpers para cada tiempo de conjugación.
-def get_irregular_verb_template(verb, irregularDict, mode, verb_options):
+def get_irregular_verb_template(verb, irregularDict, mode, verb_options, configs):
     ger, part, pres, pret_perf, pret_imperf, fut, impA, impB, impC, condA, condB, alternatives = fillDict(verb_options, ['ger', 'part', 'pres', 'pret_perf', 'pret_imperf', 'fut', 'impA', 'impB', 'impC', 'condA', 'condB', 'alternatives'])
     template = {
         'inf': [verb],
-        'ger' : ger if ger is not None else gerundio(verb, True, mode, irregularDict),
-        'part': part if part is not None else participio(verb, True, mode, irregularDict),
-        'pres': pres if pres is not None else presente_conj(verb, True, mode, irregularDict),
-        'pret_perf': pret_perf if pret_perf is not None else preterito_perf_simple_conj(verb, True, mode, irregularDict),
-        'pret_imperf': pret_imperf if pret_imperf is not None else preterito_imperf_conj(verb, True, mode, irregularDict),
-        'fut': fut if fut is not None else futuro_simple_conj(verb, True, mode, irregularDict),
-        'impA': impA if impA is not None else imperativo_A_conj(verb, True, mode, irregularDict),
-        'impB': impB if impB is not None else imperativo_B_conj(verb, True, mode, irregularDict),
-        'impC': impC if impC is not None else imperativo_C_conj(verb, True, mode, irregularDict),
-        'condA': condA if condA is not None else condicional_simple_A_conj(verb, True, mode, irregularDict),
-        'condB': condB if condB is not None else condicional_simple_B_conj(verb, True, mode, irregularDict),
+        'ger': apply_conjugation_or_exception(ger, gerundio, verb, mode, configs),
+        'part': apply_conjugation_or_exception(part, participio, verb, mode, configs),
+        'pres': apply_conjugation_or_exception(pres, presente_conj, verb, mode, configs),
+        'pret_perf': apply_conjugation_or_exception(pret_perf, preterito_perf_simple_conj, verb, mode, configs),
+        'pret_imperf': apply_conjugation_or_exception(pret_imperf, preterito_imperf_conj, verb, mode, configs),
+        'fut': apply_conjugation_or_exception(fut, futuro_simple_conj, verb, mode, configs),
+        'impA': apply_conjugation_or_exception(impA, imperativo_A_conj, verb, mode, configs),
+        'impB': apply_conjugation_or_exception(impB, imperativo_B_conj, verb, mode, configs),
+        'impC': apply_conjugation_or_exception(impC, imperativo_C_conj, verb, mode, configs),
+        'condA': apply_conjugation_or_exception(condA, condicional_simple_A_conj, verb, mode, configs),
+        'condB': apply_conjugation_or_exception(condB, condicional_simple_B_conj, verb, mode, configs),
     }
     if mode == 0 and alternatives is not None:
         for alternative in alternatives:
@@ -42,6 +41,8 @@ def get_irregular_verb_template(verb, irregularDict, mode, verb_options):
     irregularDict[verb] = template
 
 # Este modulo se utiliza para generar los casos excepcionales de verbos irregulares.
-def get_irregular_verbs(irregularDict, mode):
-    for verbException in irregularVerbExceptions:
-        get_irregular_verb_template(verbException['key'], irregularDict, mode, verbException['exceptions'])
+def get_irregular_verbs(irregularDict, mode, configs):
+    irregular_verb_exceptions_config = configs['irregular_verb_exceptions_config']
+    for verb_exception in irregular_verb_exceptions_config:
+        get_irregular_verb_template(verb_exception['key'], irregularDict, mode, verb_exception['exceptions'], configs)
+    return irregularDict

@@ -8,9 +8,6 @@
 # @Vendors
 import fnmatch
 
-# @Utils
-from src.utils.fileUtils import loadDictFromJSONFile
-
 # @Helpers
 from  .irregularVerbCastHelper import (
     irregular_cast_group_01, 
@@ -27,11 +24,10 @@ from  .irregularVerbCastHelper import (
     irregular_cast_group_13_a
 )
 
-# @Config
-irregularVerbData = loadDictFromJSONFile('wordProcessor-verbIrregularGroups')
-config = loadDictFromJSONFile('wordProcessor-verbConfig')
-
-def presente_conj(verb, force_conj, mode, irregular_verbs):
+def presente_conj(verb, force_conj, mode, configs):
+    irregular_verb_exceptions = configs['irregular_verb_exceptions'] 
+    irregular_verb_groups = configs['irregular_verb_groups']
+    config = configs['config']
     if not any(fnmatch.fnmatch(verb, suffix) for suffix in ['*ar', '*er', '*ir', '*ár', '*ér', '*ír']):
         return ['', '', '', '', '', '']
     verb_conj = []
@@ -40,7 +36,7 @@ def presente_conj(verb, force_conj, mode, irregular_verbs):
     ncer_flag = False
     ger_gir_flag = False
     guir_flag = False
-    if not verb in irregular_verbs.keys() or force_conj:
+    if not verb in irregular_verb_exceptions.keys() or force_conj:
         if fnmatch.fnmatch(verb, '*ar') or fnmatch.fnmatch(verb, '*ár'):
             if mode == 0:
                 suffix_conj = ['o', 'ás', 'a', 'amos', 'áis', 'an']
@@ -65,7 +61,7 @@ def presente_conj(verb, force_conj, mode, irregular_verbs):
             else:
                 suffix_conj = ['o', 'es', 'e', 'imos', 'ís', 'en']
     else:
-        return irregular_verbs[verb]['pres']
+        return irregular_verb_exceptions[verb]['pres']
     for i in range(0, 6):
         base_form = base_verb
 
@@ -76,38 +72,38 @@ def presente_conj(verb, force_conj, mode, irregular_verbs):
 
         # Cambio a la forma base según grupo 01 de los verbos irregulares.
         # e --> ie
-            base_form = irregular_cast_group_01(verb, base_form)
+            base_form = irregular_cast_group_01(verb, base_form, irregular_verb_groups)
         # Cambio a la forma base según grupo 02 de los verbos irregulares.
         # o --> ue
-            base_form = irregular_cast_group_02(verb, base_form)
+            base_form = irregular_cast_group_02(verb, base_form, irregular_verb_groups)
         # Cambio a la forma base según grupo 06 de los verbos irregulares.
         # e --> i
-            base_form = irregular_cast_group_06(verb, base_form)
+            base_form = irregular_cast_group_06(verb, base_form, irregular_verb_groups)
         # Cambio a la forma base según grupo 06 de los verbos irregulares.
         # e --> i
-            base_form = irregular_cast_group_07(verb, base_form)
+            base_form = irregular_cast_group_07(verb, base_form, irregular_verb_groups)
 
         # Cambio a la forma base según grupo 08 de los verbos irregulares.
         # e --> ie
-            base_form = irregular_cast_group_08_a(verb, base_form)
+            base_form = irregular_cast_group_08_a(verb, base_form, irregular_verb_groups)
         #    base_form = irregular_cast_group_08_b(verb, base_form)
         #    base_form = irregular_cast_group_09(verb, base_form)
 
         # Cambio a la forma base según grupo 09 de los verbos irregulares.
         # u --> ue
-            base_form = irregular_cast_group_09(verb, base_form)
+            base_form = irregular_cast_group_09(verb, base_form, irregular_verb_groups)
 
         # Cambio a la forma base según grupo 09 de los verbos irregulares.
         # i --> ie
-            base_form = irregular_cast_group_10(verb, base_form)
+            base_form = irregular_cast_group_10(verb, base_form, irregular_verb_groups)
 
         # Cambio a la forma base según grupo 09 de los verbos irregulares.
         # i --> y
-            base_form = irregular_cast_group_11(verb, base_form)
+            base_form = irregular_cast_group_11(verb, base_form, irregular_verb_groups)
 
         # Cambio a la forma base según grupo 09 de los verbos irregulares.
         # o --> ue
-            base_form = irregular_cast_group_12_a(verb, base_form)
+            base_form = irregular_cast_group_12_a(verb, base_form, irregular_verb_groups)
 
         # Cambia la forma base de los verbos terminados en 'decir'
         # 'dec' -> 'dic'
@@ -146,13 +142,13 @@ def presente_conj(verb, force_conj, mode, irregular_verbs):
 
         # Cambio a la forma base según grupo 03 de los verbos irregulares.
         # c --> zc
-            base_form = irregular_cast_group_03(verb, base_form)
+            base_form = irregular_cast_group_03(verb, base_form, irregular_verb_groups)
         # Cambio a la forma base según grupo 04 de los verbos irregulares.
         # c --> zc
-            base_form = irregular_cast_group_04_b(verb, base_form)
+            base_form = irregular_cast_group_04_b(verb, base_form, irregular_verb_groups)
         # Cambio a la forma base según grupo 13 de los verbos irregulares.
         # base_verb + g
-            base_form = irregular_cast_group_13_a(verb, base_form)
+            base_form = irregular_cast_group_13_a(verb, base_form, irregular_verb_groups)
 
 
         verb_conj.append(base_form + suffix_conj[i])
