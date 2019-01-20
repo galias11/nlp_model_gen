@@ -4,7 +4,7 @@ import copy
 from terminaltables import AsciiTable
 
 # @Utils
-from src.utils.fileUtils import loadDictFromJSONFile
+from src.utils.fileUtils import load_dict_from_json
 
 # @Constants
 from src.constants.constants import (
@@ -31,9 +31,9 @@ from .helpers.irregularVerbGeneratorHelper import get_irregular_verbs
 # A continuación se enumeran grupos de verbos irregulares que comparten
 # caracteristicas similares en cuanto a los cambios que debe realizarceles
 # al momento de conjugarlos.
-config = loadDictFromJSONFile('wordProcessor-verbConfig')
-irregular_verb_groups = loadDictFromJSONFile('wordProcessor-verbIrregularGroups')
-irregular_verb_exceptions_config = loadDictFromJSONFile('wordProcessor-verbIrregularExceptions')
+config = load_dict_from_json('wordProcessor-verbConfig')
+irregular_verb_groups = load_dict_from_json('wordProcessor-verbIrregularGroups')
+irregular_verb_exceptions_config = load_dict_from_json('wordProcessor-verbIrregularExceptions')
 
 # Conjugator: provee diferentes funciones para conjugar verbos en español a los
 # siguientes tiempos:

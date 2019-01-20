@@ -1,32 +1,74 @@
-# Utilities for file mangement
-
 # @Vendors
 import json
 
 # @Constants
 from src.constants.constants import PATH_SEPARATOR
 
-# Loads a json file as dict
-def loadJSONFile(pathFromRoot):
-    with open(pathFromRoot) as f:
+def load_json_file(path_from_root):
+    """
+    Lee el contenido de un archivo a partir de la ruta relativa a la raíz
+    y devuelve su contenido como un diccionario.
+
+    :path_from_root: cadena con la ruta relativa a la raíz.
+
+    :return: diccionario conteniendo el contenido del archivo json
+    """
+    with open(path_from_root) as f:
         parsedDict = json.loads(f.read())
     f.close()
     return parsedDict
 
-# @Paths
-paths = loadJSONFile('paths.json')
+def overwrite_json_file(path_from_root, content):
+    """
+    Sobreescribe el archivo indicado con el contenido del diccionario recibido.
 
-# Parses path and gets path from path file
-def getPath(element):
-    pathComponents = element.split(PATH_SEPARATOR)
-    if len(pathComponents) == 2 :
-        pathFromRoot = paths[pathComponents[0]][pathComponents[1]]
-        return pathFromRoot
+    :path_from_root: cadena con la ruta relativa a la raíz.
+
+    :content: diccionario con el contenido a escribir en el archivo.
+    """
+    file = open(path_from_root, 'w')
+    file.write(content)
+
+# @Paths
+paths = load_json_file('paths.json')
+
+def get_path(element):
+    """
+    A partir de un elemento especificado en el archivo de rutas obtiene la
+    ruta relativa desde la raíz al recurso.
+
+    :element: elemento perteneciente a la lista de rutas.
+
+    :return: cadena conteniendo la ruta relativa desde la raíz al recurso
+    """
+    path_components = element.split(PATH_SEPARATOR)
+    if len(path_components) == 2 :
+        path_from_root = paths[path_components[0]][path_components[1]]
+        return path_from_root
     return None
 
-# Loads a dictionary from a json file
-def loadDictFromJSONFile(document):
-    pathFromRoot = getPath(document)
-    if pathFromRoot is not None:
-        return loadJSONFile(pathFromRoot)
+def load_dict_from_json(document):
+    """
+    A partir de un documento especificado en la lista de documentos, obtiene
+    un diccionario a partir del json contenido en dicho archivo.
+
+    :document: documento a obtener de la lista de documentos
+
+    :return: diccionario construido a partir del json contenido en el archivo
+    """
+    path_from_root = get_path(document)
+    if path_from_root is not None:
+        return load_json_file(path_from_root)
     return {}
+
+def replace_file(document, content):
+    """
+    Sobre escribe un archivo con el contenido especificado.
+
+    :documento: documento a obtener de la lista de documentos
+
+    :content: diccionario con el contenido a escribir en el archivo.
+    """
+    path_from_root = get_path(document)
+    if path_from_root is not None:
+        overwrite_json_file(path_from_root, content)

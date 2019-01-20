@@ -2,7 +2,7 @@
 import itertools
 
 # @Utils
-from src.utils.fileUtils import loadDictFromJSONFile
+from src.utils.fileUtils import load_dict_from_json
 
 # @Constants
 from src.constants.constants import (WORD_PROCESOR_DEFAULT_THEME, WORD_PROCESOR_RESERVED_THEME)
@@ -17,7 +17,7 @@ from .helpers.fuzzyHelper import (
 )
 
 # @Assets
-config = loadDictFromJSONFile('wordProcessor-fuzzyTermsConfig')
+config = load_dict_from_json('wordProcessor-fuzzyTermsConfig')
 
 class FuzzyTermsGenerator:
     """
