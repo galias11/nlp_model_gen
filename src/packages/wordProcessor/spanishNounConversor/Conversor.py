@@ -2,14 +2,14 @@
 import fnmatch
 
 # @Utils
-from src.utils.fileUtils import loadDictFromJSONFile
+from src.utils.fileUtils import load_dict_from_json
 
 # @Constants
 from src.constants.constants import (WORD_PROCESOR_DEFAULT_THEME, WORD_PROCESOR_RESERVED_THEME)
 
 # @Assets
-noun_groups = loadDictFromJSONFile('wordProcessor-nounGroups')
-plural_exceptions = loadDictFromJSONFile('wordProcessor-nounPluralExceptions')
+noun_groups = load_dict_from_json('wordProcessor-nounGroups')
+plural_exceptions = load_dict_from_json('wordProcessor-nounPluralExceptions')
 
 # [WIP] Esta clase cumple la función de recibir un sustantivo y devolver su plurar
 class Conversor:

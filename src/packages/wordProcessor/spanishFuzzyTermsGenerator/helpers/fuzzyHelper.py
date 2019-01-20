@@ -1,8 +1,8 @@
 # @Utils
-from src.utils.fileUtils import loadDictFromJSONFile
+from src.utils.fileUtils import load_dict_from_json
 
 # @Assets
-config = loadDictFromJSONFile('wordProcessor-fuzzyTermsConfig')
+config = load_dict_from_json('wordProcessor-fuzzyTermsConfig')
 
 def replace_char(string_as_list, position, length, replacements):
     """
