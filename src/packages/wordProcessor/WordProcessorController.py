@@ -15,6 +15,11 @@ from src.constants.constants import (
     WORD_PROCESSOR_VERB_GROUPS_COLLECTION,
 )
 
+# @Classes
+from .spanishConjugator.Conjugator import Conjugator
+from .spanishFuzzyTermsGenerator.FuzzyTermsGenerator import FuzzyTermsGenerator
+from .spanishNounConversor.Conversor import Conversor
+
 # @Configs
 word_processor_default_cfg = load_dict_from_json('wordProcessor-default_config')
 
@@ -26,7 +31,7 @@ class WordProcessorController:
     Al iniciar se conecta a la base de datos para obtener tanto la configuración activa
     como los perfiles correspondientes a dicho tema.
     """
-    def __init__(self):
+    def __init__(self, mode = 0):
         self.__init_success = False
         self.__conjugator_active_theme = ''
         self.__fuzzy_gen_active_theme = ''
@@ -36,9 +41,9 @@ class WordProcessorController:
         self.__conjugator_verb_groups = dict({})
         self.__fuzzy_generator_cfg = dict({})
         self.__noun_conversor_cfg = dict({})
-        self.__initializate_cfg()
+        self.__initializate_cfg(mode)
 
-    def __initializate_cfg(self):
+    def __initializate_cfg(self, mode):
         """
         [private] Obtiene el tema de configuración activa para cada modulo y carga cada perfil
         de configuración.
@@ -48,8 +53,12 @@ class WordProcessorController:
             self.__initialize_conjugator()
             self.__initialize_fuzzy_generator()
             self.__initialize_noun_conversor()
+            self.conjugator = Conjugator(mode, self.__conjugator_general_cfg, self.__conjugator_verb_groups, self.__conjugator_verb_exceptions)
+            self.fuzzy_generator = FuzzyTermsGenerator(self.__fuzzy_generator_cfg)
+            self.conversor = Conversor(self.__noun_conversor_cfg)
             self.__init_success = True
-        except:
+        except Exception as e:
+            print(str(e)) # TODO: Logs
             self.__init_success = False
 
     def __initialize_controller(self):
@@ -176,7 +185,7 @@ class WordProcessorController:
         self.__noun_conversor_cfg = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': self.__noun_conversor_active_theme}, {'_id': 0, 'theme': 0})
 
     def retry_initialization(self):
-        self.__initializate_cfg()
+        self.__initializate_cfg(self.mode)
 
     def get_conjugator_configs(self):
         return self.__conjugator_general_cfg
@@ -192,3 +201,23 @@ class WordProcessorController:
 
     def get_fuzzy_generator_configs(self):
         return self.__fuzzy_generator_cfg
+
+    def conjugate_verb(self, verb):
+        if not self.__init_success:
+            return
+        return self.conjugator.generar_conjugaciones(verb)
+
+    def conjugate_verb_table_view(self, verb):
+        if not self.__init_success:
+            return
+        self.conjugator.table_view(verb)
+
+    def get_fuzzy_set(self, term, max_distance = 1):
+        if not self.__init_success:
+            return
+        return self.fuzzy_generator.get_fuzzy_tokens(term, max_distance)
+
+    def get_plural(self, noun):
+        if not self.__init_success:
+            return
+        return self.conversor.a_plural(noun)

@@ -756,6 +756,12 @@
             "ú": ["u"], 
             "h": [""]
         },
+        "transformations": [
+            "rnd_confuse_char", 
+            "rnd_char_del", 
+            "rnd_char_change", 
+            "rnd_duplicate_char"
+        ],
         "char_confusions_max_length": 2
     },
     "noun_conversor_config": {
@@ -767,34 +773,51 @@
             "portugués", 
             "japonés"
         ],
-        "grupo_01": [
-            "*a", 
-            "*e", 
-            "*o", 
-            "*á", 
-            "*é", 
-            "*ó"
-        ],
-        "grupo_02": [
-            "*ón", 
-            "*l", 
-            "*y", 
-            "*d", 
-            "*r"
-        ],
-        "grupo_03": [
-            "*ás", 
-            "*és", 
-            "*ís", 
-            "*ós", 
-            "*ús"
-        ],
-        "grupo_04": [
-            "*s", 
-            "*x"
-        ],
-        "grupo_05": [
-            "*z"
+        "groups": [
+            { 
+                "suffixes": [
+                    "*a", 
+                    "*e", 
+                    "*o", 
+                    "*á", 
+                    "*é", 
+                    "*ó"
+                ],
+                "replacement": "s"
+            },
+            {
+                "suffixes": [
+                    "*ón", 
+                    "*l", 
+                    "*y", 
+                    "*d", 
+                    "*r"
+                ],
+                "replacement": "es"
+            },
+            {
+                "suffixes": [
+                    "*ás", 
+                    "*és", 
+                    "*ís", 
+                    "*ós", 
+                    "*ús"
+                ],
+                "replacement": "es"
+            },
+            {
+                "suffixes": [
+                    "*s", 
+                    "*x"
+                ],
+                "replacement": ""
+            },
+            {
+                "suffixes": [
+                    "*z"
+                ],
+                "replacement": "ces"
+            }
         ],
         "exceptions": [
             "este", 

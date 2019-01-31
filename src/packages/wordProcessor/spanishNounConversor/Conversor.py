@@ -1,32 +1,19 @@
 # @Vendors
 import fnmatch
 
-# @Utils
-from src.utils.fileUtils import load_dict_from_json
-
-# @Constants
-from src.constants.constants import (WORD_PROCESOR_DEFAULT_THEME, WORD_PROCESOR_RESERVED_THEME)
-
-# @Assets
-noun_groups = load_dict_from_json('wordProcessor-nounGroups')
-plural_exceptions = load_dict_from_json('wordProcessor-nounPluralExceptions')
-
 # [WIP] Esta clase cumple la función de recibir un sustantivo y devolver su plurar
 class Conversor:
-    def __init__(self, config_theme=WORD_PROCESOR_DEFAULT_THEME):
-        self.config_theme = config_theme if config_theme in noun_groups.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME else WORD_PROCESOR_DEFAULT_THEME
+    def __init__(self, general_configs):
         self.configs = {
-            'noun_groups': noun_groups[self.config_theme],
-            'plural_exceptions': plural_exceptions[self.config_theme]
+            'noun_groups': general_configs['groups'],
+            'exceptions': general_configs['exceptions']
         }
 
-    def set_config_theme(self, config_theme):
-        if config_theme in noun_groups.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME:
-            self.config_theme = config_theme
-            self.configs = {
-                'noun_groups': noun_groups[self.config_theme],
-                'plural_exceptions': plural_exceptions[self.config_theme]
-            }
+    def set_config_theme(self, general_configs):
+        self.configs = {
+            'noun_groups': general_configs['groups'],
+            'exceptions': general_configs['exceptions']
+        }
 
     def a_plural(self, noun):
         words = noun.split()
@@ -37,18 +24,13 @@ class Conversor:
                 first_flag = False
             else:
                 line += ' '
-            if not word in self.configs['plural_exceptions']:
-                if any(fnmatch.fnmatch(word, suffix) for suffix in self.configs['noun_groups']['grupo_01']):
-                    line += word + 's'
-                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.configs['noun_groups']['grupo_02']):
-                    line += word + 'es'
-                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.configs['noun_groups']['grupo_03']):
-                    line += word + 'es'
-                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.configs['noun_groups']['grupo_04']):
-                    line += word
-                elif any(fnmatch.fnmatch(word, suffix) for suffix in self.configs['noun_groups']['grupo_05']):
-                    line += word[:len(word)-1] + 'ces'
-                else:
+            if not word in self.configs['exceptions']:
+                founded = False
+                for group in self.configs['noun_groups']:
+                    if any(fnmatch.fnmatch(word, suffix) for suffix in group['suffixes']):
+                        line += word + group['replacement']
+                        founded = True
+                if not founded:
                     line += word
             else:
                 line += word

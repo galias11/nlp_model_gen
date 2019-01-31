@@ -1,12 +1,6 @@
 # @Vendors
 import itertools
 
-# @Utils
-from src.utils.fileUtils import load_dict_from_json
-
-# @Constants
-from src.constants.constants import (WORD_PROCESOR_DEFAULT_THEME, WORD_PROCESOR_RESERVED_THEME)
-
 # @Helpers
 from .helpers.demerauDistanceHelper import damerau_levenshtein_distance
 from .helpers.fuzzyHelper import (
@@ -16,30 +10,36 @@ from .helpers.fuzzyHelper import (
     rnd_duplicate_char
 )
 
-# @Assets
-config = load_dict_from_json('wordProcessor-fuzzyTermsConfig')
-
 class FuzzyTermsGenerator:
     """
     Esta clase sirve como generador de variaciones para un token. A partir de un
     token permite generar diferentes variaciones en su escritura.
     """
 
-    def __init__(self, config_theme=WORD_PROCESOR_DEFAULT_THEME):
-        self.transformations = [rnd_confuse_char, rnd_char_del, rnd_char_change, rnd_duplicate_char]
-        self.config_theme = config_theme if config_theme in config.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME else WORD_PROCESOR_DEFAULT_THEME
+    def __init__(self, general_config):
+        self.transformations = []
         self.configs = {
-            'confuse_chars': config[self.config_theme]['char_confusions'],
-            'confuse_chars_max_length': config[self.config_theme]['char_confusions_max_length']
+            'confuse_chars': general_config['char_confusions'],
+            'confuse_chars_max_length': general_config['char_confusions_max_length']
         }
+        self.setup_transformations(general_config['transformations'])
         
-    def set_config_theme(self, config_theme):
-        if config_theme in config.keys() and config_theme is not WORD_PROCESOR_RESERVED_THEME:
-            self.config_theme = config_theme
-            self.configs = {
-                'confuse_chars': config[self.config_theme]['char_confusions'],
-                'confuse_chars_max_length': config[self.config_theme]['char_confusions_max_length']
-            }
+    def setup_transformations(self, transformation_keys):
+        if 'rnd_confuse_char' in transformation_keys:
+            self.transformations.append(rnd_confuse_char)
+        if 'rnd_char_del' in transformation_keys:
+            self.transformations.append(rnd_char_del)
+        if 'rnd_char_change' in transformation_keys:
+            self.transformations.append(rnd_char_change)
+        if 'rnd_duplicate_char' in transformation_keys:
+            self.transformations.append(rnd_duplicate_char)
+        
+    def set_config(self, general_config):
+        self.configs = {
+            'confuse_chars': general_config['char_confusions'],
+            'confuse_chars_max_length': general_config['char_confusions_max_length']
+        }
+        self.setup_transformations(general_config['transformations'])
 
     def get_fuzzy_tokens(self, token, max_distance=0):
         """
