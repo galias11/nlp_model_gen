@@ -1,9 +1,3 @@
-# @Utils
-from src.utils.fileUtils import load_dict_from_json
-
-# @Assets
-config = load_dict_from_json('wordProcessor-fuzzyTermsConfig')
-
 def replace_char(string_as_list, position, length, replacements):
     """
     Reemplaza una aparición de un potencial termino de confusión por
