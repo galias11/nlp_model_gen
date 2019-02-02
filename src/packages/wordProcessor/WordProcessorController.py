@@ -12,7 +12,7 @@ from src.constants.constants import (
     WORD_PROCESSOR_GENERAL_SETTING_COLLECTION,
     WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION,
     WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION,
-    WORD_PROCESSOR_VERB_GROUPS_COLLECTION,
+    WORD_PROCESSOR_VERB_GROUPS_COLLECTION
 )
 
 # @Classes
@@ -100,10 +100,11 @@ class WordProcessorController:
         db_drop_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION)
         db_drop_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_GROUPS_COLLECTION)
         db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_CONJ_CFG_COLLECTION, word_processor_default_cfg['conjugator_config'])
-        db_insert_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, self.__generate_verb_exceptions())
+        conjugator_verb_exceptions = self.__generate_verb_exceptions()
+        db_insert_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, conjugator_verb_exceptions)
         db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_GROUPS_COLLECTION, word_processor_default_cfg['conjugator_irregular_groups'])
         self.__conjugator_general_cfg = word_processor_default_cfg['conjugator_config']
-        self.__conjugator_verb_exceptions = word_processor_default_cfg['conjugator_verb_exceptions']
+        self.__conjugator_verb_exceptions = conjugator_verb_exceptions
         self.__conjugator_verb_groups = word_processor_default_cfg['conjugator_irregular_groups']
 
     def __generate_verb_exceptions(self):
@@ -202,22 +203,22 @@ class WordProcessorController:
     def get_fuzzy_generator_configs(self):
         return self.__fuzzy_generator_cfg
 
-    def conjugate_verb(self, verb):
+    def conjugate_verb(self, verb=''):
         if not self.__init_success:
             return
-        return self.conjugator.generar_conjugaciones(verb)
+        return self.conjugator.generar_conjugaciones(verb.lower())
 
-    def conjugate_verb_table_view(self, verb):
+    def conjugate_verb_table_view(self, verb=''):
         if not self.__init_success:
             return
-        self.conjugator.table_view(verb)
+        self.conjugator.table_view(verb.lower())
 
-    def get_fuzzy_set(self, term, max_distance = 1):
+    def get_fuzzy_set(self, term='', max_distance=1):
         if not self.__init_success:
             return
-        return self.fuzzy_generator.get_fuzzy_tokens(term, max_distance)
+        return self.fuzzy_generator.get_fuzzy_tokens(term.lower(), max_distance)
 
-    def get_plural(self, noun):
+    def get_plural(self, noun=''):
         if not self.__init_success:
             return
-        return self.conversor.a_plural(noun)
+        return self.conversor.a_plural(noun.lower())

@@ -783,7 +783,12 @@
                     "*é", 
                     "*ó"
                 ],
-                "replacement": "s"
+                "replacement": "s",
+                "backReplacements": [
+                    { "key": "*á", "backCrop": 1, "replacement": "a" },
+                    { "key": "*é", "backCrop": 1, "replacement": "e" },
+                    { "key": "*ó", "backCrop": 1, "replacement": "o" }
+                ]
             },
             {
                 "suffixes": [
@@ -793,7 +798,10 @@
                     "*d", 
                     "*r"
                 ],
-                "replacement": "es"
+                "replacement": "es",
+                "backReplacements": [
+                    { "key": "*ón", "backCrop": 2, "replacement": "on" }
+                ]
             },
             {
                 "suffixes": [
@@ -816,7 +824,10 @@
                 "suffixes": [
                     "*z"
                 ],
-                "replacement": "ces"
+                "replacement": "ces",
+                "backReplacements": [
+                    { "key": "*z", "backCrop": 1, "replacement": "" }
+                ]
             }
         ],
         "exceptions": [
