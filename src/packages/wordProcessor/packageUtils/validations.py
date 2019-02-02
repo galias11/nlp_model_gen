@@ -5,7 +5,6 @@ from schema import Schema, And, Use, Optional
 from src.constants.constants import WORD_PROCESSOR_SCHEMAS
 
 conjugator_general_config_schema = Schema({
-    'theme': And(str, Use(str.lower), len, lambda s: s is not 'default'),
     'singular': [And(Use(int))],
     'plural': [And(Use(int))],
     'primera_persona': [And(Use(int))],
@@ -33,7 +32,6 @@ conjugator_general_config_schema = Schema({
 
 conjugator_verb_exceptions_schema = Schema({
     'key': And(str, Use(str.lower), len),
-    'theme': And(str, Use(str.lower), len, lambda s: s is not 'default'),
     'exceptions': {
         Optional('inf'): [And(str, Use(str.lower))],
         Optional('ger'): [And(str, Use(str.lower))],
@@ -52,7 +50,6 @@ conjugator_verb_exceptions_schema = Schema({
 })
 
 conjugator_verb_groups_schema = Schema({
-    'theme':  And(str, Use(str.lower), len, lambda s: s is not 'default'),
     'irregular_verbs_grupo_01_ar': [And(str, len)],
     'irregular_verbs_grupo_01_er': [And(str, len)],
     'irregular_verbs_grupo_01_ir': [And(str, len)],
@@ -79,14 +76,12 @@ conjugator_verb_groups_schema = Schema({
 })
 
 fuzzy_genetator_config_schema = Schema({
-    'theme': And(str, Use(str.lower), len, lambda s: s is not 'default'),
     'char_confusions': {str: [And(str)]},
     'transformations': [And(str, lambda s: s in ['rnd_confuse_char',  'rnd_char_del', 'rnd_char_change', 'rnd_duplicate_char'])],
     'char_confusions_max_length': And(Use(int), lambda n: n > 0)
 })
 
 noun_conversor_config_schema = Schema({
-    'theme': And(str, Use(str.lower), len, lambda s: s is not 'default'),
     Optional('nacionalidades'): [And(str, len)],
     'groups': [{ 
         'suffixes': [And(str, len)],
