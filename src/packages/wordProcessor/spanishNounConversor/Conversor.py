@@ -28,8 +28,15 @@ class Conversor:
                 founded = False
                 for group in self.configs['noun_groups']:
                     if any(fnmatch.fnmatch(word, suffix) for suffix in group['suffixes']):
+                        if 'backReplacements' in group.keys():
+                            for backReplacement in group['backReplacements']:
+                                if fnmatch.fnmatch(word, backReplacement['key']):
+                                    word = word[0:len(word) - backReplacement['backCrop']]
+                                    word = word + backReplacement['replacement']
+                                    break
                         line += word + group['replacement']
                         founded = True
+                        break
                 if not founded:
                     line += word
             else:
