@@ -2,7 +2,14 @@
 import pymongo
 
 # @Constants
-from src.constants.constants import (DB_SERVER_URL, DB_CONNECTION_TIMEOUT)
+from src.constants.constants import (
+    DB_CONNECTION_TIMEOUT,
+    DB_OPERATION_DELETE,
+    DB_OPERATION_INSERT,
+    DB_OPERATION_INSERT_MANY,
+    DB_OPERATION_UPDATE,
+    DB_SERVER_URL
+)
 
 def connect():
     return pymongo.MongoClient(DB_SERVER_URL, serverSelectionTimeoutMS=DB_CONNECTION_TIMEOUT)
@@ -64,5 +71,44 @@ def db_drop_collection(db_name, col_name):
     try:
         col = get_collection(db_name, col_name)
         col.drop()
+    except:
+        raise ConnectionError()
+
+def insert(db, collection_name, data=None, query=None):
+    col = db[collection_name]
+    col.insert_one(data)
+
+def insert_many(db, collection_name, data=None, query=None):
+    col = db[collection_name]
+    col.insert(data)
+
+def update(db, collection_name, data=None, query=None):
+    col = db[collection_name]
+    col.update_one(query, {'$set': data})
+
+def delete(db, collection_name, data=None, query=None):
+    col = db[collection_name]
+    col.delete_one(query)
+
+transaction_operation_types = {
+    DB_OPERATION_INSERT: insert,
+    DB_OPERATION_UPDATE: insert_many,
+    DB_OPERATION_INSERT_MANY: insert_many,
+    DB_OPERATION_DELETE: delete
+}
+
+def db_batch_operation(db_name, operations):
+    db = connect()[db_name]
+    try:
+        for operation in operations:
+            col_name = operation['col_name']
+            data = None
+            query = None
+            if 'data' in operation.keys():
+                data = operation['data']
+            if 'query' in operation.keys():
+                query = operation['query']
+            if operation['type'] in transaction_operation_types:
+                transaction_operation_types[operation['type']](db, col_name, data=data, query=query)
     except:
         raise ConnectionError()

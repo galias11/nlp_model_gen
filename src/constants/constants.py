@@ -1,4 +1,8 @@
 DB_CONNECTION_TIMEOUT = 3000
+DB_OPERATION_DELETE = 'delete'
+DB_OPERATION_INSERT = 'insert'
+DB_OPERATION_INSERT_MANY = 'insert_many'
+DB_OPERATION_UPDATE = 'update'
 DB_SERVER_URL = 'mongodb://localhost:27017/'
 PATH_SEPARATOR = '-'
 WORD_PROCESSOR_CONFIG_DB = 'word_processor_config'
