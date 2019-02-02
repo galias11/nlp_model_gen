@@ -203,6 +203,45 @@ class WordProcessorController:
     def get_fuzzy_generator_configs(self):
         return self.__fuzzy_generator_cfg
 
+    def map_conjugator_exception(self, exception):
+        exception_copy = exception
+        del exception_copy['theme']
+        return exception_copy
+
+    def get_available_conjugator_configs(self):
+        try:
+            available_configs = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_CONJ_CFG_COLLECTION, fields={'_id': 0})
+            available_exceptions = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, fields={'_id': 0})
+            available_irr_groups = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_GROUPS_COLLECTION, fields={'_id': 0})
+            available_config_themes = []
+            for config_theme in available_configs:
+                theme_name = config_theme['theme']
+                theme = dict({})
+                theme['theme'] = theme_name
+                theme['general_settings'] = config_theme
+                theme['irregular_verb_exceptions'] = list(map(self.map_conjugator_exception, list(filter(lambda exception: exception['theme'] == theme_name, available_exceptions))))
+                theme['irregular_verb_groups'] = next((group for group in available_irr_groups if group['theme'] == theme_name), {})
+                del theme['general_settings']['theme']
+                del theme['irregular_verb_groups']['theme']
+                available_config_themes.append(theme)
+            return available_config_themes
+        except:
+            return []
+
+    def get_available_fuzzy_gen_configs(self):
+        try:
+            available_configs = list(db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, fields={'_id': 0}))
+            return available_configs
+        except:
+            return []
+
+    def get_available_conversor_configs(self):
+        try:
+            available_configs = list(db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, fields={'_id': 0}))
+            return available_configs
+        except:
+            return []
+
     def conjugate_verb(self, verb=''):
         if not self.__init_success:
             return
