@@ -35,7 +35,7 @@ def db_get_item(db_name, col_name, query=None, fields=None):
 def db_get_items(db_name, col_name, query=None, fields=None):
     try:
         col = get_collection(db_name, col_name)
-        return col.find(query, fields)
+        return list(col.find(query, fields))
     except:
         raise ConnectionError()
 
@@ -53,10 +53,10 @@ def db_insert_items(db_name, col_name, elements):
     except:
         raise ConnectionError()
 
-def db_update_item(db_name, col_name, query, updated_items):
+def db_update_item(db_name, col_name, query, updated_item):
     try:
         col = get_collection(db_name, col_name)
-        return col.update_one(query, { '$set': updated_items })
+        return col.update_one(query, {'$set': updated_item})
     except:
         raise ConnectionError()
 
@@ -92,7 +92,7 @@ def delete(db, collection_name, data=None, query=None):
 
 transaction_operation_types = {
     DB_OPERATION_INSERT: insert,
-    DB_OPERATION_UPDATE: insert_many,
+    DB_OPERATION_UPDATE: update,
     DB_OPERATION_INSERT_MANY: insert_many,
     DB_OPERATION_DELETE: delete
 }
