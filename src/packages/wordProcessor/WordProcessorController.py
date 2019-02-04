@@ -3,6 +3,8 @@ import copy
 
 # @Contants
 from src.constants.constants import (
+    DB_OPERATION_DELETE,
+    DB_OPERATION_DELETE_MANY,
     DB_OPERATION_INSERT,
     DB_OPERATION_INSERT_MANY,
     DB_OPERATION_UPDATE,
@@ -22,10 +24,11 @@ from src.constants.constants import (
 from src.utils.fileUtils import load_dict_from_json
 from src.utils.objectUtils import update_dict
 from src.utils.dbUtils import (
-    db_check_collection, 
-    db_insert_item, 
-    db_get_items, 
-    db_get_item, 
+    db_check_collection,
+    db_delete_items,
+    db_insert_item,
+    db_get_items,
+    db_get_item,
     db_drop_collection,
     db_batch_operation,
     db_update_item
@@ -74,8 +77,7 @@ class WordProcessorController:
             self.fuzzy_generator = FuzzyTermsGenerator(self.__fuzzy_generator_cfg)
             self.conversor = Conversor(self.__noun_conversor_cfg)
             self.__init_success = True
-        except Exception as e:
-            print(str(e)) # TODO: Logs
+        except:
             self.__init_success = False
 
     def __initialize_controller(self):
@@ -571,6 +573,65 @@ class WordProcessorController:
             updated_theme_data['theme'] = theme_name
             updated_entries = db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name}, updated_theme_data).matched_count
             return updated_entries > 0
+        except:
+            return False
+
+    def remove_conjugator_theme(self, theme_name):
+        """
+        Elimina completamente un tema de configuración para el conjugador. El tema debe existir, no se puede 
+        eliminar el tema por defecto.
+
+        :theme_name: [String] - Nombre del tema.
+
+        :return: [bool] - True si el borrado se realizó exitosamente, False en caso contrario.
+        """
+        try:
+            existing_themes = self.__get_existing_themes(WORD_PROCESSOR_CONJ_CFG_COLLECTION)
+            if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                return False
+            db_batch_operation(WORD_PROCESSOR_CONFIG_DB, [
+                {'type': DB_OPERATION_DELETE, 'col_name': WORD_PROCESSOR_CONJ_CFG_COLLECTION, 'query': {'theme': theme_name}},
+                {'type': DB_OPERATION_DELETE_MANY, 'col_name': WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, 'query': {'theme': theme_name}},
+                {'type': DB_OPERATION_DELETE, 'col_name': WORD_PROCESSOR_VERB_GROUPS_COLLECTION, 'query': {'theme': theme_name}}
+            ])
+            return True
+        except:
+            return False
+
+    def remove_fuzzy_gen_theme(self, theme_name):
+        """
+        Elimina completamente un tema de configuración para el generador fuzzy. El tema debe existir, no se puede
+        eliminar el tema por defecto.
+
+        :theme_name: [String] - Nombre del tema
+
+        :return: [bool] - True si el borrado se realizó exitosamente, False en caso contrario.
+        """
+        try:
+            existing_themes = self.__get_existing_themes(WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
+            if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                return False
+            db_delete_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name})
+            return True
+        except:
+            return False
+
+    def remove_noun_conversor_theme(self, theme_name):
+        """
+        Elimna completamente un tema de configuración para el conversor de sustantivos. El tema debe existir, no se puede
+        elimnar el tema por defecto.
+
+        :theme_name: [String] - Nombre del tema
+
+        :return: [bool] - True si el borrado se realizó exitosamente, False en caso contrario.
+        """
+        try:
+            existing_themes = self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
+            if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                print('chote')
+                return False
+            db_delete_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name})
+            return True
         except:
             return False
 

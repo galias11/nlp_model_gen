@@ -5,6 +5,7 @@ import pymongo
 from src.constants.constants import (
     DB_CONNECTION_TIMEOUT,
     DB_OPERATION_DELETE,
+    DB_OPERATION_DELETE_MANY,
     DB_OPERATION_INSERT,
     DB_OPERATION_INSERT_MANY,
     DB_OPERATION_UPDATE,
@@ -67,6 +68,13 @@ def db_delete_item(db_name, col_name, query):
     except:
         raise ConnectionError()
 
+def db_delete_items(db_name, col_name, query):
+    try:
+        col = get_collection(db_name, col_name)
+        return col.delete_many(query)
+    except:
+        raise ConnectionError()
+
 def db_drop_collection(db_name, col_name):
     try:
         col = get_collection(db_name, col_name)
@@ -90,11 +98,16 @@ def delete(db, collection_name, data=None, query=None):
     col = db[collection_name]
     col.delete_one(query)
 
+def delete_all(db, collection_name, data=None, query=None):
+    col = db[collection_name]
+    col.delete_many(query)
+
 transaction_operation_types = {
     DB_OPERATION_INSERT: insert,
     DB_OPERATION_UPDATE: update,
     DB_OPERATION_INSERT_MANY: insert_many,
-    DB_OPERATION_DELETE: delete
+    DB_OPERATION_DELETE: delete,
+    DB_OPERATION_DELETE_MANY: delete_all
 }
 
 def db_batch_operation(db_name, operations):
