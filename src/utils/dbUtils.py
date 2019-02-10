@@ -56,8 +56,9 @@ def db_insert_items(db_name, col_name, elements):
 
 def db_update_item(db_name, col_name, query, updated_item):
     try:
+        search_query = query if query is not None else {}
         col = get_collection(db_name, col_name)
-        return col.update_one(query, {'$set': updated_item})
+        return col.update_one(search_query, {'$set': updated_item})
     except:
         raise ConnectionError()
 

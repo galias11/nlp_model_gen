@@ -4,13 +4,13 @@ import fnmatch
 # [WIP] Esta clase cumple la función de recibir un sustantivo y devolver su plurar
 class Conversor:
     def __init__(self, general_configs):
-        self.configs = {
+        self.__configs = {
             'noun_groups': general_configs['groups'],
             'exceptions': general_configs['exceptions']
         }
 
-    def set_config_theme(self, general_configs):
-        self.configs = {
+    def set_config(self, general_configs):
+        self.__configs = {
             'noun_groups': general_configs['groups'],
             'exceptions': general_configs['exceptions']
         }
@@ -24,9 +24,9 @@ class Conversor:
                 first_flag = False
             else:
                 line += ' '
-            if not word in self.configs['exceptions']:
+            if not word in self.__configs['exceptions']:
                 founded = False
-                for group in self.configs['noun_groups']:
+                for group in self.__configs['noun_groups']:
                     if any(fnmatch.fnmatch(word, suffix) for suffix in group['suffixes']):
                         if 'backReplacements' in group.keys():
                             for backReplacement in group['backReplacements']:
