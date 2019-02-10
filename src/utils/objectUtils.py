@@ -67,3 +67,23 @@ def update_dict(origin_dict, new_data=None, deletion_keys=None):
         if key in origin_dict_copy.keys():
             del origin_dict_copy[key]
     return origin_dict_copy
+
+def remove_object_from_list(object_list, search_object):
+    """
+    Elimina de una lista al objeto cuyas keys coincidan en valor con el patron pasado como parametro.
+
+    :list: [List] - Lista original.
+
+    :search_object: [Dict] - Objeto patron de comparación.
+    """
+    if object_list is None or search_object is None:
+        return
+    for element in object_list:
+        found = True
+        for key in search_object.keys():
+            if not key in element.keys() or search_object[key] != element[key]:
+                found = False
+                break
+        if found is True:
+            object_list.remove(element)
+            return

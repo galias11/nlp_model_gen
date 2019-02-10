@@ -22,7 +22,10 @@ from src.constants.constants import (
 
 # @Utils
 from src.utils.fileUtils import load_dict_from_json
-from src.utils.objectUtils import update_dict
+from src.utils.objectUtils import (
+    update_dict,
+    remove_object_from_list
+)
 from src.utils.dbUtils import (
     db_check_collection,
     db_delete_items,
@@ -51,13 +54,13 @@ class WordProcessorController:
     Al iniciar se conecta a la base de datos para obtener tanto la configuración activa
     como los perfiles correspondientes a dicho tema.
     """
-    def __init__(self, mode = 0):
+    def __init__(self, mode=0):
         self.__init_success = False
         self.__conjugator_active_theme = ''
         self.__fuzzy_gen_active_theme = ''
         self.__noun_conversor_active_theme = ''
         self.__conjugator_general_cfg = dict({})
-        self.__conjugator_verb_exceptions = dict({})
+        self.__conjugator_verb_exceptions = list([])
         self.__conjugator_verb_groups = dict({})
         self.__fuzzy_generator_cfg = dict({})
         self.__noun_conversor_cfg = dict({})
@@ -73,9 +76,9 @@ class WordProcessorController:
             self.__initialize_conjugator()
             self.__initialize_fuzzy_generator()
             self.__initialize_noun_conversor()
-            self.conjugator = Conjugator(mode, self.__conjugator_general_cfg, self.__conjugator_verb_groups, self.__conjugator_verb_exceptions)
-            self.fuzzy_generator = FuzzyTermsGenerator(self.__fuzzy_generator_cfg)
-            self.conversor = Conversor(self.__noun_conversor_cfg)
+            self.__conjugator = Conjugator(mode, self.__conjugator_general_cfg, self.__conjugator_verb_groups, self.__conjugator_verb_exceptions)
+            self.__fuzzy_generator = FuzzyTermsGenerator(self.__fuzzy_generator_cfg)
+            self.__conversor = Conversor(self.__noun_conversor_cfg)
             self.__init_success = True
         except:
             self.__init_success = False
@@ -368,7 +371,8 @@ class WordProcessorController:
                 {'type': DB_OPERATION_INSERT, 'col_name': WORD_PROCESSOR_VERB_GROUPS_COLLECTION, 'data': updated_irregular_groups}
             ])
             return True
-        except:
+        except Exception as e:
+            print(e)
             return False
 
     def add_conjugator_exceptions(self, theme_name, exceptions):
@@ -395,6 +399,11 @@ class WordProcessorController:
                 updated_exception['theme'] = theme_name
                 transaction_data.append({'type': DB_OPERATION_INSERT, 'col_name': WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, 'data': updated_exception})
             db_batch_operation(WORD_PROCESSOR_CONFIG_DB, transaction_data)
+            if theme_name == self.__conjugator_active_theme:
+                updated_exceptions = self.get_conjugator_exceptions()
+                updated_exceptions.extend(exceptions)
+                self.__conjugator_verb_exceptions = updated_exceptions
+                self.__conjugator.set_irregular_verb_exceptions_config(self.__conjugator_verb_exceptions)
             return True
         except:
             return False
@@ -484,6 +493,11 @@ class WordProcessorController:
                 {'type': DB_OPERATION_UPDATE, 'col_name': WORD_PROCESSOR_CONJ_CFG_COLLECTION, 'data': updated_config_data, 'query': {'theme': theme_name}},
                 {'type': DB_OPERATION_UPDATE, 'col_name': WORD_PROCESSOR_VERB_GROUPS_COLLECTION, 'data': updated_irr_groups_data, 'query': {'theme': theme_name}}
             ])
+            if theme_name == self.__conjugator_active_theme:
+                self.__conjugator_general_cfg = updated_config_data
+                self.__conjugator_verb_groups = updated_irr_groups_data
+                self.__conjugator.set_general_config(updated_config_data)
+                self.__conjugator.set_irregular_verb_exceptions_config(updated_config_data)
             return True
         except:
             return False
@@ -522,6 +536,10 @@ class WordProcessorController:
                 return False
             updated_exception_data['theme'] = theme_name
             updated_entries = db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, {'theme': theme_name, 'key': exception_key}, updated_exception_data).matched_count
+            if theme_name == self.__conjugator_active_theme:
+                remove_object_from_list(self.__conjugator_verb_exceptions, {'theme': theme_name, 'key': exception_key})
+                self.__conjugator_verb_exceptions.append(updated_exception_data)
+                self.__conjugator.set_irregular_verb_exceptions_config(self.__conjugator_verb_exceptions)
             return updated_entries > 0
         except:
             return False
@@ -547,6 +565,9 @@ class WordProcessorController:
                 return False
             updated_theme_data['theme'] = theme_name
             updated_entries = db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name}, updated_theme_data).matched_count
+            if theme_name == self.__fuzzy_gen_active_theme:
+                self.__fuzzy_generator_cfg = updated_theme_data
+                self.__fuzzy_generator.set_config(self.__fuzzy_generator_cfg)
             return updated_entries > 0
         except:
             return False
@@ -572,6 +593,9 @@ class WordProcessorController:
                 return False
             updated_theme_data['theme'] = theme_name
             updated_entries = db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name}, updated_theme_data).matched_count
+            if theme_name == self.__noun_conversor_active_theme:
+                self.__noun_conversor_cfg = updated_theme_data
+                self.__conversor.set_config(updated_theme_data)
             return updated_entries > 0
         except:
             return False
@@ -579,7 +603,8 @@ class WordProcessorController:
     def remove_conjugator_theme(self, theme_name):
         """
         Elimina completamente un tema de configuración para el conjugador. El tema debe existir, no se puede 
-        eliminar el tema por defecto.
+        eliminar el tema por defecto. Si el tema a a eliminar es el activo actualmente, se cambia el tema al tema por
+        defecto.
 
         :theme_name: [String] - Nombre del tema.
 
@@ -588,6 +613,11 @@ class WordProcessorController:
         try:
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_CONJ_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                return False
+            theme_changed = True
+            if theme_name == self.__conjugator_active_theme:
+                theme_changed = self.set_conjugator_active_theme('default')
+            if not theme_changed:
                 return False
             db_batch_operation(WORD_PROCESSOR_CONFIG_DB, [
                 {'type': DB_OPERATION_DELETE, 'col_name': WORD_PROCESSOR_CONJ_CFG_COLLECTION, 'query': {'theme': theme_name}},
@@ -611,6 +641,11 @@ class WordProcessorController:
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
                 return False
+            theme_changed = True
+            if theme_name == self.__fuzzy_gen_active_theme:
+                theme_changed = self.set_fuzzy_generator_active_theme('default')
+            if not theme_changed:
+                return False
             db_delete_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name})
             return True
         except:
@@ -618,7 +653,7 @@ class WordProcessorController:
 
     def remove_noun_conversor_theme(self, theme_name):
         """
-        Elimna completamente un tema de configuración para el conversor de sustantivos. El tema debe existir, no se puede
+        Elimina completamente un tema de configuración para el conversor de sustantivos. El tema debe existir, no se puede
         elimnar el tema por defecto.
 
         :theme_name: [String] - Nombre del tema
@@ -628,9 +663,91 @@ class WordProcessorController:
         try:
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
-                print('chote')
+                return False
+            theme_changed = True
+            if theme_name == self.__noun_conversor_active_theme:
+                theme_changed = self.set_noun_conversor_active_theme('default')
+            if not theme_changed:
                 return False
             db_delete_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name})
+            return True
+        except:
+            return False
+
+    def set_conjugator_active_theme(self, theme_name):
+        """
+        Cambia el tema de configuración activo del conjugador. En primera instancia guarda los cambios en la base de datos. El
+        tema debe existir y no debe ser el tema actual.
+
+        :theme_name: [String] - Nombre del tema
+
+        :return: [Bool] - True si el cambio se realizó con exito, False en caso contrario.
+        """
+        try:
+            if theme_name == self.__conjugator_active_theme:
+                return False
+            existing_themes = self.__get_existing_themes(WORD_PROCESSOR_CONJ_CFG_COLLECTION)
+            if not theme_name in existing_themes:
+                return False
+            next_config_theme = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_CONJ_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0})
+            next_verb_exceptions = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, {'theme': theme_name}, {'_id': 0})
+            next_verb_groups = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_GROUPS_COLLECTION, {'theme': theme_name}, {'_id': 0})
+            db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_GENERAL_SETTING_COLLECTION, None, {'conjugator_active_theme': theme_name})
+            self.__conjugator_active_theme = theme_name
+            self.__conjugator_general_cfg = next_config_theme
+            self.__conjugator_verb_exceptions = next_verb_exceptions
+            self.__conjugator_verb_groups = next_verb_groups
+            self.__conjugator.set_general_config(next_config_theme)
+            self.__conjugator.set_irregular_verb_exceptions_config(next_verb_exceptions)
+            self.__conjugator.set_irregular_verb_groups_config(next_verb_groups)
+            return True
+        except:
+            return False
+
+    def set_fuzzy_generator_active_theme(self, theme_name):
+        """
+        Cambia el tema de configuración activo del generador fuzzy. En primera instancia guarda los cambios en la base de datos. El
+        tema debe existir y no debe ser el tema actual.
+
+        :theme_name: [String] - Nombre del tema
+
+        :return: [Bool] - True si el cambio se realizó con exito. False en caso contrario.
+        """
+        try:
+            if theme_name == self.__fuzzy_gen_active_theme:
+                return False
+            existing_themes = self.__get_existing_themes(WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
+            if not theme_name in existing_themes:
+                return False
+            next_config_theme = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0})
+            db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_GENERAL_SETTING_COLLECTION, None, {'fuzzy_gen_active_theme': theme_name})
+            self.__fuzzy_gen_active_theme = theme_name
+            self.__fuzzy_generator_cfg = next_config_theme
+            self.__fuzzy_generator.set_config(next_config_theme)
+            return True
+        except:
+            return False
+
+    def set_noun_conversor_active_theme(self, theme_name):
+        """
+        Cambia el tema de configuración activo del conversor de sustantivos. En primera instancia guarda los cambios en la base de
+        datos. El tema debe existir y no debe ser el tema actual.
+
+        :theme_name: [String] - Nombre del tema.
+
+        :return: [Bool] - True si el cambio se realizó con exito. False en caso contrario.
+        """
+        try:
+            if theme_name == self.__noun_conversor_active_theme:
+                return False
+            existing_themes = self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
+            if not theme_name in existing_themes:
+                return False
+            next_config_theme = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0})
+            db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_GENERAL_SETTING_COLLECTION, None, {'fuzzy_gen_active_theme': theme_name})
+            self.__noun_conversor_active_theme = theme_name
+            self.__noun_conversor_cfg = next_config_theme
+            self.__conversor.set_config(next_config_theme)
             return True
         except:
             return False
@@ -647,7 +764,7 @@ class WordProcessorController:
         """
         if not self.__init_success:
             return None
-        return self.conjugator.generar_conjugaciones(verb.lower())
+        return self.__conjugator.generar_conjugaciones(verb.lower())
 
     def conjugate_verb_table_view(self, verb=''):
         """
@@ -658,7 +775,7 @@ class WordProcessorController:
         """
         if not self.__init_success:
             return
-        self.conjugator.table_view(verb.lower())
+        self.__conjugator.table_view(verb.lower())
 
     def get_fuzzy_set(self, term='', max_distance=1):
         """
@@ -675,7 +792,7 @@ class WordProcessorController:
         """
         if not self.__init_success:
             return None
-        return self.fuzzy_generator.get_fuzzy_tokens(term.lower(), max_distance)
+        return self.__fuzzy_generator.get_fuzzy_tokens(term.lower(), max_distance)
 
     def get_plural(self, noun=''):
         """
@@ -688,4 +805,4 @@ class WordProcessorController:
         """
         if not self.__init_success:
             return None
-        return self.conversor.a_plural(noun.lower())
+        return self.__conversor.a_plural(noun.lower())
