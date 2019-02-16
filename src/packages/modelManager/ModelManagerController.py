@@ -1,6 +1,6 @@
 # @Classes
 from .modelDataManager.ModelDataManager import ModelDataManager
-from .modelLoader.modelLoader import ModelLoader
+from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
 
 # @Constants
@@ -8,24 +8,45 @@ from src.constants.constants import MODEL_MANAGER_DEFAULT_BASE_MODEL
 
 class ModelManagerController:
     __models = list([])
-    __model_loader = None
     __init_success = False
 
     def __init__(self):
-        self.__model_loader = ModelLoader()
-        self.__models = list([])
+        self.__initialize()
 
     def __initialize(self):
         """
         Inicializa el modulo.
         """
+        try:
+            stored_models_data = ModelDataManager.get_models()
+            for model in stored_models_data:
+                model_object = Model(model['model_name'], model['description'], model['author'], model['path'])
+                self.__models.append(model_object)
+            self.__init_success = True
+        except Exception as e:
+            print(e)
+            self.__init_success = False
 
-    def __load_spacy(self):
+    def __get_model(self, model_name):
         """
-        Carga la libreria de spacy, si el resultado es existo se cambia a true el valor
-        de la flag init_success
+        Obtiene un modelo de la lista de modelos disponibles.
+
+        :model_name: [String] - Nombre del modelo.
+
+        :return: [Model] - Modelo encontrado, None si el modelo no existe
         """
-        pass
+        for model in self.__models:
+            if model.get_model_name() == model_name:
+                return model
+        return None
+
+    def __initialize_custom_model(self):
+        """
+        Inicializa un nuevo modelo de spacy, cargando lo en memoria.
+
+        :return: [SpacyModelRef] - Referencia al nuevo modelo de spacy creado.
+        """
+        return ModelLoader.initiate_default_model()
 
     def load_model(self, model_name):
         """
@@ -43,7 +64,7 @@ class ModelManagerController:
 
         :return: [List(Dict)] - Lista de los modelos disponibles y sus caracteristicas.
         """
-        pass
+        return self.__models
 
     def analyze_text(self, model_name, text):
         """
@@ -86,7 +107,19 @@ class ModelManagerController:
 
         :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
         """
-        pass
+        if self.__get_model(model_name) is not None:
+            return False
+        try:
+            custom_model = self.__initialize_custom_model()
+            # TODO: Add tokenizer_exceptions logic here.
+            ModelDataManager.save_model_data(model_name, description, author, path)
+            ModelLoader.save_model(custom_model, path)
+            new_model = Model(model_name, description, author, path)
+            new_model.set_reference(custom_model)
+            self.__models.append(new_model)
+            return True
+        except:
+            return False
 
     def edit_model(self, model_name, description):
         """
