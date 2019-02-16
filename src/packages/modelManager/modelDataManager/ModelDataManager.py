@@ -2,7 +2,12 @@
 from src.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
 
 # @Helpers
-from src.utils.dbUtils import db_get_items
+from src.utils.dbUtils import ( 
+    db_get_item, 
+    db_get_items, 
+    db_insert_item,
+    db_update_item
+)
 
 class ModelDataManager:
     def __init__(self):
@@ -20,6 +25,18 @@ class ModelDataManager:
         except:
             return None
 
+    def __check_existing_model(self, model_name):
+        """
+        Devuelve un listado de los identificadores de cada modelo disponible.
+
+        :return: [List(String)] - Listado con los identificadores de cada modelo guardado.
+        """
+        available_model_names = list(map(
+            lambda model: model['model_name'], 
+            db_get_items(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, None, {'model_name': 1})
+        ))
+        return model_name in available_model_names
+
     def save_model_data(self, model_name, description, author, path):
         """
         Guarda información de un modelo.
@@ -34,11 +51,23 @@ class ModelDataManager:
 
         :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
-        pass
+        try:
+            if self.__check_existing_model(model_name):
+                return False
+            data_dict = {
+                'model_name': model_name,
+                'description': description,
+                'author': author,
+                'path': path
+            }
+            db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
+            return True
+        except:
+            return False
 
-    def modify_model_data(self, model_name, description):
+    def modify_model_data(self, previous_model_name, model_name, description):
         """
-        Modifica el nombre o la descripción de un modelo, el nuevo nombre no debe existir.
+        Modifica el nombre o la descripción de un modelo, el nuevo nombre no debe existir y si debe hacerlo el previo.
 
         :model_name: [String] - Nuevo nombre del modelo (actua como id).
 
