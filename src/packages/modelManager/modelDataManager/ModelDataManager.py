@@ -75,7 +75,19 @@ class ModelDataManager:
 
         :return: [boolean] - True si se ha guardado la modificación con exito, False en caso contrario.
         """
-        pass
+        try:
+            if self.__check_existing_model(model_name):
+                return False
+            updated_data = {
+                'model_name': model_name,
+                'description': description
+            }
+            update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': previous_model_name}, updated_data)
+            if update_count == 0:
+                return False
+            return True
+        except:
+            return False
 
     def remove_model_data(self, model_name):
         """
