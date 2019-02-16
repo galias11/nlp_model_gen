@@ -19,7 +19,7 @@ class ModelLoader:
 
         :path: [String] - Ruta para acceder al modelo.
 
-        :return: [SpacyModelRef] - Referencia al modelo de spacy
+        :return: [SpacyModelRef] - Referencia al modelo de spacy, None si no se pdo cargar el modelo.
         """
         try:
             nlp_model = spacy.load(path)
