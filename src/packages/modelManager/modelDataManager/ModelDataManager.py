@@ -1,6 +1,9 @@
 # @Constatns
 from src.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
 
+# @Helpers
+from src.utils.dbUtils import db_get_items
+
 class ModelDataManager:
     def __init__(self):
         pass
@@ -11,7 +14,11 @@ class ModelDataManager:
 
         :return: [List(Dict)] - Listado de todos los modelos y sus datos.
         """
-        pass
+        try:
+            available_models = db_get_items(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, None, {'_id': 0})
+            return available_models
+        except:
+            return None
 
     def save_model_data(self, model_name, description, author, path):
         """
