@@ -1,19 +1,21 @@
 # @Vendors
 import spacy
 
+# @Utils
+from src.utils.fileUtils import check_dir_existence
+
+# @Constants
+from src.constants.constants import (
+    MODEL_MANAGER_DEFAULT_BASE_MODEL,
+    MODEL_MANAGER_ROOT_DIR
+)
+
 class ModelLoader:
-    __connected: False
-
     def __init__(self):
-        self.__initialize()
-
-    def __initialize(self):
-        """
-        Inicializa el modulo conectando con spacy.
-        """
         pass
 
-    def load_model(self, path):
+    @staticmethod
+    def load_model(path):
         """
         Carga el modelo a partir del path.
 
@@ -27,17 +29,38 @@ class ModelLoader:
         except:
             return None
 
-    def save_model(self, path):
+    @staticmethod
+    def initiate_default_model():
+        """
+        Inicializa un instancia del modelo por defecto.
+    
+        :return: [SpacyModelRef] - Referencia al modelo de spacy
+        """
+        default_nlp_model = ModelLoader.load_model(MODEL_MANAGER_DEFAULT_BASE_MODEL)
+        return default_nlp_model
+
+    @staticmethod
+    def save_model(model, path):
         """
         Guarda el modelo en el path solicitado.
+
+        :model: [SpacyModelRef] - Referencia a un modelo de spacy.
 
         :path: [String] - Ruta en la cual guardar el modelo.
 
         :return: [boolean] - True si el modelo fue cargado correctamente, False en caso contrario.
         """
-        pass
+        try:
+            full_path = MODEL_MANAGER_ROOT_DIR + path
+            if check_dir_existence(full_path):
+                return False
+            model.to_disk(full_path)
+            return True
+        except:
+            return False
 
-    def delete_model_files(self, path):
+    @staticmethod
+    def delete_model_files(path):
         """
         Elimina los archivos de un modelo del disco.
 
@@ -47,7 +70,8 @@ class ModelLoader:
         """
         pass
 
-    def apply_training_data(self, path, training_data):
+    @staticmethod
+    def apply_training_data(path, training_data):
         """
         Ejecuta la rutina de entrenamiento de un modelo particular.
 

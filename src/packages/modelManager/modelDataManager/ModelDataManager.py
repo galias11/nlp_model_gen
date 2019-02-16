@@ -3,7 +3,7 @@ from src.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COL
 
 # @Helpers
 from src.utils.dbUtils import ( 
-    db_get_item, 
+    db_delete_item,
     db_get_items, 
     db_insert_item,
     db_update_item
@@ -13,7 +13,8 @@ class ModelDataManager:
     def __init__(self):
         pass
 
-    def get_models(self):
+    @staticmethod
+    def get_models():
         """
         Devuelve un listado de los modelos disponibles y sus caracteristicas.
 
@@ -25,7 +26,8 @@ class ModelDataManager:
         except:
             return None
 
-    def __check_existing_model(self, model_name):
+    @staticmethod
+    def check_existing_model(model_name):
         """
         Devuelve un listado de los identificadores de cada modelo disponible.
 
@@ -37,7 +39,8 @@ class ModelDataManager:
         ))
         return model_name in available_model_names
 
-    def save_model_data(self, model_name, description, author, path):
+    @staticmethod
+    def save_model_data(model_name, description, author, path):
         """
         Guarda información de un modelo.
 
@@ -52,7 +55,7 @@ class ModelDataManager:
         :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
         try:
-            if self.__check_existing_model(model_name):
+            if ModelDataManager.check_existing_model(model_name): 
                 return False
             data_dict = {
                 'model_name': model_name,
@@ -65,7 +68,8 @@ class ModelDataManager:
         except:
             return False
 
-    def modify_model_data(self, previous_model_name, model_name, description):
+    @staticmethod
+    def modify_model_data(previous_model_name, model_name, description):
         """
         Modifica el nombre o la descripción de un modelo, el nuevo nombre no debe existir y si debe hacerlo el previo.
 
@@ -76,20 +80,19 @@ class ModelDataManager:
         :return: [boolean] - True si se ha guardado la modificación con exito, False en caso contrario.
         """
         try:
-            if self.__check_existing_model(model_name):
+            if ModelDataManager.check_existing_model(model_name):
                 return False
             updated_data = {
                 'model_name': model_name,
                 'description': description
             }
-            update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': previous_model_name}, updated_data)
-            if update_count == 0:
-                return False
-            return True
+            update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': previous_model_name}, updated_data).modified_count
+            return True if update_count > 0 else False
         except:
             return False
 
-    def remove_model_data(self, model_name):
+    @staticmethod
+    def remove_model_data(model_name):
         """
         Elimina la entrada para un modelo.
 
@@ -97,4 +100,8 @@ class ModelDataManager:
 
         :return: [boolean] - True si se ha eliminado con exito, False en caso contrario.
         """
-        pass
+        try:
+            delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': model_name}).deleted_count
+            return True if delete_count > 0 else False
+        except:
+            return False

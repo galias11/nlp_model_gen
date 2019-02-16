@@ -1,4 +1,5 @@
 # @Vendors
+import os
 import json
 
 # @Constants
@@ -72,3 +73,14 @@ def replace_file(document, content):
     path_from_root = get_path(document)
     if path_from_root is not None:
         overwrite_json_file(path_from_root, content)
+
+def check_dir_existence(path):
+    """
+    Verifica la existencia de un directorio (especificado en el parametro path). Valida no solo que el archivo 
+    exista sino que también sea un directorio.
+
+    :path: [String] - Ruta relativa al directorio.
+
+    :return: [boolean] - True si el directorio existe, false en caso contrario
+    """
+    return os.path.exists(path) and os.path.isdir(path)
