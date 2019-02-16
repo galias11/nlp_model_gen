@@ -1,10 +1,19 @@
+# @Classes
+from .modelDataManager.ModelDataManager import ModelDataManager
+from .modelLoader.modelLoader import ModelLoader
+from .model.Model import Model
+
+# @Constants
+from src.constants.constants import MODEL_MANAGER_DEFAULT_BASE_MODEL
+
 class ModelManagerController:
     __models = list([])
     __model_loader = None
     __init_success = False
 
     def __init__(self):
-        pass
+        self.__model_loader = ModelLoader()
+        self.__models = list([])
 
     def __initialize(self):
         """

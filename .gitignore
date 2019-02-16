@@ -1,5 +1,11 @@
+# MacOS
+.DS_Store
+
 # Python cache
 __pycache__
 
 # VS code settings
 .vscode/*
+
+# Models
+models
