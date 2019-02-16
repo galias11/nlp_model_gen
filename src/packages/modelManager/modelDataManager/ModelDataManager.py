@@ -1,3 +1,6 @@
+# @Constatns
+from src.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
+
 class ModelDataManager:
     def __init__(self):
         pass
