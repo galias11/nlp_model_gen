@@ -1,12 +1,15 @@
+# @Vendors
+import spacy
+
 class ModelLoader:
     __connected: False
 
     def __init__(self):
-        pass
+        self.__initialize()
 
     def __initialize(self):
         """
-        Inicializa el modulo.
+        Inicializa el modulo conectando con spacy.
         """
         pass
 
@@ -18,7 +21,11 @@ class ModelLoader:
 
         :return: [SpacyModelRef] - Referencia al modelo de spacy
         """
-        pass
+        try:
+            nlp_model = spacy.load(path)
+            return nlp_model
+        except:
+            return None
 
     def save_model(self, path):
         """
