@@ -24,7 +24,8 @@ class ModelLoader:
         :return: [SpacyModelRef] - Referencia al modelo de spacy, None si no se pdo cargar el modelo.
         """
         try:
-            nlp_model = spacy.load(path)
+            full_path = MODEL_MANAGER_ROOT_DIR + path
+            nlp_model = spacy.load(full_path)
             return nlp_model
         except:
             return None
