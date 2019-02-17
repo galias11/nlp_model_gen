@@ -3,9 +3,6 @@ from .modelDataManager.ModelDataManager import ModelDataManager
 from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
 
-# @Constants
-from src.constants.constants import MODEL_MANAGER_DEFAULT_BASE_MODEL
-
 class ModelManagerController:
     __models = list([])
     __init_success = False
@@ -56,7 +53,11 @@ class ModelManagerController:
 
         :return: [boolean] - True si fue exitoso, false en caso contrario.
         """
-        pass
+        selected_model = self.__get_model(model_name)
+        if selected_model is None:
+            return False
+        selected_model.load()
+        return selected_model.is_loaded()
 
     def get_available_models(self):
         """
