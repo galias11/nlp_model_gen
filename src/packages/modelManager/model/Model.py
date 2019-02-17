@@ -62,3 +62,24 @@ class Model:
         :return: [boolean] - True si el entrenamiento fue exitoso, False en caso contrario.
         """
         pass
+
+    def to_dict(self):
+        """
+        Retorna un diccionario con la información del modelo.
+
+        :return: [Dict] - Diccionario con los datos del modelo.
+        """
+        return dict({
+            "model_name": self.__model_name,
+            "descripcion": self.__description,
+            "author": self.__author,
+            "path": self.__path
+        })
+
+    def __eq__(self, other):
+        """
+        Sobreescribe metodo equals de la clase.
+        """
+        if other is None or not isinstance(other, Model):
+            return False
+        return self.__model_name == other.get_model_name()

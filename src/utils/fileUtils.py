@@ -1,6 +1,7 @@
 # @Vendors
 import os
 import json
+import shutil
 
 # @Constants
 from src.constants.constants import PATH_SEPARATOR
@@ -84,3 +85,17 @@ def check_dir_existence(path):
     :return: [boolean] - True si el directorio existe, false en caso contrario
     """
     return os.path.exists(path) and os.path.isdir(path)
+
+def remove_dir(path):
+    """
+    Elimina el directorio indicado en path del disco.
+
+    :path: [String] - Ruta relativa al directorio.
+
+    :return: [boolean] - True si el borrado se realizo con exito, False en caso contrario.
+    """
+    try:
+        shutil.rmtree(path)
+        return True
+    except:
+        return False
