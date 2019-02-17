@@ -62,9 +62,20 @@ class ModelManagerController:
         """
         Devuelve una lista de los modelos disponibles y sus caracteristicas.
 
-        :return: [List(Dict)] - Lista de los modelos disponibles y sus caracteristicas.
+        :return: [List(Model)] - Lista de los modelos disponibles y sus caracteristicas.
         """
         return self.__models
+
+    def get_available_models_dict(self):
+        """
+        Devuelve la lista de modelos disponibles y sus caracteristicas convertidos a formato dict.
+        
+        :return: [List(Dict)] - Lista de los modelos disponibles y sus caracteristicas.
+        """
+        models_list = list([])
+        for model in self.__models:
+            models_list.append(model.to_dict())
+        return models_list
 
     def analyze_text(self, model_name, text):
         """
@@ -132,3 +143,22 @@ class ModelManagerController:
         :return: [boolean] - True si la modificación se ha realizado correctamente, False en caso contrario.
         """
         pass
+
+    def remove_model(self, model_name):
+        """
+        Elimina un modelo del sistema. Borra los datos del mismo de la base de datos y elimina los archivos
+        del mismo del disco.
+
+        :model_name: [String] - Nombre del modelo.
+
+        :return: [boolean] - True si el modelo fue exitosamente borrado, False en caso contrario.
+        """
+        selected_model = self.__get_model(model_name)
+        if selected_model is None:
+            return False
+        if not ModelDataManager.remove_model_data(selected_model.get_model_name()):
+            return False
+        if not ModelLoader.delete_model_files(selected_model.get_path()):
+            return False
+        self.__models.remove(selected_model)
+        return True

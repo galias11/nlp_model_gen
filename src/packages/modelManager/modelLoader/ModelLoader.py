@@ -2,7 +2,7 @@
 import spacy
 
 # @Utils
-from src.utils.fileUtils import check_dir_existence
+from src.utils.fileUtils import ( check_dir_existence, remove_dir )
 
 # @Constants
 from src.constants.constants import (
@@ -68,7 +68,8 @@ class ModelLoader:
 
         :return: [Boolean] - Ture si el modelo fue borrado correctamente, False en caso contrario.
         """
-        pass
+        full_path = MODEL_MANAGER_ROOT_DIR + path
+        return remove_dir(full_path)
 
     @staticmethod
     def apply_training_data(path, training_data):
