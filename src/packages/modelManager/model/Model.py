@@ -29,6 +29,12 @@ class Model:
     def get_path(self):
         return self.__path
 
+    def set_model_name(self, model_name):
+        self.__model_name = model_name
+
+    def set_description(self, description):
+        self.__description = description
+
     def set_reference(self, reference):
         self.__reference = reference
 

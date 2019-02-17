@@ -85,7 +85,7 @@ class ModelManagerController:
 
         :text: [String] - Texto a analizar.
 
-        :return: [Dict] - Resultados del análisis.
+        :return: [SpacyDoc] - Resultados del análisis.
         """
         pass
 
@@ -132,7 +132,7 @@ class ModelManagerController:
         except:
             return False
 
-    def edit_model(self, model_name, description):
+    def edit_model(self, previous_model_name, model_name, description):
         """
         Permite editar la descripción de un modelo. El modelo debe existir.
 
@@ -142,7 +142,17 @@ class ModelManagerController:
 
         :return: [boolean] - True si la modificación se ha realizado correctamente, False en caso contrario.
         """
-        pass
+        selected_model = self.__get_model(previous_model_name)
+        if selected_model is None:
+            return False
+        target_model = self.__get_model(model_name)
+        if target_model is not None:
+            return False
+        if not ModelDataManager.modify_model_data(previous_model_name, model_name, description):
+            return False
+        selected_model.set_model_name(model_name)
+        selected_model.set_description(description)
+        return True
 
     def remove_model(self, model_name):
         """
