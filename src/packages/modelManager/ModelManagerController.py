@@ -78,7 +78,7 @@ class ModelManagerController:
             models_list.append(model.to_dict())
         return models_list
 
-    def analyze_text(self, model_name, text):
+    def analyze_text(self, model_name, text=''):
         """
         Analiza un texto con el modelo solicitado.
 
@@ -86,9 +86,16 @@ class ModelManagerController:
 
         :text: [String] - Texto a analizar.
 
-        :return: [SpacyDoc] - Resultados del análisis.
+        :return: [List(Dict)] - Resultados del análisis.
         """
-        pass
+        selected_model = self.__get_model(model_name)
+        if selected_model is None or text is None:
+            return None
+        if not selected_model.is_loaded():
+            selected_model.load()
+        if not selected_model.is_loaded():
+            return None
+        return selected_model.analyse_text(text)
 
     def train_model(self, model_name, training_data):
         """

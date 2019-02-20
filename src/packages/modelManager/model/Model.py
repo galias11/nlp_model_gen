@@ -1,12 +1,14 @@
 # @Clases
 from ..modelLoader.ModelLoader import ModelLoader
+from ..token.Token import Token
+from ..entity.Entity import Entity
 
 class Model:
     __model_name = ''
     __description = ''
     __author = ''
     __path = ''
-    __reference = False
+    __reference = None
     __loaded = False
 
     def __init__(self, model_name, description, author, path):
@@ -48,6 +50,39 @@ class Model:
         model_reference = ModelLoader.load_model(self.__path)
         if model_reference is not None:
             self.__loaded = True
+        self.__reference = model_reference
+
+    def __process_tokenizer_results(self, doc):
+        """
+        Procesa los resultados del analisis de un texto almacenados en un doc de spacy en función de los
+        resultados del tokenizer.
+
+        :doc: [SpacyDoc] - Documento con los resultado del analisis de spacy.
+
+        :return: [List(Dict)] - Lista con los resultados del analisis del tokenizer   
+        """
+        results = list([])
+        if doc is None:
+            return results
+        for token in doc:
+            results.append(Token(token.lemma_, token.is_oov, token.pos_, token.sent, token.sentiment, token.tag_, token.text))
+        return results
+
+    def __process_ner_results(self, doc):
+        """
+        Procesa los resultados del analisis de un texto almacenados en un doc de spacy en función de los
+        resultados del NER.
+
+        :doc: [SpacyDoc] - Documento con los resultado del analisis de spacy.
+
+        :return: [List(Dict)] - Lista con los resultados del analisis del NER  
+        """
+        results = list([])
+        if doc is None:
+            return results
+        for ent in doc.ents:
+            results.append(Entity(ent.text, ent.start_char, ent.end_char, ent.label_))
+        return results
 
     def analyse_text(self, text):
         """
@@ -55,9 +90,16 @@ class Model:
 
         :text: String - Texto a analizar
 
-        :return: [List(Dict)] - Resultados del análisis.
+        :return: [Dict()] - Resultados del análisis.
         """
-        pass
+        if not self.is_loaded():
+            return None
+        doc = self.__reference(text)
+        results = {
+            'tokenizer_results': self.__process_tokenizer_results(doc),
+            'ner_results': self.__process_ner_results(doc)
+        }
+        return results
 
     def train_model(self, training_data):
         """
