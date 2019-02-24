@@ -80,7 +80,7 @@ class ModelDataManager:
         :return: [boolean] - True si se ha guardado la modificación con exito, False en caso contrario.
         """
         try:
-            if ModelDataManager.check_existing_model(model_name):
+            if previous_model_name != model_name and ModelDataManager.check_existing_model(model_name):
                 return False
             updated_data = {
                 'model_name': model_name,
