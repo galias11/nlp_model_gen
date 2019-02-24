@@ -173,9 +173,6 @@ class ModelManagerController:
         selected_model = self.get_model(previous_model_name)
         if selected_model is None:
             return False
-        target_model = self.get_model(model_name)
-        if target_model is not None:
-            return False
         if not ModelDataManager.modify_model_data(previous_model_name, model_name, description):
             return False
         selected_model.set_model_name(model_name)
