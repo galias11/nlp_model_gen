@@ -45,4 +45,31 @@ class AdminModuleController:
         :return: [List] - Listado de los modelos disponibles en el sistema.
         """
         return self.__model_manager.get_available_models_dict()
-        
+
+    def edit_model_data(self, model_name, new_model_name=None, new_description=None):
+        """
+        Edita los datos de un modelo existente. Si el modelo no existe u ocurre algún error durante
+        la edición de sus datos devolverá false.
+
+        :model_name: [String] - Nombre actual del modelo.
+
+        :new_model_name: [String] - Nuevo nombre a asignar al modelo.
+
+        :new_description: [String] - Nueva descripción para el modelo.
+
+        :return: [bool] - True si la edición se realizó correctamente, False en caso contrario.
+        """
+        current_model = self.__model_manager.get_model(model_name)
+        if current_model is None:
+            return False
+        current_model_name = current_model.get_model_name()
+        edited_model_name = new_model_name
+        current_description = current_model.get_description()
+        edited_description = new_description
+        if new_model_name is None or new_model_name == '':
+            edited_model_name = current_model_name
+        if new_description is None or new_description == '':
+            edited_description = current_description
+        if edited_model_name == current_model_name and edited_description == current_description:
+            return False
+        return self.__model_manager.edit_model(model_name, edited_model_name, edited_description)
