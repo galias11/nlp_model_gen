@@ -5,11 +5,54 @@ DB_OPERATION_INSERT = 'insert'
 DB_OPERATION_INSERT_MANY = 'insert_many'
 DB_OPERATION_UPDATE = 'update'
 DB_SERVER_URL = 'mongodb://localhost:27017/'
+DEFAULT_REPLACE_WILDCARD = '%s'
+DIR_PATH_SEPARATOR = '/'
+LOGGER_WILDCARD = '%s'
 MODEL_MANAGER_DB = 'model_manager_model_data'
 MODEL_MANAGER_DEFAULT_BASE_MODEL = 'es_core_news_md'
 MODEL_MANAGER_MODELS_COLLECTION = 'mm_models_data'
-MODEL_MANAGER_ROOT_DIR = './models/'
+MODEL_MANAGER_ROOT_DIR = './models'
 PATH_SEPARATOR = '-'
+TOKEN_RULES_GEN_NOUN = 'NOUN'
+TOKEN_RULES_GEN_NOUN_SING_TAG = 'NOUN_BASE_SING'
+TOKEN_RULES_GEN_NOUN_PLUR_TAG = 'NOUN_BASE_PLUR'
+TOKEN_RULES_GEN_RULES_EXT = '.json'
+TOKEN_RULES_GEN_TMP_ROOT_PATH = './tmp'
+TOKEN_RULES_GEN_TYPE_NOUN = 'noun'
+TOKEN_RULES_GEN_TYPE_VERB = 'verb'
+TOKEN_RULES_GEN_VERB = 'VERB'
+TOKEN_RULES_GEN_VERB_GROUP_COMPLEX = [
+    'VERB_%s_1STPER_SING',
+    'VERB_%s_2NDPER_SING',
+    'VERB_%s_3RDPER_SING',
+    'VERB_%s_1STPER_PLUR',
+    'VERB_%s_2NDPER_PLUR',
+    'VERB_%s_3RDPER_PLUR'
+]
+TOKEN_RULES_GEN_VERB_GROUP_IMP = [
+    'VERB_PRES_1STPER_PLUR',
+    'VERB_%s_2NDPER_SING',
+    'VERB_%s_3RDPER_SING',
+    'VERB_%s_1STPER_PLUR',
+    'VERB_%s_2NDPER_PLUR',
+    'VERB_%s_3RDPER_PLUR'
+]
+TOKEN_RULES_GEN_VERB_GROUP_SIMPLE = ['%s']
+TOKEN_RULES_GEN_VERB_GROUP_PART = ['%s', '%s', '%s']
+TOKEN_RULES_GEN_VERB_CFG = {
+    'inf': {'time_keys': ['VERB_INF'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_SIMPLE},
+    'ger': {'time_keys': ['VERB_GER'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_SIMPLE},
+    'part': {'time_keys': ['VERB_PART_MASC', 'VERB_PART_FEM', 'VERB_PART_MASC'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_PART},
+    'pres': {'time_keys': ['PRES', 'PRES', 'PRES', 'PRES', 'PRES', 'PRES'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
+    'pret_perf': {'time_keys': ['PAST', 'PAST', 'PAST', 'PAST', 'PAST', 'PAST'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
+    'pret_imperf': {'time_keys': ['PAST', 'PAST', 'PAST', 'PAST', 'PAST', 'PAST'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
+    'fut': {'time_keys': ['FUT', 'FUT', 'FUT', 'FUT', 'FUT', 'FUT'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
+    'impA': {'time_keys': ['', 'IMP', 'IMP', 'IMP', 'IMP', 'IMP'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_IMP},
+    'impB': {'time_keys': ['', 'IMP', 'IMP', 'IMP', 'IMP', 'IMP'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_IMP},
+    'impC': {'time_keys': ['', 'IMP', 'IMP', 'IMP', 'IMP', 'IMP'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_IMP},
+    'condA': {'time_keys': ['COND', 'COND', 'COND', 'COND', 'COND', 'COND'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
+    'condB': {'time_keys': ['SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
+}
 WORD_PROCESSOR_CONFIG_DB = 'word_processor_config'
 WORD_PROCESSOR_CONJ_CFG_COLLECTION = 'wp_conjugator_config'
 WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION = 'wp_fuzzy_gen_config'

@@ -4,7 +4,7 @@ import json
 import shutil
 
 # @Constants
-from src.constants.constants import PATH_SEPARATOR
+from src.constants.constants import DIR_PATH_SEPARATOR, PATH_SEPARATOR
 
 def load_json_file(path_from_root):
     """
@@ -99,3 +99,57 @@ def remove_dir(path):
         return True
     except:
         return False
+
+def dictionary_to_disk(path, dictionary):
+    """
+    Guarda un diccionario a un archivo en disco.
+
+    :param path: ruta absoluta o relativa al archivo a crear.
+
+    :param dictionary: diccionario a guardar.
+    """
+    arch = open(path, 'w')
+    arch.write(json.dumps(dictionary))
+    arch.close()
+
+def create_dir_if_not_exist(path):
+    """
+    Crea un directorio con el path pasado como parametro si es que no existe.
+
+    :param path: ruta absoluta o relativa del directorio.
+    """
+    try:
+        os.stat(path)
+    except:
+        os.mkdir(path)
+
+def build_path(base_dir, file_name, extension=''):
+    """
+    Construye un path a partir de un directorio base y un nombre para el directorio.
+
+    :base_dir: [String] - Directorio base.
+
+    :dir_name: [String] - Nombre del directorio a crear.
+
+    :return: [String] - Ruta creada.
+    """
+    return base_dir + DIR_PATH_SEPARATOR + file_name + extension
+
+def get_files_in_dir(root_path, extension):
+    """
+    Devuelve una colección de todos los archivos dentro de un directorio con la extensión
+    requerida.
+
+    :root_path: [String] - Ruta raiz del directorio de búsqueda.
+
+    :extensión: [String] - Extensión deseada para los archivos.
+
+    :return: [List(File)] - Lista con los punteros a cada uno de los archivos.
+    """
+    files = list([])
+    for file in os.scandir(root_path):
+        if os.path.isdir(file):
+            files.extend(get_files_in_dir(file.path, extension))
+        if file.path.endswith(extension):
+            files.append(file.path)
+    return files

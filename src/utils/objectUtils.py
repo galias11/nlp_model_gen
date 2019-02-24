@@ -87,3 +87,18 @@ def remove_object_from_list(object_list, search_object):
         if found is True:
             object_list.remove(element)
             return
+
+def transform_dict_key_data_to_int(dictionary):
+    """
+    Convierte las keys de un diccionario en valores enteros. Devuelve el mismo diccionario con las keys 
+    transformads en valores enteros.
+
+    :dictionary: [Dict] - Diccionario a convertir
+
+    :return: [Dict] - Diccionario con las keys convertidas
+    """
+    aux_dict = dict({})
+    for key in dictionary:
+        aux_dict[int(key)] = dictionary[key]
+    return aux_dict
+    
