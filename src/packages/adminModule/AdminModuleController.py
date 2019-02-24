@@ -73,3 +73,11 @@ class AdminModuleController:
         if edited_model_name == current_model_name and edited_description == current_description:
             return False
         return self.__model_manager.edit_model(model_name, edited_model_name, edited_description)
+
+    def delete_model_data(self, model_name):
+        """
+        Elimina un modelo del sistema. Al eliminar los modelos se eliminará todo registro del mismo 
+        tanto en la base de datos como en la carpeta de modelos del sistema.
+        """
+        return self.__model_manager.remove_model(model_name)
+        
