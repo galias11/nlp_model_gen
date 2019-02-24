@@ -1,3 +1,6 @@
+# @Utils
+from src.utils.fileUtils import remove_dir
+
 # @Classes
 from src.packages.modelManager.ModelManagerController import ModelManagerController
 from src.packages.wordProcessor.WordProcessorController import WordProcessorController
@@ -32,4 +35,5 @@ class AdminModuleController:
         if not tokenizer_exceptions_path:
             return False
         model_creation_success = self.__model_manager.create_model(model_name, description, author, tokenizer_exceptions_path)
+        remove_dir(tokenizer_exceptions_path)
         return model_creation_success

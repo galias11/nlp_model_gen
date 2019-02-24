@@ -153,3 +153,15 @@ def get_files_in_dir(root_path, extension):
         if file.path.endswith(extension):
             files.append(file.path)
     return files
+
+def copy_file(source, destination):
+    """
+    Copia el archivo en el path "source" al directorio indicado en el path "desitination".
+    Destination debe ser un directorio.
+
+    :source: [String] - Ruta al archivo a copiar.
+
+    :destination: [String] - Ruta a donde copiar el archivo.
+    """
+    shutil.copyfile(source, destination)
+    
