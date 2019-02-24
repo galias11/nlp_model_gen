@@ -153,7 +153,7 @@ class ModelManagerController:
             new_model.set_reference(custom_model)
             self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
             ModelDataManager.save_model_data(model_name, description, author, model_name)
-            ModelLoader.save_model(custom_model, model_name)
+            ModelLoader.save_model(custom_model, model_name, tokenizer_exceptions_path)
             self.__models.append(new_model)
             return True
         except Exception as e:

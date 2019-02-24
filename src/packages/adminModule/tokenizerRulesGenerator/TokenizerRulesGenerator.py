@@ -3,6 +3,7 @@ from src.utils.fileUtils import build_path, check_dir_existence, create_dir_if_n
 
 # @Constants
 from src.constants.constants import (
+    TOKEN_RULES_GEN_MODEL_SEED_FILENAME,
     TOKEN_RULES_GEN_TMP_ROOT_PATH,
     TOKEN_RULES_GEN_TYPE_NOUN,
     TOKEN_RULES_GEN_TYPE_VERB,
@@ -99,7 +100,7 @@ class TokenizerRulesGenerator:
 
         :base_path: [String] - Directorio base del modelo.
         """
-        path = build_path(base_path, 'model_seed.mdl')
+        path = build_path(base_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME)
         dictionary_to_disk(path, model_seed)
 
     def generate_model_data(self, model_seed, path, max_dist):

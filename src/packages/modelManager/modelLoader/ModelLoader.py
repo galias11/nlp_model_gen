@@ -2,12 +2,20 @@
 import spacy
 
 # @Utils
-from src.utils.fileUtils import build_path, check_dir_existence, remove_dir
+from src.utils.fileUtils import (
+    build_path, 
+    check_dir_existence, 
+    copy_file,
+    create_dir_if_not_exist, 
+    remove_dir
+)
 
 # @Constants
 from src.constants.constants import (
+    MODEL_MANAGER_CUSTOM_FILES_DIR,
     MODEL_MANAGER_DEFAULT_BASE_MODEL,
-    MODEL_MANAGER_ROOT_DIR
+    MODEL_MANAGER_ROOT_DIR,
+    TOKEN_RULES_GEN_MODEL_SEED_FILENAME
 )
 
 class ModelLoader:
@@ -41,13 +49,15 @@ class ModelLoader:
         return default_nlp_model
 
     @staticmethod
-    def save_model(model, path):
+    def save_model(model, path, tmp_files_path):
         """
         Guarda el modelo en el path solicitado.
 
         :model: [SpacyModelRef] - Referencia a un modelo de spacy.
 
         :path: [String] - Ruta en la cual guardar el modelo.
+
+        :tmp_files_path: [String] - Ruta donde se encuentran los archivos temporales del modelo.
 
         :return: [boolean] - True si el modelo fue cargado correctamente, False en caso contrario.
         """
@@ -56,6 +66,11 @@ class ModelLoader:
             if check_dir_existence(full_path):
                 return False
             model.to_disk(full_path)
+            custom_model_files_path = build_path(full_path, MODEL_MANAGER_CUSTOM_FILES_DIR)
+            create_dir_if_not_exist(custom_model_files_path)
+            model_seed_path = build_path(tmp_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME)
+            model_seed_copy_path = build_path(custom_model_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME)
+            copy_file(model_seed_path, model_seed_copy_path)
             return True
         except:
             return False
