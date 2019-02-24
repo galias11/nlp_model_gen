@@ -91,3 +91,15 @@ class AdminModuleController:
         tanto en la base de datos como en la carpeta de modelos del sistema.
         """
         return self.__model_manager.remove_model(model_name)
+
+    def analyse_text(self, model_name, text):
+        """
+        Analiza un texto aplicandole el modelo solicitado. El modelo debe existir.
+
+        :model_name: [String] - Nombre del modelo a utilizar.
+
+        :text: [String] - Texto a analizar.
+
+        :return: [List(Dict)] - Resultados del analisis, None si ha ocurrido un error.
+        """
+        return self.__model_manager.analyze_text(model_name, text)
