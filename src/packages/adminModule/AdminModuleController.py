@@ -37,3 +37,12 @@ class AdminModuleController:
         model_creation_success = self.__model_manager.create_model(model_name, description, author, tokenizer_exceptions_path)
         remove_dir(tokenizer_exceptions_path)
         return model_creation_success
+
+    def get_available_models(self):
+        """
+        Devuelve una lista con todos los modelos disponibles en el sistema (esten cargados o no).
+
+        :return: [List] - Listado de los modelos disponibles en el sistema.
+        """
+        return self.__model_manager.get_available_models_dict()
+        
