@@ -46,6 +46,17 @@ class AdminModuleController:
         """
         return self.__model_manager.get_available_models_dict()
 
+    def load_model(self, model_name):
+        """
+        Carga un modelo en memoria para poder tener un acceso más rapido al mismo. Solo se aconseja su uso para
+        la realización de pruebas.
+
+        :model_name: [String] - Nombre del modelo a cargar.
+
+        :return: [bool] - True si el modelo ha sido exitosamente cargado, False en caso contrario.
+        """
+        return self.__model_manager.load_model(model_name)
+
     def edit_model_data(self, model_name, new_model_name=None, new_description=None):
         """
         Edita los datos de un modelo existente. Si el modelo no existe u ocurre algún error durante
@@ -80,4 +91,3 @@ class AdminModuleController:
         tanto en la base de datos como en la carpeta de modelos del sistema.
         """
         return self.__model_manager.remove_model(model_name)
-        
