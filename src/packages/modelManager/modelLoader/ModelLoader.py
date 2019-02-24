@@ -2,7 +2,7 @@
 import spacy
 
 # @Utils
-from src.utils.fileUtils import ( check_dir_existence, remove_dir )
+from src.utils.fileUtils import build_path, check_dir_existence, remove_dir
 
 # @Constants
 from src.constants.constants import (
@@ -24,7 +24,7 @@ class ModelLoader:
         :return: [SpacyModelRef] - Referencia al modelo de spacy, None si no se pdo cargar el modelo.
         """
         try:
-            full_path = MODEL_MANAGER_ROOT_DIR + path
+            full_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
             nlp_model = spacy.load(full_path)
             return nlp_model
         except:
@@ -37,7 +37,7 @@ class ModelLoader:
     
         :return: [SpacyModelRef] - Referencia al modelo de spacy
         """
-        default_nlp_model = ModelLoader.load_model(MODEL_MANAGER_DEFAULT_BASE_MODEL)
+        default_nlp_model = spacy.load(MODEL_MANAGER_DEFAULT_BASE_MODEL)
         return default_nlp_model
 
     @staticmethod
@@ -52,7 +52,7 @@ class ModelLoader:
         :return: [boolean] - True si el modelo fue cargado correctamente, False en caso contrario.
         """
         try:
-            full_path = MODEL_MANAGER_ROOT_DIR + path
+            full_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
             if check_dir_existence(full_path):
                 return False
             model.to_disk(full_path)
@@ -69,7 +69,7 @@ class ModelLoader:
 
         :return: [Boolean] - Ture si el modelo fue borrado correctamente, False en caso contrario.
         """
-        full_path = MODEL_MANAGER_ROOT_DIR + path
+        full_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
         return remove_dir(full_path)
 
     @staticmethod

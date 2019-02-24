@@ -3,6 +3,9 @@ from ..modelLoader.ModelLoader import ModelLoader
 from ..token.Token import Token
 from ..entity.Entity import Entity
 
+# @Utils
+from src.utils.objectUtils import transform_dict_key_data_to_int
+
 class Model:
     __model_name = ''
     __description = ''
@@ -100,6 +103,19 @@ class Model:
             'ner_results': self.__process_ner_results(doc)
         }
         return results
+
+    def add_tokenizer_rule_set(self, rule_set):
+        """
+        Agrega una regla al modelo. El modelo debe estar inicializado.
+
+        :rule_set: [Dict] - Regla agregar al tokenizer del modelo.
+        """
+        tokenizer = self.__reference.tokenizer
+        for rule in rule_set:
+            token_key = next(iter(rule))
+            exception_data = rule[token_key][0]
+            exception_dict = transform_dict_key_data_to_int(exception_data)
+            tokenizer.add_special_case(token_key, [exception_dict])
 
     def train_model(self, training_data):
         """

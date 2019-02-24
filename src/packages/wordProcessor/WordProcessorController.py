@@ -21,6 +21,7 @@ from src.constants.constants import (
 )
 
 # @Utils
+from src.utils.classUtills import Singleton
 from src.utils.fileUtils import load_dict_from_json
 from src.utils.objectUtils import (
     update_dict,
@@ -46,7 +47,7 @@ from .spanishNounConversor.Conversor import Conversor
 # @Configs
 word_processor_default_cfg = load_dict_from_json('wordProcessor-default_config')
 
-class WordProcessorController:
+class WordProcessorController (metaclass=Singleton):
     """
     Controlador del modulo de procesamiento de palabras. Administra los modulos y 
     permite crear, modificar y establecer diferentes configuraciones para los modulos.
