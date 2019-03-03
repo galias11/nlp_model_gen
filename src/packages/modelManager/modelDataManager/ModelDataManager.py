@@ -40,7 +40,7 @@ class ModelDataManager:
         return model_name in available_model_names
 
     @staticmethod
-    def save_model_data(model_name, description, author, path):
+    def save_model_data(model_name, description, author, path, analyser_rules_set):
         """
         Guarda información de un modelo.
 
@@ -52,6 +52,8 @@ class ModelDataManager:
 
         :path: [String] - Ruta relativa para encontrar el modelo.
 
+        :analyser_rules_set: [List(Dict)] - Lista de reglas para el analizador
+
         :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
         try:
@@ -61,7 +63,8 @@ class ModelDataManager:
                 'model_name': model_name,
                 'description': description,
                 'author': author,
-                'path': path
+                'path': path,
+                'analyzer_rules_set': analyser_rules_set
             }
             db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
             return True

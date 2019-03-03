@@ -5,15 +5,19 @@ from src.utils.fileUtils import remove_dir
 from src.packages.modelManager.ModelManagerController import ModelManagerController
 from src.packages.wordProcessor.WordProcessorController import WordProcessorController
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
+from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
 
 class AdminModuleController:
-    __word_processor = None
+    __analyzer_rules_generator = None
+    __model_manager = None
     __tokenizer_rules_generator = None
+    __word_processor = None
 
     def __init__(self):
         self.__word_processor = WordProcessorController()
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
         self.__model_manager = ModelManagerController()
+        self.__analyzer_rules_generator = AnalyzerRulesGerator()
 
     def generate_model(self, model_name, description, author, tokenizer_exceptions, max_dist):
         """
@@ -32,9 +36,10 @@ class AdminModuleController:
         if self.__model_manager.get_model(model_name):
             return False
         tokenizer_exceptions_path = self.__tokenizer_rules_generator.generate_model_data(tokenizer_exceptions, model_name, max_dist)
-        if not tokenizer_exceptions_path:
+        analyzer_rule_set = self.__analyzer_rules_generator.create_analyzer_rule_set(tokenizer_exceptions)
+        if not tokenizer_exceptions_path or analyzer_rule_set is None:
             return False
-        model_creation_success = self.__model_manager.create_model(model_name, description, author, tokenizer_exceptions_path)
+        model_creation_success = self.__model_manager.create_model(model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
         remove_dir(tokenizer_exceptions_path)
         return model_creation_success
 
@@ -92,7 +97,7 @@ class AdminModuleController:
         """
         return self.__model_manager.remove_model(model_name)
 
-    def analyse_text(self, model_name, text):
+    def analyse_text(self, model_name, text, only_positives=False):
         """
         Analiza un texto aplicandole el modelo solicitado. El modelo debe existir.
 
@@ -100,6 +105,8 @@ class AdminModuleController:
 
         :text: [String] - Texto a analizar.
 
+        :only_positives: [boolean] - Si esta activado, devuelve solo los resultados positivos.
+
         :return: [List(Dict)] - Resultados del analisis, None si ha ocurrido un error.
         """
-        return self.__model_manager.analyze_text(model_name, text)
+        return self.__model_manager.analyze_text(model_name, text, only_positives)

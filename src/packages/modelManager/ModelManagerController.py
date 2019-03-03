@@ -23,7 +23,7 @@ class ModelManagerController:
         try:
             stored_models_data = ModelDataManager.get_models()
             for model in stored_models_data:
-                model_object = Model(model['model_name'], model['description'], model['author'], model['path'])
+                model_object = Model(model['model_name'], model['description'], model['author'], model['path'], model['analyzer_rules_set'])
                 self.__models.append(model_object)
             self.__init_success = True
         except:
@@ -83,13 +83,16 @@ class ModelManagerController:
             models_list.append(model.to_dict())
         return models_list
 
-    def analyze_text(self, model_name, text=''):
+    def analyze_text(self, model_name, text='', only_positives=False):
         """
         Analiza un texto con el modelo solicitado.
 
         :model_name: [String] - Nombre del modelo a utilizar.
 
         :text: [String] - Texto a analizar.
+
+        :only_positives: [boolean] - Si se activa solo se devolveran los resultados positivos del 
+        análisis.
 
         :return: [List(Dict)] - Resultados del análisis.
         """
@@ -100,7 +103,7 @@ class ModelManagerController:
             selected_model.load()
         if not selected_model.is_loaded():
             return None
-        return selected_model.analyse_text(text)
+        return selected_model.analyse_text(text, only_positives)    
 
     def train_model(self, model_name, training_data):
         """
@@ -130,7 +133,7 @@ class ModelManagerController:
             for key in rule_set:
                 model.add_tokenizer_rule_set(rule_set[key])
 
-    def create_model(self, model_name, description, author, tokenizer_exceptions_path):
+    def create_model(self, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set):
         """
         Crea un nuevo modelo. Crea los datos necesarios y lo guarda tanto en disco como su
         referencia en la base de datos.
@@ -143,16 +146,18 @@ class ModelManagerController:
 
         :tokenizer_exceptions_path: [List(Dict)] - Lista de excepciones del modulo tokenizer del modelo.
 
+        :analyzer_rule_set: [List(Dict)] - Lista de reglas para el analizador.
+
         :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
         """
         if self.get_model(model_name) is not None:
             return False
         try:
             custom_model = self.__initialize_custom_model()
-            new_model = Model(model_name, description, author, model_name)
+            new_model = Model(model_name, description, author, model_name, analyzer_rule_set)
             new_model.set_reference(custom_model)
             self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
-            ModelDataManager.save_model_data(model_name, description, author, model_name)
+            ModelDataManager.save_model_data(model_name, description, author, model_name, analyzer_rule_set)
             ModelLoader.save_model(custom_model, model_name, tokenizer_exceptions_path)
             self.__models.append(new_model)
             return True
