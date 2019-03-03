@@ -2,6 +2,7 @@
 from ..modelLoader.ModelLoader import ModelLoader
 from ..token.Token import Token
 from ..entity.Entity import Entity
+from ..analyzer.Analyzer import Analyzer
 
 # @Utils
 from src.utils.objectUtils import transform_dict_key_data_to_int
@@ -11,14 +12,16 @@ class Model:
     __description = ''
     __author = ''
     __path = ''
+    __analyzer_rules_set = []
     __reference = None
     __loaded = False
 
-    def __init__(self, model_name, description, author, path):
+    def __init__(self, model_name, description, author, path, __analyzer_rules_set):
         self.__model_name = model_name
         self.__description = description
         self.__author = author
         self.__path = path
+        self.__analyzer_rules_set = __analyzer_rules_set
         self.__reference = None
         self.__loaded = False
 
@@ -33,6 +36,9 @@ class Model:
 
     def get_path(self):
         return self.__path
+
+    def get_analyser_rules_set(self):
+        return self.__analyzer_rules_set
 
     def set_model_name(self, model_name):
         self.__model_name = model_name
@@ -55,20 +61,26 @@ class Model:
             self.__loaded = True
         self.__reference = model_reference
 
-    def __process_tokenizer_results(self, doc):
+    def __process_tokenizer_results(self, doc, only_positives=False):
         """
         Procesa los resultados del analisis de un texto almacenados en un doc de spacy en función de los
         resultados del tokenizer.
 
         :doc: [SpacyDoc] - Documento con los resultado del analisis de spacy.
 
-        :return: [List(Dict)] - Lista con los resultados del analisis del tokenizer   
+        :only_positives: [boolean] - Si esta activado, solo se devulven los resultados positivos.
+
+        :return: [List(Dict)] - Lista con los resultados del analisis del tokenizer.
         """
         results = list([])
         if doc is None:
             return results
+        token_analyzer = Analyzer(self.__analyzer_rules_set)
         for token in doc:
-            results.append(Token(token.lemma_, token.is_oov, token.pos_, token.sent, token.sentiment, token.tag_, token.text))
+            generated_token = Token(token.lemma_, token.is_oov, token.pos_, token.sent, token.sentiment, token.tag_, token.text)
+            token_analyzer.analyze_token(generated_token)
+            if not only_positives or generated_token.is_positive():
+                results.append(generated_token)
         return results
 
     def __process_ner_results(self, doc):
@@ -87,11 +99,13 @@ class Model:
             results.append(Entity(ent.text, ent.start_char, ent.end_char, ent.label_))
         return results
 
-    def analyse_text(self, text):
+    def analyse_text(self, text, only_positives=False):
         """
         Analiza el texto deseado.
 
-        :text: String - Texto a analizar
+        :text: [String] - Texto a analizar
+
+        :only_positives: [Boolean] - Si esta activado solo se devulven los resultados positivos
 
         :return: [Dict()] - Resultados del análisis.
         """
@@ -99,7 +113,7 @@ class Model:
             return None
         doc = self.__reference(text)
         results = {
-            'tokenizer_results': self.__process_tokenizer_results(doc),
+            'tokenizer_results': self.__process_tokenizer_results(doc, only_positives),
             'ner_results': self.__process_ner_results(doc)
         }
         return results
