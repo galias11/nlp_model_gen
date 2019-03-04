@@ -92,6 +92,7 @@ class ModelLoader:
 
         :return: [Boolean] - Ture si el modelo fue borrado correctamente, False en caso contrario.
         """
+        Logger.log('L-0070')
         full_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
         return remove_dir(full_path)
 

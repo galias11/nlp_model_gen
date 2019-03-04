@@ -114,7 +114,9 @@ class ModelDataManager:
         :return: [boolean] - True si se ha eliminado con exito, False en caso contrario.
         """
         try:
+            Logger.log('L-0066')
             delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': model_name}).deleted_count
             return True if delete_count > 0 else False
-        except:
+        except Exception as e:
+            Logger.log('L-0067', [{'text': e, 'color': ERROR_COLOR}])
             return False

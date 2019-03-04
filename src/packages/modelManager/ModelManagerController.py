@@ -209,12 +209,19 @@ class ModelManagerController:
 
         :return: [boolean] - True si el modelo fue exitosamente borrado, False en caso contrario.
         """
+        Logger.log('L-0064')
         selected_model = self.get_model(model_name)
         if selected_model is None:
+            Logger.log('L-0065')
             return False
         if not ModelDataManager.remove_model_data(selected_model.get_model_name()):
+            Logger.log('L-0068')
             return False
+        Logger.log('L-0069')
         if not ModelLoader.delete_model_files(selected_model.get_path()):
+            Logger.log('L-0071')
             return False
+        Logger.log('L-0072')
         self.__models.remove(selected_model)
+        Logger.log('L-0073')
         return True

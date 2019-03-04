@@ -380,5 +380,65 @@ LOG_DATA = {
         'method_name': 'analyze_text',
         'main_text': 'Texto analizado exitosamente con modelo de spaCy',
         'type': TYPE_SUCCESS
-    }
+    },
+    'L-0064': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'remove_model',
+        'main_text': 'Eliminando modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0065': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'remove_model',
+        'main_text': 'Modelo inexistente',
+        'type': TYPE_ERR
+    },
+    'L-0066': {
+        'class_name': 'ModelDataManager',
+        'method_name': 'remove_model_data',
+        'main_text': 'Eliminando modelo de la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0067': {
+        'class_name': 'ModelDataManager',
+        'method_name': 'remove_model_data',
+        'main_text': 'Excepción al intentar elimnar modelo de la base de datos: %s',
+        'type': TYPE_INFO
+    },
+    'L-0068': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'remove_model',
+        'main_text': 'Error al eliminar modelo de la base de datos',
+        'type': TYPE_ERR
+    },
+    'L-0069': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'remove_model',
+        'main_text': 'Modelo eliminado de la base de datos',
+        'type': TYPE_SUCCESS
+    },
+    'L-0070': {
+        'class_name': 'ModelLoader',
+        'method_name': 'delete_model_files',
+        'main_text': 'Eliminando archivos del modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0071': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'remove_model',
+        'main_text': 'Error al eliminar los archivos del modelo',
+        'type': TYPE_ERR
+    },
+    'L-0072': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'remove_model',
+        'main_text': 'Archivos del modelo eliminados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0073': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'remove_model',
+        'main_text': 'Modelo eliminado exitosamente',
+        'type': TYPE_SUCCESS
+    },
 }
