@@ -441,4 +441,64 @@ LOG_DATA = {
         'main_text': 'Modelo eliminado exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0074': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'edit_model_data',
+        'main_text': 'Modificando datos del modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0075': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'edit_model_data',
+        'main_text': 'Error: Modelo inexistente',
+        'type': TYPE_ERR
+    },
+    'L-0076': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'edit_model_data',
+        'main_text': 'Error: Ningún dato que modificar',
+        'type': TYPE_ERR
+    },
+    'L-0077': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'edit_model',
+        'main_text': 'Error: Modelo inexistente',
+        'type': TYPE_ERR
+    },
+    'L-0078': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'edit_model',
+        'main_text': 'Error al modificar los datos en la base de datos',
+        'type': TYPE_ERR
+    },
+    'L-0078': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'edit_model',
+        'main_text': 'Error al modificar los datos en la base de datos',
+        'type': TYPE_ERR
+    },
+    'L-0079': {
+        'class_name': 'ModelDataManager',
+        'method_name': 'modify_model_data',
+        'main_text': 'Excepción al modificar datos en la base de datos: %s',
+        'type': TYPE_INFO
+    },
+    'L-0080': {
+        'class_name': 'ModelDataManager',
+        'method_name': 'modify_model_data',
+        'main_text': 'Modificando datos del modelo en la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0081': {
+        'class_name': 'ModelDataManager',
+        'method_name': 'modify_model_data',
+        'main_text': 'Ya existe un modelo con el nuevo nombre',
+        'type': TYPE_ERR
+    },
+    'L-0082': {
+        'class_name': 'ModelDataManager',
+        'method_name': 'modify_model_data',
+        'main_text': 'Datos del modelo modificados exitosamente',
+        'type': TYPE_SUCCESS
+    },
 }

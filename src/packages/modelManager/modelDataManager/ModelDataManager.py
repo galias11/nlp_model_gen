@@ -93,7 +93,9 @@ class ModelDataManager:
         :return: [boolean] - True si se ha guardado la modificación con exito, False en caso contrario.
         """
         try:
+            Logger.log('L-0080')
             if previous_model_name != model_name and ModelDataManager.check_existing_model(model_name):
+                Logger.log('L-0081')
                 return False
             updated_data = {
                 'model_name': model_name,
@@ -101,7 +103,8 @@ class ModelDataManager:
             }
             update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': previous_model_name}, updated_data).modified_count
             return True if update_count > 0 else False
-        except:
+        except Exception as e:
+            Logger.log('L-0079', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     @staticmethod

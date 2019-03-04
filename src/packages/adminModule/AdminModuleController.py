@@ -84,8 +84,10 @@ class AdminModuleController:
 
         :return: [bool] - True si la edición se realizó correctamente, False en caso contrario.
         """
+        Logger.log('L-0074')
         current_model = self.__model_manager.get_model(model_name)
         if current_model is None:
+            Logger.log('L-0075')
             return False
         current_model_name = current_model.get_model_name()
         edited_model_name = new_model_name
@@ -96,12 +98,13 @@ class AdminModuleController:
         if new_description is None or new_description == '':
             edited_description = current_description
         if edited_model_name == current_model_name and edited_description == current_description:
+            Logger.log('L-0076')
             return False
         return self.__model_manager.edit_model(model_name, edited_model_name, edited_description)
 
     def delete_model_data(self, model_name):
         """
-        Elimina un modelo del sistema. Al eliminar los modelos se eliminará todo registro del mismo 
+        Elimina un modelo del sistema. Al eliminar los modelos se eliminará todo registro del mismo
         tanto en la base de datos como en la carpeta de modelos del sistema.
         """
         return self.__model_manager.remove_model(model_name)

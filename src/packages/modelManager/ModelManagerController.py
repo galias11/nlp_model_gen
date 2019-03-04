@@ -193,11 +193,14 @@ class ModelManagerController:
         """
         selected_model = self.get_model(previous_model_name)
         if selected_model is None:
+            Logger.log('L-0077')
             return False
         if not ModelDataManager.modify_model_data(previous_model_name, model_name, description):
+            Logger.log('L-0078')
             return False
         selected_model.set_model_name(model_name)
         selected_model.set_description(description)
+        Logger.log('L-0082')
         return True
 
     def remove_model(self, model_name):
