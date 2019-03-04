@@ -501,4 +501,70 @@ LOG_DATA = {
         'main_text': 'Datos del modelo modificados exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0083': {
+        'class_name': '',
+        'method_name': 'remove_dir',
+        'main_text': 'Excepción al eliminar el directorio: %s',
+        'type': TYPE_INFO
+    },
+    'L-0084': {
+        'class_name': '',
+        'method_name': 'create_dir_if_not_exist',
+        'main_text': 'Excepción al crear el directorio: %s',
+        'type': TYPE_INFO
+    },
+    'L-0085': {
+        'class_name': '',
+        'method_name': 'db_check_collection',
+        'main_text': 'Excepción al validar colección en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0086': {
+        'class_name': '',
+        'method_name': 'db_get_item',
+        'main_text': 'Excepción al realizar consulta en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0087': {
+        'class_name': '',
+        'method_name': 'db_get_items',
+        'main_text': 'Excepción al realizar consulta en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0088': {
+        'class_name': '',
+        'method_name': 'db_insert_item',
+        'main_text': 'Excepción al guardar datos en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0089': {
+        'class_name': '',
+        'method_name': 'db_insert_items',
+        'main_text': 'Excepción al guardar datos en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0090': {
+        'class_name': '',
+        'method_name': 'db_delete_item',
+        'main_text': 'Excepción al eliminar datos en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0091': {
+        'class_name': '',
+        'method_name': 'db_delete_items',
+        'main_text': 'Excepción al eliminar datos en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0092': {
+        'class_name': '',
+        'method_name': 'db_drop_collection',
+        'main_text': 'Excepción al eliminar colección en BD: %s',
+        'type': TYPE_INFO
+    },
+    'L-0093': {
+        'class_name': '',
+        'method_name': 'db_batch_operation',
+        'main_text': 'Excepción al realizar operación en batch sobre la BD: %s',
+        'type': TYPE_INFO
+    }
 }

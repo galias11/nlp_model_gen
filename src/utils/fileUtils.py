@@ -3,6 +3,12 @@ import os
 import json
 import shutil
 
+# @Logger
+from src.packages.logger.Logger import Logger
+
+# @Logger colors
+from src.packages.logger.assets.logColors import ERROR_COLOR
+
 # @Constants
 from src.constants.constants import DIR_PATH_SEPARATOR, PATH_SEPARATOR
 
@@ -97,7 +103,8 @@ def remove_dir(path):
     try:
         shutil.rmtree(path)
         return True
-    except:
+    except Exception as e:
+        Logger.log('L-0083', [{'text': e, 'color': ERROR_COLOR}])
         return False
 
 def dictionary_to_disk(path, dictionary):
@@ -120,7 +127,8 @@ def create_dir_if_not_exist(path):
     """
     try:
         os.stat(path)
-    except:
+    except Exception as e:
+        Logger.log('L-0084', [{'text': e, 'color': ERROR_COLOR}])
         os.mkdir(path)
 
 def build_path(base_dir, file_name, extension=''):
