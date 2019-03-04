@@ -20,18 +20,14 @@ class AdminModuleController:
     def __init__(self):
         self.__initialize()
 
-    def __initialize(self, is_retry=False):
+    def __initialize(self):
         """
         Inicializa el modulo. Si la inicialización es exitosa, setea el atributo ready a True.
         En caso contrario se pasará (si no estuviese ya) a False
-
-        :is_retry: [Bool] - Indica si es un reintento de inicialización
         """
         Logger.log('L-0036')
         self.__init_success = False
         self.__word_processor = WordProcessorController()
-        if is_retry:
-            self.__word_processor.retry_initialization()
         if not self.__word_processor.is_ready():
             return # TODO: Normalize when error handler is ready.
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
@@ -46,7 +42,7 @@ class AdminModuleController:
         """
         Reintenta la reinicialización del modulo.
         """
-        self.__initialize(True)
+        self.__initialize()
 
     def generate_model(self, model_name, description, author, tokenizer_exceptions, max_dist):
         """
@@ -143,9 +139,6 @@ class AdminModuleController:
         Elimina un modelo del sistema. Al eliminar los modelos se eliminará todo registro del mismo
         tanto en la base de datos como en la carpeta de modelos del sistema.
         """
-        if not self.__init_success:
-            Logger.log('L-0097')
-            return None
         return self.__model_manager.remove_model(model_name)
 
     def analyse_text(self, model_name, text, only_positives=False):
@@ -160,7 +153,4 @@ class AdminModuleController:
 
         :return: [List(Dict)] - Resultados del analisis, None si ha ocurrido un error.
         """
-        if not self.__init_success:
-            Logger.log('L-0097')
-            return None
         return self.__model_manager.analyze_text(model_name, text, only_positives)

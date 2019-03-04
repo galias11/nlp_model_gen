@@ -189,6 +189,9 @@ class WordProcessorController (metaclass=Singleton):
         db_drop_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
         db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, word_processor_default_cfg['fuzzy_terms_generator_config'])
         self.__fuzzy_generator_cfg = word_processor_default_cfg['fuzzy_terms_generator_config']
+    
+    def is_ready(self):
+        return self.__init_success
 
     def __get_fuzzy_generator_cfg(self):
         """
@@ -227,11 +230,11 @@ class WordProcessorController (metaclass=Singleton):
         """
         self.__noun_conversor_cfg = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': self.__noun_conversor_active_theme}, {'_id': 0, 'theme': 0})
 
-    def retry_initialization(self):
+    def retry_initialization(self, mode=0):
         """
         Reintenta la inicialización del controlador.
         """
-        self.__initializate_cfg(self.mode)
+        self.__initializate_cfg(mode)
 
     def get_conjugator_configs(self):
         """
