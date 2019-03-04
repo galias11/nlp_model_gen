@@ -321,4 +321,64 @@ LOG_DATA = {
         'main_text': 'Excepción al inicializar administrador de modelos: %s',
         'type': TYPE_INFO
     },
+    'L-0054': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'analyze_text',
+        'main_text': 'Analizando texto...',
+        'type': TYPE_INFO
+    },
+    'L-0055': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'analyze_text',
+        'main_text': 'El modelo no existe o no se ha provisto de un texto',
+        'type': TYPE_ERR
+    },
+    'L-0056': {
+        'class_name': 'Model',
+        'method_name': 'load',
+        'main_text': 'Cargando modelo de spaCy...',
+        'type': TYPE_INFO
+    },
+    'L-0057': {
+        'class_name': 'Model',
+        'method_name': 'load',
+        'main_text': 'Modelo de spaCy cargado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0058': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'analyze_text',
+        'main_text': 'Error al cargar el modelo de spaCy',
+        'type': TYPE_ERR
+    },
+    'L-0059': {
+        'class_name': 'Model',
+        'method_name': 'analyze_text',
+        'main_text': 'Analizando el texto con modelo de spaCy...',
+        'type': TYPE_INFO
+    },
+    'L-0060': {
+        'class_name': 'Model',
+        'method_name': 'analyze_text',
+        'main_text': 'Error al intentar utilizar el modelo de spaCy',
+        'type': TYPE_ERR
+    },
+    'L-0061': {
+        'class_name': 'Model',
+        'method_name': 'analyze_text',
+        'main_text': 'Procesando resultados...',
+        'type': TYPE_INFO
+    },
+    'L-0062': {
+        'class_name': 'Model',
+        'method_name': 'analyze_text',
+        'main_text': 'Resultados procesados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0063': {
+        'class_name': 'Model',
+        'method_name': 'analyze_text',
+        'main_text': 'Texto analizado exitosamente con modelo de spaCy',
+        'type': TYPE_SUCCESS
+    }
 }

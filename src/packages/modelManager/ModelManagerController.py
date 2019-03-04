@@ -103,12 +103,15 @@ class ModelManagerController:
 
         :return: [List(Dict)] - Resultados del análisis.
         """
+        Logger.log('L-0054')
         selected_model = self.get_model(model_name)
         if selected_model is None or text is None:
+            Logger.log('L-0055')
             return None
         if not selected_model.is_loaded():
             selected_model.load()
         if not selected_model.is_loaded():
+            Logger.log('L-0058')
             return None
         return selected_model.analyse_text(text, only_positives)    
 
