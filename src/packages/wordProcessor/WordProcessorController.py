@@ -20,6 +20,12 @@ from src.constants.constants import (
     WORD_PROCESSOR_SCHEMAS
 )
 
+# @Logger
+from src.packages.logger.Logger import Logger
+
+# @Logger colors
+from src.packages.logger.assets.logColors import ERROR_COLOR
+
 # @Utils
 from src.utils.classUtills import Singleton
 from src.utils.fileUtils import load_dict_from_json
@@ -56,6 +62,7 @@ class WordProcessorController (metaclass=Singleton):
     como los perfiles correspondientes a dicho tema.
     """
     def __init__(self, mode=0):
+        Logger.log('L-0038')
         self.__init_success = False
         self.__conjugator_active_theme = ''
         self.__fuzzy_gen_active_theme = ''
@@ -80,8 +87,10 @@ class WordProcessorController (metaclass=Singleton):
             self.__conjugator = Conjugator(mode, self.__conjugator_general_cfg, self.__conjugator_verb_groups, self.__conjugator_verb_exceptions)
             self.__fuzzy_generator = FuzzyTermsGenerator(self.__fuzzy_generator_cfg)
             self.__conversor = Conversor(self.__noun_conversor_cfg)
+            Logger.log('L-0039')
             self.__init_success = True
-        except:
+        except Exception as e:
+            Logger.log('L-0040', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
 
     def __initialize_controller(self):
@@ -89,6 +98,7 @@ class WordProcessorController (metaclass=Singleton):
         [private] Inicializa el controlador cargando los perfiles de configuración activos
         para cada modulo.
         """
+        Logger.log('L-0041')
         if not db_check_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_GENERAL_SETTING_COLLECTION):
             db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_GENERAL_SETTING_COLLECTION, WORD_PROCESSOR_DEFAULT_CFG_OBJECT)
             self.__conjugator_active_theme = WORD_PROCESSOR_DEFAULT_CFG_OBJECT['conjugator_active_theme']
@@ -99,6 +109,7 @@ class WordProcessorController (metaclass=Singleton):
             self.__conjugator_active_theme = db_data['conjugator_active_theme']
             self.__fuzzy_gen_active_theme = db_data['fuzzy_gen_active_theme']
             self.__noun_conversor_active_theme = db_data['noun_conversor_active_theme']
+        Logger.log('L-0042')
 
     def __initialize_conjugator(self):
         """
@@ -108,10 +119,12 @@ class WordProcessorController (metaclass=Singleton):
         Si no existen perfiles, carga el archivo de configuración por defecto y lo almacena en la 
         base de datos. En caso contrario, obtiene la configuración activa desde la base de datos.
         """
+        Logger.log('L-0043')
         if not db_check_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_CONJ_CFG_COLLECTION):
             self.__initialize_conjugator_cfg()
         else:
             self.__get_conjugator_cfg()
+        Logger.log('L-0044')
 
     def __initialize_conjugator_cfg(self):
         """
@@ -161,10 +174,12 @@ class WordProcessorController (metaclass=Singleton):
         contrario, almacena en la base de datos las configuraciones almacenadas en el archivo
         de configuración por defecto.
         """
+        Logger.log('L-0045')
         if not db_check_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION):
             self.__initialize_fuzzy_generator_cfg()
         else:
             self.__get_fuzzy_generator_cfg()
+        Logger.log('L-0046')
 
     def __initialize_fuzzy_generator_cfg(self):
         """
@@ -187,16 +202,18 @@ class WordProcessorController (metaclass=Singleton):
         [private] Inicializa el conversor de sustantivos. Si ya existe la información en la base
         de datos, obtiene los datos para el tema activo desde la misma. En caso contario, obtiene
         la configuración por defecto del archivo de configuraciones y almacena las mismas
-        en la base de datos 
+        en la base de datos
         """
+        Logger.log('L-0047')
         if not db_check_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION):
             self.__initialize_noun_conversor_cfg()
         else:
             self.__get_noun_conversor_cfg()
+        Logger.log('L-0048')
 
     def __initialize_noun_conversor_cfg(self):
         """
-        [private] Obtiene la configuración por defecto del conversor de sustantivos y hace el 
+        [private] Obtiene la configuración por defecto del conversor de sustantivos y hace el
         almacenamiento inicial de dicha configuración en la base de datos.
         """
         db_drop_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)

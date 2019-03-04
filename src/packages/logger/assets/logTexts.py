@@ -213,4 +213,112 @@ LOG_DATA = {
         'main_text': 'Archivos temporales de modelo removidos',
         'type': TYPE_SUCCESS
     },
+    'L-0036': {
+        'class_name': 'AdminModuleController',
+        'method_name': '__init__',
+        'main_text': 'Inicializando modulo de administración...',
+        'type': TYPE_INFO
+    },
+    'L-0037': {
+        'class_name': 'AdminModuleController',
+        'method_name': '__init__',
+        'main_text': 'Inicialización exitosa',
+        'type': TYPE_SUCCESS
+    },
+    'L-0038': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__init__',
+        'main_text': 'Inicializando modulo de procesamiento de palabras...',
+        'type': TYPE_INFO
+    },
+    'L-0039': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initializate_cfg',
+        'main_text': 'Inicialización exitosa del modulo de procesamiento de palabras',
+        'type': TYPE_SUCCESS
+    },
+    'L-0040': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initializate_cfg',
+        'main_text': 'Ocurrio una excepción al inicializar el modulo: %s',
+        'type': TYPE_INFO
+    },
+    'L-0041': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_controller',
+        'main_text': 'Inicialilizando controlador...',
+        'type': TYPE_INFO
+    },
+    'L-0042': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_controller',
+        'main_text': 'Controlador inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0043': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_conjugator',
+        'main_text': 'Inicializando conjugador...',
+        'type': TYPE_INFO
+    },
+    'L-0044': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_conjugator',
+        'main_text': 'Conjugador inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0045': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_fuzzy_generator',
+        'main_text': 'Inicializando generador de terminos fuzzy...',
+        'type': TYPE_INFO
+    },
+    'L-0046': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_fuzzy_generator',
+        'main_text': 'Generador de terminos fuzzy inicializado exitosamente...',
+        'type': TYPE_SUCCESS
+    },
+    'L-0047': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_noun_conversor',
+        'main_text': 'Inicializando conversor de sustantivos...',
+        'type': TYPE_INFO
+    },
+    'L-0048': {
+        'class_name': 'WordProcessorController',
+        'method_name': '__initialize_noun_conversor',
+        'main_text': 'Conversor de sustantivos inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0049': {
+        'class_name': 'TokenizerRulesGenerator',
+        'method_name': '__init__',
+        'main_text': 'Inicializando generador de reglas para el tokenizer...',
+        'type': TYPE_INFO
+    },
+    'L-0050': {
+        'class_name': 'TokenizerRulesGenerator',
+        'method_name': '__init__',
+        'main_text': 'Generador de reglas del tokenizer inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0051': {
+        'class_name': 'ModelManagerController',
+        'method_name': '__initialize',
+        'main_text': 'Inicializando administrador de modelos...',
+        'type': TYPE_INFO
+    },
+    'L-0052': {
+        'class_name': 'ModelManagerController',
+        'method_name': '__initialize',
+        'main_text': 'Administrador de modelos inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0053': {
+        'class_name': 'ModelManagerController',
+        'method_name': '__initialize',
+        'main_text': 'Excepción al inicializar administrador de modelos: %s',
+        'type': TYPE_INFO
+    },
 }

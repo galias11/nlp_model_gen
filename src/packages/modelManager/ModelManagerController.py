@@ -25,12 +25,15 @@ class ModelManagerController:
         Inicializa el modulo.
         """
         try:
+            Logger.log('L-0051')
             stored_models_data = ModelDataManager.get_models()
             for model in stored_models_data:
                 model_object = Model(model['model_name'], model['description'], model['author'], model['path'], model['analyzer_rules_set'])
                 self.__models.append(model_object)
+            Logger.log('L-0052')
             self.__init_success = True
-        except:
+        except Exception as e:
+            Logger.log('L-0053', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
 
     def get_model(self, model_name):

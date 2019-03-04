@@ -21,7 +21,9 @@ class TokenizerRulesGenerator:
     token_generator = None
 
     def __init__(self):
+        Logger.log('L-0049')
         self.__token_generator = TokenGenerator()
+        Logger.log('L-0050')
 
     def __generate_verb_rules(self, categories, max_dist, base_path):
         """

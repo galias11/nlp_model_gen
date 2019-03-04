@@ -17,10 +17,12 @@ class AdminModuleController:
     __word_processor = None
 
     def __init__(self):
+        Logger.log('L-0036')
         self.__word_processor = WordProcessorController()
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
         self.__model_manager = ModelManagerController()
         self.__analyzer_rules_generator = AnalyzerRulesGerator()
+        Logger.log('L-0037')
 
     def generate_model(self, model_name, description, author, tokenizer_exceptions, max_dist):
         """
