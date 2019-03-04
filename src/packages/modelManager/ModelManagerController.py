@@ -36,6 +36,9 @@ class ModelManagerController:
             Logger.log('L-0053', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
 
+    def is_ready(self):
+        return self.__init_success
+
     def get_model(self, model_name):
         """
         Obtiene un modelo de la lista de modelos disponibles.
