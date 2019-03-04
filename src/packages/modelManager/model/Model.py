@@ -1,11 +1,14 @@
+# @Utils
+from src.utils.objectUtils import transform_dict_key_data_to_int
+
+# @Logger
+from src.packages.logger.Logger import Logger
+
 # @Clases
 from ..modelLoader.ModelLoader import ModelLoader
 from ..token.Token import Token
 from ..entity.Entity import Entity
 from ..analyzer.Analyzer import Analyzer
-
-# @Utils
-from src.utils.objectUtils import transform_dict_key_data_to_int
 
 class Model:
     __model_name = ''
@@ -56,8 +59,10 @@ class Model:
         """
         Setea al modelo como cargado.
         """
+        Logger.log('L-0056')
         model_reference = ModelLoader.load_model(self.__path)
         if model_reference is not None:
+            Logger.log('L-0057')
             self.__loaded = True
         self.__reference = model_reference
 
@@ -109,13 +114,18 @@ class Model:
 
         :return: [Dict()] - Resultados del análisis.
         """
+        Logger.log('L-0059')
         if not self.is_loaded():
+            Logger.log('L-0060')
             return None
         doc = self.__reference(text)
+        Logger.log('L-0061')
         results = {
             'tokenizer_results': self.__process_tokenizer_results(doc, only_positives),
             'ner_results': self.__process_ner_results(doc)
         }
+        Logger.log('L-0062')
+        Logger.log('L-0063')
         return results
 
     def add_tokenizer_rule_set(self, rule_set):

@@ -1,6 +1,12 @@
 # @Vendors
 import pymongo
 
+# @Logger
+from src.packages.logger.Logger import Logger
+
+# @Log colors
+from src.packages.logger.assets.logColors import ERROR_COLOR
+
 # @Constants
 from src.constants.constants import (
     DB_CONNECTION_TIMEOUT,
@@ -19,7 +25,8 @@ def db_check_collection(db_name, col_name):
     db = connect()[db_name]
     try:
         return col_name in db.collection_names()
-    except:
+    except Exception as e:
+        Logger.log('L-0085', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def get_collection(db_name, col_name):
@@ -30,28 +37,32 @@ def db_get_item(db_name, col_name, query=None, fields=None):
     try:
         col = get_collection(db_name, col_name)
         return col.find_one(query, fields)
-    except:
+    except Exception as e:
+        Logger.log('L-0086', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def db_get_items(db_name, col_name, query=None, fields=None):
     try:
         col = get_collection(db_name, col_name)
         return list(col.find(query, fields))
-    except:
+    except Exception as e:
+        Logger.log('L-0087', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def db_insert_item(db_name, col_name, element):
     try:
         col = get_collection(db_name, col_name)
         return col.insert_one(element)
-    except:
+    except Exception as e:
+        Logger.log('L-0088', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def db_insert_items(db_name, col_name, elements):
     try:
         col = get_collection(db_name, col_name)
         return col.insert(elements)
-    except:
+    except Exception as e:
+        Logger.log('L-0089', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def db_update_item(db_name, col_name, query, updated_item):
@@ -66,21 +77,24 @@ def db_delete_item(db_name, col_name, query):
     try:
         col = get_collection(db_name, col_name)
         return col.delete_one(query)
-    except:
+    except Exception as e:
+        Logger.log('L-0090', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def db_delete_items(db_name, col_name, query):
     try:
         col = get_collection(db_name, col_name)
         return col.delete_many(query)
-    except:
+    except Exception as e:
+        Logger.log('L-0091', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def db_drop_collection(db_name, col_name):
     try:
         col = get_collection(db_name, col_name)
         col.drop()
-    except:
+    except Exception as e:
+        Logger.log('L-0092', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
 
 def insert(db, collection_name, data=None, query=None):
@@ -124,5 +138,6 @@ def db_batch_operation(db_name, operations):
                 query = operation['query']
             if operation['type'] in transaction_operation_types:
                 transaction_operation_types[operation['type']](db, col_name, data=data, query=query)
-    except:
+    except Exception as e:
+        Logger.log('L-0093', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()

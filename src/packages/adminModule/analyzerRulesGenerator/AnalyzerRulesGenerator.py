@@ -1,4 +1,11 @@
+# @Classes
+from src.packages.logger.Logger import Logger
 
+# @Constants
+from src.constants.constants import TEXT_NOUNS, TEXT_VERBS
+
+# @Logger colors
+from src.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR
 
 class AnalyzerRulesGerator:
     def __init__(self):
@@ -32,12 +39,17 @@ class AnalyzerRulesGerator:
         """
         try:
             rule_set = list([])
+            Logger.log('L-0016', [{'text': TEXT_NOUNS, 'color': HIGHLIGHT_COLOR}])
             noun_categories = tokenizer_exceptions['nouns']
             for key in noun_categories.keys():
                 rule_set.append(self.__create_category_rule_set(noun_categories[key]))
+            Logger.log('L-0017')
+            Logger.log('L-0016', [{'text': TEXT_VERBS, 'color': HIGHLIGHT_COLOR}])
             verb_categories = tokenizer_exceptions['verbs']
             for key in verb_categories.keys():
                 rule_set.append(self.__create_category_rule_set(verb_categories[key]))
+            Logger.log('L-0017')
             return rule_set
-        except:
+        except Exception as e:
+            Logger.log('L-0018', [{'text': e, 'color': ERROR_COLOR}])
             return None

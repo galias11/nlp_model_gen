@@ -7,6 +7,9 @@ from src.packages.wordProcessor.WordProcessorController import WordProcessorCont
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
 
+# @Logger
+from src.packages.logger.Logger import Logger
+
 class AdminModuleController:
     __analyzer_rules_generator = None
     __model_manager = None
@@ -14,10 +17,12 @@ class AdminModuleController:
     __word_processor = None
 
     def __init__(self):
+        Logger.log('L-0036')
         self.__word_processor = WordProcessorController()
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
         self.__model_manager = ModelManagerController()
         self.__analyzer_rules_generator = AnalyzerRulesGerator()
+        Logger.log('L-0037')
 
     def generate_model(self, model_name, description, author, tokenizer_exceptions, max_dist):
         """
@@ -33,14 +38,18 @@ class AdminModuleController:
 
         :tokenizer_exceptions: [Dict] - Conjunto de excepciones a agregar al tokenizer del nuevo modelo.
         """
+        Logger.log('L-0001')
         if self.__model_manager.get_model(model_name):
+            Logger.log('L-0002')
             return False
         tokenizer_exceptions_path = self.__tokenizer_rules_generator.generate_model_data(tokenizer_exceptions, model_name, max_dist)
         analyzer_rule_set = self.__analyzer_rules_generator.create_analyzer_rule_set(tokenizer_exceptions)
         if not tokenizer_exceptions_path or analyzer_rule_set is None:
             return False
         model_creation_success = self.__model_manager.create_model(model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
-        remove_dir(tokenizer_exceptions_path)
+        Logger.log('L-0034')
+        if remove_dir(tokenizer_exceptions_path):
+            Logger.log('L-0035')
         return model_creation_success
 
     def get_available_models(self):
@@ -75,8 +84,10 @@ class AdminModuleController:
 
         :return: [bool] - True si la edición se realizó correctamente, False en caso contrario.
         """
+        Logger.log('L-0074')
         current_model = self.__model_manager.get_model(model_name)
         if current_model is None:
+            Logger.log('L-0075')
             return False
         current_model_name = current_model.get_model_name()
         edited_model_name = new_model_name
@@ -87,12 +98,13 @@ class AdminModuleController:
         if new_description is None or new_description == '':
             edited_description = current_description
         if edited_model_name == current_model_name and edited_description == current_description:
+            Logger.log('L-0076')
             return False
         return self.__model_manager.edit_model(model_name, edited_model_name, edited_description)
 
     def delete_model_data(self, model_name):
         """
-        Elimina un modelo del sistema. Al eliminar los modelos se eliminará todo registro del mismo 
+        Elimina un modelo del sistema. Al eliminar los modelos se eliminará todo registro del mismo
         tanto en la base de datos como en la carpeta de modelos del sistema.
         """
         return self.__model_manager.remove_model(model_name)

@@ -1,5 +1,11 @@
+# @Logger
+from src.packages.logger.Logger import Logger
+
 # @Constatns
 from src.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
+
+# @Log colors
+from src.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Helpers
 from src.utils.dbUtils import ( 
@@ -57,7 +63,9 @@ class ModelDataManager:
         :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
         try:
+            Logger.log('L-0026')
             if ModelDataManager.check_existing_model(model_name): 
+                Logger.log('L-0027')
                 return False
             data_dict = {
                 'model_name': model_name,
@@ -67,8 +75,10 @@ class ModelDataManager:
                 'analyzer_rules_set': analyser_rules_set
             }
             db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
+            Logger.log('L-0029')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0028', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     @staticmethod
@@ -83,7 +93,9 @@ class ModelDataManager:
         :return: [boolean] - True si se ha guardado la modificación con exito, False en caso contrario.
         """
         try:
+            Logger.log('L-0080')
             if previous_model_name != model_name and ModelDataManager.check_existing_model(model_name):
+                Logger.log('L-0081')
                 return False
             updated_data = {
                 'model_name': model_name,
@@ -91,7 +103,8 @@ class ModelDataManager:
             }
             update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': previous_model_name}, updated_data).modified_count
             return True if update_count > 0 else False
-        except:
+        except Exception as e:
+            Logger.log('L-0079', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     @staticmethod
@@ -104,7 +117,9 @@ class ModelDataManager:
         :return: [boolean] - True si se ha eliminado con exito, False en caso contrario.
         """
         try:
+            Logger.log('L-0066')
             delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': model_name}).deleted_count
             return True if delete_count > 0 else False
-        except:
+        except Exception as e:
+            Logger.log('L-0067', [{'text': e, 'color': ERROR_COLOR}])
             return False

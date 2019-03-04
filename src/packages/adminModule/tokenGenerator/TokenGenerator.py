@@ -15,19 +15,11 @@ from src.constants.constants import (
 from src.packages.wordProcessor.WordProcessorController import WordProcessorController
 from src.packages.logger.Logger import Logger
 
+# @Logger colors
+from src.packages.logger.assets.logColors import HIGHLIGHT_COLOR
+
 # @Resourses
 from ..packageUtils.token_tags import TOKEN_TAGS
-
-# @Logger
-from src.packages.logger.assets.logColors import OK_COLOR
-from src.packages.logger.assets.logTexts import (
-    GENERAL_OK,
-    TOKEN_RULES_GEN_NOUN_PROCESSING,
-    TOKEN_RULES_GEN_CREATING_NOUN_RULES,
-    TOKEN_RULES_GEN_CREATING_VERB_RULES,
-    TOKEN_RULES_GEN_CONJUGATING,
-    TOKEN_RULES_GEN_VERB_PROCESSING
-)
 
 class TokenGenerator:
     __word_processor = None
@@ -156,6 +148,7 @@ class TokenGenerator:
         :max_dist: Distancia de levenshtein máxima para que una variación
         de una palabra sea tomada como válida.
         """
+        Logger.log('L-0014', [{'text': verb, 'color': HIGHLIGHT_COLOR}])
         fuzzy_token_set = self.__word_processor.get_fuzzy_set(verb, max_dist)
         tokenizer_exceptions_set = list([])
         for fuzzy_token in fuzzy_token_set:
@@ -179,17 +172,12 @@ class TokenGenerator:
         :return: [Dict] - Diccionario con todas las excepciones al conjugador generadas a 
         partir del verbo, sus conjugaciones y las deformaciones realizadas.
         """
-        Logger.log(TOKEN_RULES_GEN_CREATING_VERB_RULES, [{'text': infinitive, 'color': OK_COLOR}])
-        Logger.log(TOKEN_RULES_GEN_CONJUGATING)
         conj_dict = self.__word_processor.conjugate_verb(infinitive)
-        Logger.log(GENERAL_OK)
         verb_rules_dict = dict({})
         for key in conj_dict.keys():
             for index, verb in enumerate(conj_dict[key]):
                 if verb != '':
-                    Logger.log(TOKEN_RULES_GEN_VERB_PROCESSING, [{'text': verb, 'color': OK_COLOR}])
                     verb_rules_dict[verb] = self.__create_custom_verb_token_rules(verb, infinitive, index, key, max_dist)
-                    Logger.log(GENERAL_OK)
         return verb_rules_dict
 
     def __create_custom_noun_token_rules(self, noun, base_noun, max_dist, is_plural=False):
@@ -204,13 +192,12 @@ class TokenGenerator:
 
         :is_plural: [bool] - True si la palabra es plural. 
         """
-        Logger.log(TOKEN_RULES_GEN_NOUN_PROCESSING, [{'text': noun, 'color': OK_COLOR}])
+        Logger.log('L-0015', [{'text': noun, 'color': HIGHLIGHT_COLOR}])
         fuzzy_set = self.__word_processor.get_fuzzy_set(noun, max_dist)
         tag = TOKEN_RULES_GEN_NOUN_SING_TAG if not is_plural else TOKEN_RULES_GEN_NOUN_PLUR_TAG
         noun_rule_set = list([])
         for fuzzy_token in fuzzy_set:
             noun_rule_set.append(self.__get_noun_token_rule(fuzzy_token, base_noun, tag))
-        Logger.log(GENERAL_OK)
         return noun_rule_set
 
     def generate_noun_rules_set(self, singular, max_dist):
@@ -227,7 +214,6 @@ class TokenGenerator:
         :return: [Dict] - Diccionario con todas las excepciones al conjugador generadas a 
         partir del verbo, sus conjugaciones y las deformaciones realizadas.
         """
-        Logger.log(TOKEN_RULES_GEN_CREATING_NOUN_RULES, [{'text': singular, 'color': OK_COLOR}])
         noun_rules_dict = dict({})
         noun_rules_dict[singular] = self.__create_custom_noun_token_rules(singular, singular, max_dist, False)
         plural_form = self.__word_processor.get_plural(singular)

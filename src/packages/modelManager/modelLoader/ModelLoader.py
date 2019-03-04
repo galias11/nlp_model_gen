@@ -1,6 +1,10 @@
 # @Vendors
 import spacy
 
+# @Logger
+from src.packages.logger.Logger import Logger
+from src.packages.logger.assets.logColors import ERROR_COLOR
+
 # @Utils
 from src.utils.fileUtils import (
     build_path, 
@@ -62,8 +66,10 @@ class ModelLoader:
         :return: [boolean] - True si el modelo fue cargado correctamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0030')
             full_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
             if check_dir_existence(full_path):
+                Logger.log('L-0031')
                 return False
             model.to_disk(full_path)
             custom_model_files_path = build_path(full_path, MODEL_MANAGER_CUSTOM_FILES_DIR)
@@ -71,8 +77,10 @@ class ModelLoader:
             model_seed_path = build_path(tmp_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME)
             model_seed_copy_path = build_path(custom_model_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME)
             copy_file(model_seed_path, model_seed_copy_path)
+            Logger.log('L-0032')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0033', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     @staticmethod
@@ -84,6 +92,7 @@ class ModelLoader:
 
         :return: [Boolean] - Ture si el modelo fue borrado correctamente, False en caso contrario.
         """
+        Logger.log('L-0070')
         full_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
         return remove_dir(full_path)
 

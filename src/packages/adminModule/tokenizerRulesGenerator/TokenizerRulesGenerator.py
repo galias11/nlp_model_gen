@@ -11,15 +11,7 @@ from src.constants.constants import (
 )
 
 # @Log
-from src.packages.logger.assets.logColors import OK_COLOR
-from src.packages.logger.assets.logTexts import (
-    GENERAL_OK,
-    TOKEN_RULES_GEN_CREATING_CATEG,
-    TOKEN_RULES_GEN_CREATING_DICT,
-    TOKEN_RULES_GEN_CREATING_TMP_FILES,
-    TOKEN_RULES_GEN_MODEL_FILES_GENERATED,
-    TOKEN_RULES_GEN_TMP_FILES_GENERATED
-)
+from src.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR
 
 # @Classes
 from src.packages.logger.Logger import Logger
@@ -29,7 +21,9 @@ class TokenizerRulesGenerator:
     token_generator = None
 
     def __init__(self):
+        Logger.log('L-0049')
         self.__token_generator = TokenGenerator()
+        Logger.log('L-0050')
 
     def __generate_verb_rules(self, categories, max_dist, base_path):
         """
@@ -47,19 +41,16 @@ class TokenizerRulesGenerator:
         :base_path: [String] - Ruta raíz del modelo.
         """
         for key in categories.keys():
-            Logger.log(TOKEN_RULES_GEN_CREATING_CATEG, [{'text': categories[key]['name'], 'color': OK_COLOR}])
+            Logger.log('L-0006', [{'text': categories[key]['name'], 'color': HIGHLIGHT_COLOR}])
             category_path = build_path(base_path, categories[key]['default_dir'])
             create_dir_if_not_exist(category_path)
-            Logger.log(TOKEN_RULES_GEN_CREATING_TMP_FILES)
             for verb in categories[key]['dictionary']:
+                Logger.log('L-0008', [{'text': verb, 'color': HIGHLIGHT_COLOR}])
                 verb_path = build_path(category_path, verb)
                 create_dir_if_not_exist(verb_path)
                 exceptions = self.__token_generator.generate_verb_rules_set(verb, max_dist)
                 dictionary_to_disk(build_path(verb_path, verb + TOKEN_RULES_GEN_RULES_EXT), exceptions)
-            Logger.log(TOKEN_RULES_GEN_TMP_FILES_GENERATED)
-            Logger.log(TOKEN_RULES_GEN_CREATING_DICT, [{'text': categories[key]['name'], 'color': OK_COLOR}])
-            Logger.log(GENERAL_OK)
-            Logger.log(TOKEN_RULES_GEN_MODEL_FILES_GENERATED)
+            Logger.log('L-0007')
 
     def __generate_noun_rules(self, categories, max_dist, base_path):
         """
@@ -78,19 +69,16 @@ class TokenizerRulesGenerator:
         """
 
         for key in categories.keys():
-            Logger.log(TOKEN_RULES_GEN_CREATING_CATEG, [{'text': categories[key]['name'], 'color': OK_COLOR}])
+            Logger.log('L-0009', [{'text': categories[key]['name'], 'color': HIGHLIGHT_COLOR}])
             category_path = build_path(base_path, categories[key]['default_dir'])
             create_dir_if_not_exist(category_path)
-            Logger.log(TOKEN_RULES_GEN_CREATING_TMP_FILES)
             for noun in categories[key]['dictionary']:
+                Logger.log('L-0011', [{'text': noun, 'color': HIGHLIGHT_COLOR}])
                 noun_path = build_path(category_path, noun)
                 create_dir_if_not_exist(noun_path)
                 exceptions = self.__token_generator.generate_noun_rules_set(noun, max_dist)
                 dictionary_to_disk(build_path(noun_path, noun + TOKEN_RULES_GEN_RULES_EXT), exceptions)    
-                Logger.log(TOKEN_RULES_GEN_CREATING_DICT, [{'text': categories[key]['name'], 'color': OK_COLOR}])
-                Logger.log(GENERAL_OK)
-            Logger.log(GENERAL_OK)
-            Logger.log(TOKEN_RULES_GEN_MODEL_FILES_GENERATED)
+            Logger.log('L-0010')
 
     def __save_model_seed(self, model_seed, base_path):
         """
@@ -118,6 +106,7 @@ class TokenizerRulesGenerator:
         if check_dir_existence(base_path):
             return False
         try:
+            Logger.log('L-0003')
             create_dir_if_not_exist(base_path)
             self.__save_model_seed(model_seed, base_path)
             nouns_path = build_path(base_path, TOKEN_RULES_GEN_TYPE_NOUN)
@@ -126,6 +115,8 @@ class TokenizerRulesGenerator:
             create_dir_if_not_exist(verbs_path)
             self.__generate_noun_rules(model_seed['nouns'], max_dist, nouns_path)
             self.__generate_verb_rules(model_seed['verbs'], max_dist, verbs_path)
+            Logger.log('L-0004')
             return base_path
-        except:
+        except Exception as e:
+            Logger.log('L-0005', [ {'text': e, 'color': ERROR_COLOR}])
             return False

@@ -1,13 +1,17 @@
-# @Classes
-from .modelDataManager.ModelDataManager import ModelDataManager
-from .modelLoader.ModelLoader import ModelLoader
-from .model.Model import Model
-
 # @Utils
 from src.utils.fileUtils import get_files_in_dir, load_json_file
 
 # @Contants
 from src.constants.constants import TOKEN_RULES_GEN_RULES_EXT
+
+# @Log colors
+from src.packages.logger.assets.logColors import ERROR_COLOR
+
+# @Classes
+from src.packages.logger.Logger import Logger
+from .modelDataManager.ModelDataManager import ModelDataManager
+from .modelLoader.ModelLoader import ModelLoader
+from .model.Model import Model
 
 class ModelManagerController:
     __models = list([])
@@ -21,12 +25,15 @@ class ModelManagerController:
         Inicializa el modulo.
         """
         try:
+            Logger.log('L-0051')
             stored_models_data = ModelDataManager.get_models()
             for model in stored_models_data:
                 model_object = Model(model['model_name'], model['description'], model['author'], model['path'], model['analyzer_rules_set'])
                 self.__models.append(model_object)
+            Logger.log('L-0052')
             self.__init_success = True
-        except:
+        except Exception as e:
+            Logger.log('L-0053', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
 
     def get_model(self, model_name):
@@ -96,12 +103,15 @@ class ModelManagerController:
 
         :return: [List(Dict)] - Resultados del análisis.
         """
+        Logger.log('L-0054')
         selected_model = self.get_model(model_name)
         if selected_model is None or text is None:
+            Logger.log('L-0055')
             return None
         if not selected_model.is_loaded():
             selected_model.load()
         if not selected_model.is_loaded():
+            Logger.log('L-0058')
             return None
         return selected_model.analyse_text(text, only_positives)    
 
@@ -127,11 +137,13 @@ class ModelManagerController:
 
         :return: [bool] - True si la operación fue exitosa, False en caso contrario.
         """
+        Logger.log('L-0023')
         tokenizer_exceptions_files = get_files_in_dir(tokenizer_exceptions_path, TOKEN_RULES_GEN_RULES_EXT)
         for source_file in tokenizer_exceptions_files:
             rule_set = load_json_file(source_file)
             for key in rule_set:
                 model.add_tokenizer_rule_set(rule_set[key])
+        Logger.log('L-0024')
 
     def create_model(self, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set):
         """
@@ -151,18 +163,22 @@ class ModelManagerController:
         :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
         """
         if self.get_model(model_name) is not None:
+            Logger.log('L-0019')
             return False
         try:
+            Logger.log('L-0021')
             custom_model = self.__initialize_custom_model()
             new_model = Model(model_name, description, author, model_name, analyzer_rule_set)
             new_model.set_reference(custom_model)
+            Logger.log('L-0022')
             self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
             ModelDataManager.save_model_data(model_name, description, author, model_name, analyzer_rule_set)
             ModelLoader.save_model(custom_model, model_name, tokenizer_exceptions_path)
             self.__models.append(new_model)
+            Logger.log('L-0025')
             return True
         except Exception as e:
-            print(e)
+            Logger.log('L-0020', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def edit_model(self, previous_model_name, model_name, description):
@@ -177,11 +193,14 @@ class ModelManagerController:
         """
         selected_model = self.get_model(previous_model_name)
         if selected_model is None:
+            Logger.log('L-0077')
             return False
         if not ModelDataManager.modify_model_data(previous_model_name, model_name, description):
+            Logger.log('L-0078')
             return False
         selected_model.set_model_name(model_name)
         selected_model.set_description(description)
+        Logger.log('L-0082')
         return True
 
     def remove_model(self, model_name):
@@ -193,12 +212,19 @@ class ModelManagerController:
 
         :return: [boolean] - True si el modelo fue exitosamente borrado, False en caso contrario.
         """
+        Logger.log('L-0064')
         selected_model = self.get_model(model_name)
         if selected_model is None:
+            Logger.log('L-0065')
             return False
         if not ModelDataManager.remove_model_data(selected_model.get_model_name()):
+            Logger.log('L-0068')
             return False
+        Logger.log('L-0069')
         if not ModelLoader.delete_model_files(selected_model.get_path()):
+            Logger.log('L-0071')
             return False
+        Logger.log('L-0072')
         self.__models.remove(selected_model)
+        Logger.log('L-0073')
         return True
