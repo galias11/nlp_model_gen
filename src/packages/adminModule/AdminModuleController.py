@@ -7,6 +7,9 @@ from src.packages.wordProcessor.WordProcessorController import WordProcessorCont
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
 
+# @Logger
+from src.packages.logger.Logger import Logger
+
 class AdminModuleController:
     __analyzer_rules_generator = None
     __model_manager = None
@@ -33,14 +36,18 @@ class AdminModuleController:
 
         :tokenizer_exceptions: [Dict] - Conjunto de excepciones a agregar al tokenizer del nuevo modelo.
         """
+        Logger.log('L-0001')
         if self.__model_manager.get_model(model_name):
+            Logger.log('L-0002')
             return False
         tokenizer_exceptions_path = self.__tokenizer_rules_generator.generate_model_data(tokenizer_exceptions, model_name, max_dist)
         analyzer_rule_set = self.__analyzer_rules_generator.create_analyzer_rule_set(tokenizer_exceptions)
         if not tokenizer_exceptions_path or analyzer_rule_set is None:
             return False
         model_creation_success = self.__model_manager.create_model(model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
-        remove_dir(tokenizer_exceptions_path)
+        Logger.log('L-0034')
+        if remove_dir(tokenizer_exceptions_path):
+            Logger.log('L-0035')
         return model_creation_success
 
     def get_available_models(self):

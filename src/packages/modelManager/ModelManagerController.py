@@ -1,13 +1,17 @@
-# @Classes
-from .modelDataManager.ModelDataManager import ModelDataManager
-from .modelLoader.ModelLoader import ModelLoader
-from .model.Model import Model
-
 # @Utils
 from src.utils.fileUtils import get_files_in_dir, load_json_file
 
 # @Contants
 from src.constants.constants import TOKEN_RULES_GEN_RULES_EXT
+
+# @Log colors
+from src.packages.logger.assets.logColors import ERROR_COLOR
+
+# @Classes
+from src.packages.logger.Logger import Logger
+from .modelDataManager.ModelDataManager import ModelDataManager
+from .modelLoader.ModelLoader import ModelLoader
+from .model.Model import Model
 
 class ModelManagerController:
     __models = list([])
@@ -127,11 +131,13 @@ class ModelManagerController:
 
         :return: [bool] - True si la operación fue exitosa, False en caso contrario.
         """
+        Logger.log('L-0023')
         tokenizer_exceptions_files = get_files_in_dir(tokenizer_exceptions_path, TOKEN_RULES_GEN_RULES_EXT)
         for source_file in tokenizer_exceptions_files:
             rule_set = load_json_file(source_file)
             for key in rule_set:
                 model.add_tokenizer_rule_set(rule_set[key])
+        Logger.log('L-0024')
 
     def create_model(self, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set):
         """
@@ -151,18 +157,22 @@ class ModelManagerController:
         :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
         """
         if self.get_model(model_name) is not None:
+            Logger.log('L-0019')
             return False
         try:
+            Logger.log('L-0021')
             custom_model = self.__initialize_custom_model()
             new_model = Model(model_name, description, author, model_name, analyzer_rule_set)
             new_model.set_reference(custom_model)
+            Logger.log('L-0022')
             self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
             ModelDataManager.save_model_data(model_name, description, author, model_name, analyzer_rule_set)
             ModelLoader.save_model(custom_model, model_name, tokenizer_exceptions_path)
             self.__models.append(new_model)
+            Logger.log('L-0025')
             return True
         except Exception as e:
-            print(e)
+            Logger.log('L-0020', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def edit_model(self, previous_model_name, model_name, description):

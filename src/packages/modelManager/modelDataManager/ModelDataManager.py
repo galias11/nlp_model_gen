@@ -1,5 +1,11 @@
+# @Logger
+from src.packages.logger.Logger import Logger
+
 # @Constatns
 from src.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
+
+# @Log colors
+from src.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Helpers
 from src.utils.dbUtils import ( 
@@ -57,7 +63,9 @@ class ModelDataManager:
         :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
         try:
+            Logger.log('L-0026')
             if ModelDataManager.check_existing_model(model_name): 
+                Logger.log('L-0027')
                 return False
             data_dict = {
                 'model_name': model_name,
@@ -67,8 +75,10 @@ class ModelDataManager:
                 'analyzer_rules_set': analyser_rules_set
             }
             db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
+            Logger.log('L-0029')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0028', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     @staticmethod
