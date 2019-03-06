@@ -1,0 +1,917 @@
+{
+    "conjugator_config": {
+        "theme": "default",
+        "singular": [0, 1, 2],
+        "plural": [3, 4, 5],
+        "primera_persona": [0, 3],
+        "segunda_persona": [1, 4],
+        "tercera_persona": [2, 5],
+        "verb_suffixes": ["*ar", "*er", "*ir", "*ár", "*ér", "*ír"],
+        "irregular_suffix_exceptions": ["dar", "ir", "estar", "mandar", "ser", "ver"],
+        "empty_conj_dict": {
+            "inf": [""],
+            "ger" : [""],
+            "part": ["", "", ""],
+            "pres": ["", "", "", "", "", ""],
+            "pret_perf": ["", "", "", "", "", ""],
+            "pret_imperf": ["", "", "", "", "", ""],
+            "fut": ["", "", "", "", "", ""],
+            "impA": ["", "", "", "", "", ""],
+            "impB": ["", "", "", "", "", ""],
+            "impC": ["", "", "", "", "", ""],
+            "condA": ["", "", "", "", "", ""],
+            "condB": ["", "", "", "", "", ""]
+        },
+        "table_headers": [
+            ["", "Presente", "Preterito imperfecto", "Preterito perfecto simple", "Condicional"],
+            ["", "Futuro", "pret_imperf subjuntivo", "Imperativo_A","Imperativo_B","Imperativo_C"],
+            ["", ""]
+        ],
+        "row_headers": [
+            ["yo", "tu/vos", "el", "nos", "vosotros", "ellos"],
+            ["Infinitivo", "Gerundio", "Participio 1", "Participio 2", "Participio 3"]
+        ]
+    },
+    "conjugator_verb_exceptions": {
+        "theme": "default",
+        "exceptions": [
+            {
+                "key": "ir",
+                "exceptions": {
+                    "ger" : ["yendo"],
+                    "pres": ["voy", "vas", "vas", "vamos", "vais", "van"],
+                    "pret_perf": ["fuí", "fuiste", "fue", "fuimos", "fuisteis", "fueron"],
+                    "pret_imperf": ["iba", "ibas", "iba", "ibamos", "ibais", "iban"],
+                    "impA": ["", "ve", "vaya", "vayamos", "id", "vayan"],
+                    "impB": ["","","","","",""],
+                    "condB": ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"],
+                    "alternatives": [{ "key": "pres", "person": 1, "value": "andá"}]
+                }
+            },
+            {
+                "key": "asir",
+                "exceptions": {
+                    "pres": ["asgo", "ases", "ase", "asimos", "asís", "asen"],
+                    "alternatives": [{ "key": "pres", "person": 1, "value": "asís"}]
+                }
+            },
+            {
+                "key": "caber",
+                "exceptions": {
+                    "pres": ["quepo", "cabes", "cabe", "cabemos", "cabéis", "caben"],
+                    "pret_perf": ["cupe", "cupiste", "cupo", "cupimos", "cupisteis", "cupieron"],
+                    "condA": ["cabría", "cabrías", "cabría", "cabríamos", "cambríais", "cabriamos"],
+                    "condB": ["cupiese", "cupieses", "cupiese", "cupiésemos", "cupieseis", "cupiesen"],
+                    "alternatives": [{ "key": "pres", "person": 1, "value": "cabés"}]
+                  }
+            },
+            {
+                "key": "dar",
+                "exceptions": {
+                    "pres": ["doy", "das", "da", "damos", "dáis", "dan"],
+                    "pret_perf": ["dí", "diste", "dió", "dimos", "disteis", "dieron"],
+                    "condB": ["diese", "dieses", "diese", "diesemos", "dieseis", "diesen"]
+                }
+            },
+            {
+                "key": "erguir",
+                "exceptions": {
+                    "ger" : ["irguiendo"],
+                    "pres": ["yergo", "yergues", "yergue", "erguimos", "erguis", "yerguen"],
+                    "pret_perf": ["erguí", "erguiste", "irguió", "erguimos", "erguisteis", "irguieron"],
+                    "impA": ["", "yergue", "yerga", "yergamos", "erguid", "yergan"],
+                    "condB": ["irguiese", "irguieses", "irguiese", "irguiésemos", "irguieseis", "irguiesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "erguís"},
+                        { "key": "impA", "person": 1, "value": "erguí"}
+                    ]
+                }
+            },
+            {
+                "key": "estar",
+                "exceptions": {
+                    "pres": ["estoy", "estás", "está", "estamos", "estáis", "están"],
+                    "pret_perf": ["estuve", "estuviste", "estuvo", "estuvimos", "estuvisteis", "estuvieron"],
+                    "condB": ["estuviese", "estuvieses", "estuviese", "estuviesemos", "estuvieseis", "estuviesemos"],
+                    "alternatives": [{ "key": "pres", "person": 1, "value": "estate"}]
+                }
+            },
+            {
+                "key": "haber",
+                "exceptions": {
+                    "pres": ["he", "has", "ha", "hemos", "habéis", "han"],
+                    "pret_perf": ["hube", "hubiste", "hubo", "hubimos", "hubistéis", "hubieron"],
+                    "fut": ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"],
+                    "impA": ["", "", "", "", "", ""],
+                    "condA": ["habría", "habrías", "habría", "habríamos", "habríais", "habrían"],
+                    "condB": ["hubiese", "hubieses", "hubiese", "hubiésemos", "hubieseis", "hubiesen"]
+                }
+            },
+            {
+                "key": "leer",
+                "exceptions": {
+                    "ger" : ["leyendo"],
+                    "part": ["leído", "leída", "leerse"],
+                    "pret_perf": ["leí", "leiste", "leyó", "leimos", "leístes", "leyeron"],
+                    "condB": ["leyese", "leyeses", "leyese", "leyésemos", "leyeseis", "leyesen"],
+                    "alternatives": [{ "key": "impA", "person": 1, "value": "lee"}]
+                }
+            },
+            {
+                "key": "morir",
+                "exceptions": {
+                    "part": ["muerto", "muerta", "morirse"]
+                }
+            },
+            {
+                "key": "oir",
+                "exceptions": {
+                    "ger" : ["oyendo"],
+                    "pres": ["oigo", "oyes", "oye", "oimos", "oís", "oyen"],
+                    "pret_perf": ["oí", "oiste", "oyó", "oimos", "oisteis", "oyeron"],
+                    "impA": ["", "oye", "oiga", "oigamos", "oíd", "oigan"],
+                    "condB": ["oyese", "oyeses", "oyese", "oyésemos", "oyeseis", "oyesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "oís"},
+                        { "key": "impA", "person": 1, "value": "oí"}
+                    ]
+                }
+            },
+            {
+                "key": "poder",
+                "exceptions": {
+                    "ger" : ["pudiendo"],
+                    "pres": ["puedo", "puedes", "pueden", "podemos", "podéis", "pueden"],
+                    "pret_perf": ["pude", "pudiste", "pudo", "pudimos", "pudisteis", "pudieron"],
+                    "fut": ["podré", "podrás", "podrá", "podremos", "podréis", "podrán"],
+                    "impA": ["", "puede", "pueda", "podamos", "poded", "puedan"],
+                    "condA": ["podría", "podrías", "podría", "podríamos", "podríais", "podrían"],
+                    "condB": ["pudiese", "pudieses", "pudiese", "pudiésemos", "pudieseis", "pudiesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "podés"},
+                        { "key": "impA", "person": 1, "value": "podé"}
+                    ]
+                }
+            },
+            {
+                "key": "poner",
+                "exceptions": {
+                    "part": ["puesto", "puesta", "ponerse"],
+                    "pres": ["pongo", "pones", "pone", "ponemos", "ponéis", "ponen"],
+                    "pret_perf": ["puse", "pusiste", "puso", "pusimos", "pusisteis", "pusieron"],
+                    "fut": ["pondré", "pondrás", "pondrá", "pondremos", "pondréis", "pondrán"],
+                    "impA": ["", "pon", "ponga", "pongamos", "poned", "pongan"],
+                    "condA": ["pondría", "pondrías", "pondría", "pondríamos", "pondríais", "pondrían"],
+                    "condB": ["pusiese", "pusieses", "pusiese", "pusiésemos", "pusieseis", "pusiesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "ponés"},
+                        { "key": "impA", "person": 1, "value": "poné"}
+                    ]
+                }
+            },
+            {
+                "key": "pudrir",
+                "exceptions": {
+                    "part": ["podrido", "podrida", "pudrirse"]
+                }
+            },
+            {
+                "key": "querer",
+                "exceptions": {
+                    "pres": ["quiero", "quieres", "quiere", "queremos", "queréis", "quieren"],
+                    "pret_perf": ["quise", "quisiste", "quiso", "quisimos", "quisisteis", "quisieron"],
+                    "fut": ["querré", "querrás", "querrá", "querremos", "querréis", "querrán"],
+                    "impA": ["", "quiere", "quiera", "queramos", "quered", "quieran"],
+                    "condA": ["querría", "querrías", "querría", "querriamos", "querríais", "querrían"],
+                    "condB": ["quisiese", "quisieses", "quisiese", "quisiésemos", "quisieseis", "quisiesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "querés"},
+                        { "key": "impA", "person": 1, "value": "queré"}
+                    ]
+                }
+            },
+            {
+                "key": "roer",
+                "exceptions": {
+                    "ger" : ["royendo"],
+                    "pret_perf": ["roí", "roiste", "royó", "roimos", "roísteis", "royeron"],
+                    "condB": ["royese", "royeses", "royese", "royésemos", "royeseis", "royesen"]
+                }
+            },
+            {
+                "key": "saber",
+                "exceptions": {
+                    "pres": ["sé", "sabes", "sabe", "sabemos", "sabéis", "saben"],
+                    "pret_perf": ["supe", "supiste", "supo", "supimos", "supisteis", "supieron"],
+                    "fut": ["sabré", "sabrás", "sabrá", "sabremos", "sabréis", "sabrán"],
+                    "impA": ["", "sabe", "sepa", "sepamos", "sabed", "sepan"],
+                    "condA": ["sabría", "sabrías", "sabría", "sabríamos", "sabríais", "sabrían"],
+                    "condB": ["supiese", "supieses", "supiese", "supiésemos", "supieseis", "supiesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "sabés"},
+                        { "key": "impA", "person": 1, "value": "sabé"}
+                    ]
+                }
+            },
+            {
+                "key": "ser",
+                "exceptions": {
+                    "part": ["sido", "", ""],
+                    "pres": ["soy", "eres", "es", "somos", "sois", "son"],
+                    "pret_perf": ["fui", "fuiste", "fue", "fuimos", "fuisteis", "fueron"],
+                    "pret_imperf": ["era", "eras", "era", "eramos", "eraís", "eran"],
+                    "impA": ["", "se", "sea", "seamos", "sed", "sean"],
+                    "condB": ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "sos"},
+                        { "key": "impA", "person": 1, "value": "sé"}
+                    ]
+                }
+            },
+            {
+                "key": "tener",
+                "exceptions": {
+                    "pres": ["tengo", "tienes", "tiene", "tenemos", "tenéis", "tienen"],
+                    "pret_perf": ["tuve", "tuviste", "tuvo", "tuvimos", "tuvisteis", "tuvieron"],
+                    "fut": ["tendré", "tendrás", "tendrá", "tendremos", "tendréis", "tendrán"],
+                    "impA": ["", "ten", "tenga", "tengamos", "tened", "tengan"],
+                    "condA": ["tendría", "tendrías", "tendría", "tendríamos", "tendríais", "tendrían"],
+                    "condB": ["tuviese", "tuvieses", "tuviese", "tuviésemos", "tuvieseis", "tuviesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "tenés"},
+                        { "key": "impA", "person": 1, "value": "tené"}
+                    ]
+                }
+            },
+            {
+                "key": "traer",
+                "exceptions": {
+                    "ger" : ["trayendo"],
+                    "pres": ["traigo", "traes", "trae", "traemos", "traéis", "traen"],
+                    "pret_perf": ["traje", "trajiste", "trajo", "trajimos", "trajisteis", "trajeron"],
+                    "impA": ["", "trae", "traiga", "traigamos", "traed", "traigan"],
+                    "condB": ["trajese", "trajeses", "trajese", "trajésemos", "trajeseis", "trajesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "traés"},
+                        { "key": "impA", "person": 1, "value": "traé"}
+                    ]
+                }
+            },
+            {
+                "key": "venir",
+                "exceptions": {
+                    "ger" : ["viniendo"],
+                    "pres": ["vengo", "vienes", "viene", "venimos", "venís", "vienen"],
+                    "pret_perf": ["vine", "viniste", "vino", "vinimos", "vinisteis", "vinieron"],
+                    "fut": ["vendré", "vendrás", "vendrá", "vendremos", "vendréis", "vendrán"],
+                    "impA": ["", "ven", "venga", "vengamos", "venid", "vengan"],
+                    "condA": ["vendría", "vendrías", "vendría", "vendríamos", "vendríais", "vendrían"],
+                    "condB": ["viniese", "vinieses", "viniese", "viniésemos", "vinieseis", "viniesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "venís"},
+                        { "key": "impA", "person": 1, "value": "vení"}
+                    ]
+                }
+            },
+            {
+                "key": "ver",
+                "exceptions": {
+                    "part": ["visto", "vista", "verse"],
+                    "pres": ["veo", "ves", "ve", "vemos", "véis", "ven"],
+                    "pret_imperf": ["veía", "veías", "veía", "veiamos", "veíais", "veían"],
+                    "impA": ["", "ve", "vea", "veamos", "ved", "vean"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "ves"},
+                        { "key": "impA", "person": 1, "value": "ve"}
+                    ]
+                }
+            },
+            {
+                "key": "yacer",
+                "exceptions": {
+                    "pres": ["yazgo", "yaces", "yace", "yacemos", "yacéis", "yacen"],
+                    "impA": ["", "yace", "yazga", "yazgamos", "yaced", "yazgan"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "yacés"},
+                        { "key": "impA", "person": 1, "value": "yacé"}
+                    ]
+                }
+            },
+            {
+                "key": "creer",
+                "exceptions": {
+                    "ger" : ["creyendo"],
+                    "pret_perf": ["creí", "creiste", "creyó", "creimos", "creisteis", "creyeron"],
+                    "condB": ["creyese", "creyeses", "creyese", "creyésemos", "creyeseis", "creyesen"],
+                    "alternatives": [
+                        { "key": "pres", "person": 1, "value": "yacés"},
+                        { "key": "impA", "person": 1, "value": "yacé"}
+                    ]
+                }
+            }
+        ]
+    },
+    "conjugator_irregular_groups": {
+        "theme": "default",
+        "irregular_verbs_grupo_01_ar": [
+            "acertar", 
+            "acrecentar", 
+            "alentar", 
+            "apretar",
+            "arrendar", 
+            "asentar", 
+            "asosegar", 
+            "aterrar", 
+            "atravesar", 
+            "calentar", 
+            "cegar", 
+            "cerrar",
+            "comenzar", 
+            "concertar", 
+            "confesar", 
+            "denegar", 
+            "desalentar", 
+            "desasosegar",
+            "desconcertar", 
+            "desenterrar", 
+            "deshelar", 
+            "desmembrar", 
+            "despertar", 
+            "desplegar",
+            "desterrar", 
+            "emparentar", 
+            "empezar", 
+            "encerrar", 
+            "encomendar", 
+            "enmendar",
+            "ensangrentar", 
+            "enterrar", 
+            "escarmentar", 
+            "fregar", 
+            "gobernar", 
+            "helar",
+            "herrar", 
+            "invernar", 
+            "manifestar", 
+            "mentar", 
+            "merendar", 
+            "negar", 
+            "nevar", 
+            "pensar",
+            "plegar", 
+            "quebrar", 
+            "recalentar",
+            "recomendar", 
+            "refregar", 
+            "regar", 
+            "remendar",
+            "renegar", 
+            "repensarse", 
+            "replegar", 
+            "restregar", 
+            "reventar", 
+            "salpimentar", 
+            "segar",
+            "sembrar", 
+            "sentar", 
+            "serrar", 
+            "sosegar", 
+            "soterrar", 
+            "subarrendar", 
+            "temblar", 
+            "tentar",
+            "tropezar"
+        ],
+        "irregular_verbs_grupo_01_er": [
+            "ascender", 
+            "atender", 
+            "defender", 
+            "desatender",
+            "descender", 
+            "encender", 
+            "entender", 
+            "extender", 
+            "heder", 
+            "perder", 
+            "sobrentender",
+            "tender", 
+            "trascender", 
+            "verter"
+        ],
+        "irregular_verbs_grupo_01_ir": [
+            "cernir", 
+            "concernir", 
+            "discernir"
+        ],
+        "irregular_verbs_grupo_02_ar": [
+            "acordar", 
+            "almorzar", 
+            "apostar", 
+            "aprobar",
+            "asolar", 
+            "avergonzar", 
+            "colar", 
+            "colgar", 
+            "comprobar", 
+            "concordar", 
+            "consolar",
+            "contar", 
+            "costar", 
+            "degollar", 
+            "demostrar", 
+            "desaprobar", 
+            "descolgar", 
+            "descontar",
+            "desosar", 
+            "desollar", 
+            "despoblarse", 
+            "encontrar", 
+            "engrosar", 
+            "esforzarse",
+            "forzar", 
+            "mostrar", 
+            "poblar", 
+            "probar", 
+            "recordar", 
+            "recostar", 
+            "reforzar",
+            "renovar", 
+            "repoblar", 
+            "reprobar", 
+            "resollar", 
+            "resonar", 
+            "revolcar", 
+            "rodar",
+            "rogar", 
+            "sobrevolar", 
+            "soldar", 
+            "soltar", 
+            "sonar", 
+            "soñar", 
+            "tostar",
+            "trastocarse",
+            "tronar", 
+            "volar", 
+            "volcar"
+        ],
+        "irregular_verbs_grupo_02_er": [
+            "absolver", 
+            "cocer", 
+            "conmover", 
+            "demoler",
+            "desenvolver", 
+            "devolver", 
+            "disolver", 
+            "doler", 
+            "envolver", 
+            "escocer", 
+            "llover",
+            "moler", 
+            "morder", 
+            "mover", 
+            "oler", 
+            "promover", 
+            "remorder", 
+            "remover", 
+            "resolver",
+            "retorcer", 
+            "revolver", 
+            "soler", 
+            "torcer", 
+            "volver"
+        ],
+        "irregular_verbs_grupo_03_acer": [
+            "complacer", 
+            "nacer", 
+            "pacer", 
+            "renacer"
+        ],
+        "irregular_verbs_grupo_03_ecer": [
+            "abastecer", 
+            "aborrecer", 
+            "acaecer", 
+            "acontecer",
+            "adolecer", 
+            "agradecer", 
+            "amanecer", 
+            "anochecer", 
+            "aparecer", 
+            "apetecer", 
+            "atardecer",
+            "carecer", 
+            "compadecer", 
+            "comparecer", 
+            "convalecer", 
+            "crecer", 
+            "decrecer",
+            "desaparecer", 
+            "desentumecer", 
+            "desfallecer", 
+            "desfavorecer", 
+            "desobedecer",
+            "desvanecerse", 
+            "embellecer", 
+            "embrutecer", 
+            "empobrecer", 
+            "enaltecer", 
+            "enardecer",
+            "encarecer", 
+            "endurecer", 
+            "enfurecer", 
+            "enloquecer", 
+            "enmohecer", 
+            "enmudecer",
+            "ennegrecer", 
+            "ennoblecer", 
+            "enorgullecer", 
+            "enrarecer", 
+            "enriquecer",
+            "enrojecer", 
+            "ensombrecer", 
+            "ensordecer", 
+            "enternecer", 
+            "entorpecer",
+            "entristecer", 
+            "entumecer", 
+            "envejecer", 
+            "envilecer", 
+            "esclarecer", 
+            "establecer",
+            "estremecer", 
+            "fallecer", 
+            "favorecer", 
+            "florecer", 
+            "fortalecer", 
+            "guarecer",
+            "humedecer", 
+            "languidecer", 
+            "merecer", 
+            "obedecer", 
+            "ofrecer", 
+            "oscurecer",
+            "padecer", 
+            "palidecer", 
+            "parecer", 
+            "perecer", 
+            "permanecer", 
+            "pertenecer",
+            "prevalecer", 
+            "reaparecer", 
+            "reblandecer", 
+            "recrudecer", 
+            "rejuvenecer",
+            "resplandecer", 
+            "restablecer"
+        ],
+        "irregular_verbs_grupo_03_ocer": [
+            "conocer", 
+            "desconocer", 
+            "reconocer"
+        ],
+        "irregular_verbs_grupo_03_ucer": [
+            "balbucir", 
+            "deslucir", 
+            "lucir", 
+            "relucir"
+        ],
+        "irregular_verbs_grupo_04_ducir": [
+            "aducir", 
+            "conducir", 
+            "deducir", 
+            "inducir",
+            "introducir", 
+            "producir", 
+            "reducir", 
+            "reproducir", 
+            "seducir", 
+            "traducir"
+        ],
+        "irregular_verbs_grupo_05_er": [
+            "atañer", 
+            "tañer"
+        ],
+        "irregular_verbs_grupo_05_nir": [
+            "gruñir", 
+            "restriñir"
+        ],
+        "irregular_verbs_grupo_05_ullir": [
+            "bullir", 
+            "engullir", 
+            "escabullir", 
+            "zambullir"
+        ],
+        "irregular_verbs_grupo_06_ir": [
+            "comedir", 
+            "competir", 
+            "concebir", 
+            "conseguir",
+            "corregir", 
+            "derretir", 
+            "despedir", 
+            "desvestir", 
+            "distinguir", 
+            "elegir", 
+            "embestir", 
+            "expedir",
+            "gemir", 
+            "impedir", 
+            "investir", 
+            "medir", 
+            "pedir", 
+            "perseguir", 
+            "proseguir",
+            "reelegir", 
+            "regir", 
+            "rendir", 
+            "repetir", 
+            "reseguir", 
+            "revestir", 
+            "seguir", 
+            "servir",
+            "transgredir", 
+            "trasgredir", 
+            "trasvestir", 
+            "vestir"
+        ],
+        "irregular_verbs_grupo_07_enir": [
+            "ceñir", 
+            "desteñir", 
+            "mullir", 
+            "reñir", 
+            "teñir"
+        ],
+        "irregular_verbs_grupo_07_eir": [
+            "desleír", 
+            "freír", 
+            "reír", 
+            "sonreír", 
+            "sofreír"
+        ],
+        "irregular_verbs_grupo_08_ir": [
+            "adherir", 
+            "advertir", 
+            "arrepentirse", 
+            "asentir",
+            "conferir", 
+            "consentir", 
+            "convertir", 
+            "desmentir", 
+            "diferir", 
+            "digerir",
+            "disentir", 
+            "divertir", 
+            "herir", 
+            "hervir", 
+            "ingerir", 
+            "injerir", 
+            "inserir",
+            "invertir", 
+            "malherir", 
+            "mentir", 
+            "pervertir", 
+            "preferir", 
+            "presentir",
+            "proferir", 
+            "referir", 
+            "requerir", 
+            "resentirse", 
+            "revertir", 
+            "sentir",
+            "sugerir", 
+            "transferir"
+        ],
+        "irregular_verbs_grupo_09_u": [
+            "jugar"
+        ],
+        "irregular_verbs_grupo_10_irir": [
+            "adquirir", 
+            "inquirir"
+        ],
+        "irregular_verbs_grupo_11_uir": [
+            "afluir", 
+            "atribuir", 
+            "concluir", 
+            "confluir",
+            "constituir", 
+            "construir", 
+            "contribuir", 
+            "derruir", 
+            "destituir", 
+            "destruir",
+            "diluir", 
+            "disminuir", 
+            "distribuir", 
+            "excluir", 
+            "fluir", 
+            "huir", 
+            "imbuir",
+            "incluir", 
+            "inmiscuir", 
+            "influir", 
+            "instituir", 
+            "instruir", 
+            "intuir",
+            "obstruir", 
+            "prostituir", 
+            "reconstruir", 
+            "recluir", 
+            "rehuir", 
+            "restituir",
+            "retribuir", 
+            "substituir", 
+            "sustituir"
+        ],
+        "irregular_verbs_grupo_12_o": [
+            "dormir", 
+            "morir"
+        ],
+        "irregular_verbs_grupo_13_aler": [
+            "equivaler", 
+            "valer"
+        ],
+        "irregular_verbs_grupo_13_alir": [
+            "salir", 
+            "sobresalir"
+        ]
+    },
+    "fuzzy_terms_generator_config": {
+        "theme": "default",
+        "char_confusions": {
+            "v": ["b"],
+            "b": ["v"],
+            "n": ["m"],
+            "m": ["n"],
+            "c": ["s", "k", "z"],
+            "s": ["c","z"],
+            "z": ["s","c"], 
+            "k": ["q", "qu", "c"], 
+            "qu": ["k"],
+            "ll": ["y", "l"],
+            "y": ["ll","i"],
+            "i": ["y"],
+            "á": ["a"],  
+            "é": ["e"], 
+            "í": ["i"],
+            "ó": ["o"],
+            "ú": ["u"], 
+            "h": [""]
+        },
+        "transformations": [
+            "rnd_confuse_char", 
+            "rnd_char_del", 
+            "rnd_char_change", 
+            "rnd_duplicate_char"
+        ],
+        "char_confusions_max_length": 2
+    },
+    "noun_conversor_config": {
+        "theme": "default",
+        "nacionalidades": [
+            "inglés", 
+            "francés", 
+            "holandés", 
+            "portugués", 
+            "japonés"
+        ],
+        "groups": [
+            { 
+                "suffixes": [
+                    "*a", 
+                    "*e", 
+                    "*o", 
+                    "*á", 
+                    "*é", 
+                    "*ó"
+                ],
+                "replacement": "s",
+                "backReplacements": [
+                    { "key": "*á", "backCrop": 1, "replacement": "a" },
+                    { "key": "*é", "backCrop": 1, "replacement": "e" },
+                    { "key": "*ó", "backCrop": 1, "replacement": "o" }
+                ]
+            },
+            {
+                "suffixes": [
+                    "*ón", 
+                    "*l", 
+                    "*y", 
+                    "*d", 
+                    "*r"
+                ],
+                "replacement": "es",
+                "backReplacements": [
+                    { "key": "*ón", "backCrop": 2, "replacement": "on" }
+                ]
+            },
+            {
+                "suffixes": [
+                    "*ás", 
+                    "*és", 
+                    "*ís", 
+                    "*ós", 
+                    "*ús"
+                ],
+                "replacement": "es"
+            },
+            {
+                "suffixes": [
+                    "*s", 
+                    "*x"
+                ],
+                "replacement": ""
+            },
+            {
+                "suffixes": [
+                    "*z"
+                ],
+                "replacement": "ces",
+                "backReplacements": [
+                    { "key": "*z", "backCrop": 1, "replacement": "" }
+                ]
+            }
+        ],
+        "exceptions": [
+            "este", 
+            "oeste", 
+            "norte", 
+            "sur", 
+            "sed", 
+            "cariz", 
+            "tez",
+            "caos", 
+            "salud", 
+            "grima", 
+            "fénix", 
+            "lsd", 
+            "cocaína", 
+            "merca", 
+            "ak47",
+            "alquitran negro", 
+            "angel face nevada", 
+            "azucar glass nevadito", 
+            "azúcar mascabado",
+            "blanca nieve", 
+            "blanca nieves papel", 
+            "bolsa pase", 
+            "botón de mezcal",
+            "bóxer", 
+            "bud", 
+            "burundanga", 
+            "caspa del diablo", 
+            "champiñones magicos",
+            "chespi piedra", 
+            "chulas pops", 
+            "cigarrillo de la risa", 
+            "coca pericazo",
+            "cois pipian", 
+            "coke polvo", 
+            "crystal meth", 
+            "dama blanca", 
+            "de la buena",
+            "demonios amarillos", 
+            "demonios rojos", 
+            "dick", 
+            "dios oculto", 
+            "demonios azules",
+            "dulce nasal raya", 
+            "ecstasy", 
+            "farla rayuela", 
+            "farlopa", 
+            "fiesta blanca rieles",
+            "fafafa", 
+            "fifi soda", 
+            "flufli", 
+            "flunitrazepam", 
+            "fly", 
+            "ganya", 
+            "ghb",
+            "gis soplido", 
+            "grapa suavena", 
+            "h-eich", 
+            "hielos rockstars", 
+            "hofman",
+            "la dama", 
+            "la droga del amor", 
+            "la fina", 
+            "la que tomaba maradona",
+            "ladys", 
+            "n bomb", 
+            "nieve boliviana", 
+            "ninvana ice", 
+            "northern lights",
+            "pasta base", 
+            "polvo de angel", 
+            "poxiran", 
+            "resina de cannabis", 
+            "rivotril",
+            "rohypnol", 
+            "roofies", 
+            "sales de baño", 
+            "semillitas de la virgen", 
+            "soña blanca",
+            "triki trakets", 
+            "white rhine", 
+            "white widow"
+        ]
+    } 
+}

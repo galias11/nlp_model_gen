@@ -24,8 +24,8 @@ from os import scandir, getcwd
 from os.path import abspath
 from collections import Counter
 import fnmatch
-from .esp_conjugator import Conjugator
-from .esp_conjugator import Noun_modifier
+from nlp_model_gen.esp_conjugator import Conjugator
+from nlp_model_gen.esp_conjugator import Noun_modifier
 from termcolor import colored, cprint
 import importlib.util
 import sys
@@ -214,7 +214,7 @@ class Tokenizer_rules_generator:
                 search_targets.append({category['name'] + '_acto':[category['dictionary'], category['detection_msg']]})
 
         arch = open(self.default_path + self.path_separator() + '__init__.py', 'w')
-        arch.write('from .search_function_load_file import *')
+        arch.write('from nlp_model_gen.search_function_load_file import *')
         arch.close()
 
         arch = open(self.default_path + self.path_separator() + 'search_function_load_file.py', 'w')
