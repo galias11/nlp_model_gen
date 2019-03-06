@@ -215,13 +215,13 @@ LOG_DATA = {
     },
     'L-0036': {
         'class_name': 'AdminModuleController',
-        'method_name': '__init__',
+        'method_name': '__initialize',
         'main_text': 'Inicializando modulo de administración...',
         'type': TYPE_INFO
     },
     'L-0037': {
         'class_name': 'AdminModuleController',
-        'method_name': '__init__',
+        'method_name': '__initialize',
         'main_text': 'Inicialización exitosa',
         'type': TYPE_SUCCESS
     },
@@ -471,12 +471,6 @@ LOG_DATA = {
         'main_text': 'Error al modificar los datos en la base de datos',
         'type': TYPE_ERR
     },
-    'L-0078': {
-        'class_name': 'ModelManagerController',
-        'method_name': 'edit_model',
-        'main_text': 'Error al modificar los datos en la base de datos',
-        'type': TYPE_ERR
-    },
     'L-0079': {
         'class_name': 'ModelDataManager',
         'method_name': 'modify_model_data',
@@ -566,5 +560,41 @@ LOG_DATA = {
         'method_name': 'db_batch_operation',
         'main_text': 'Excepción al realizar operación en batch sobre la BD: %s',
         'type': TYPE_INFO
+    },
+    'L-0094': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'generate_model',
+        'main_text': 'El módulo no se ha inicializado correctamente.',
+        'type': TYPE_ERR
+    },
+    'L-0095': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'get_available_models',
+        'main_text': 'El módulo no se ha inicializado correctamente.',
+        'type': TYPE_ERR
+    },
+    'L-0096': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'load_model',
+        'main_text': 'El módulo no se ha inicializado correctamente.',
+        'type': TYPE_ERR
+    },
+    'L-0097': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'edit_model_data',
+        'main_text': 'El módulo no se ha inicializado correctamente.',
+        'type': TYPE_ERR
+    },
+    'L-0098': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'delete_model_data',
+        'main_text': 'El módulo no se ha inicializado correctamente.',
+        'type': TYPE_ERR
+    },
+    'L-0099': {
+        'class_name': 'AdminModuleController',
+        'method_name': 'analyse_text',
+        'main_text': 'El módulo no se ha inicializado correctamente.',
+        'type': TYPE_ERR
     }
 }
