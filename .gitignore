@@ -10,3 +10,6 @@ __pycache__
 # Models
 models
 tmp
+dist
+build
+nlp_model_gen.egg-info

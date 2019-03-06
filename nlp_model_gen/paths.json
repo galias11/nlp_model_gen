@@ -1,0 +1,11 @@
+{
+  "wordProcessor": {
+    "default_config": "%s/config/resources/wordProcessorInitialDefault.json",
+    "fuzzyTermsConfig": "%s/packages/wordProcessor/spanishFuzzyTermsGenerator/assets/config.json",
+    "nounGroups": "%s/packages/wordProcessor/spanishNounConversor/assets/nounGroups.json",
+    "nounPluralExceptions": "%s/packages/wordProcessor/spanishNounConversor/assets/nounPluralExceptions.json",
+    "verbConfig": "%s/packages/wordProcessor/spanishConjugator/assets/config.json",
+    "verbIrregularExceptions": "%s/packages/wordProcessor/spanishConjugator/assets/verbIrregularExceptions.json",
+    "verbIrregularGroups": "%s/packages/wordProcessor/spanishConjugator/assets/verbIrregularGroups.json"
+  }
+}
