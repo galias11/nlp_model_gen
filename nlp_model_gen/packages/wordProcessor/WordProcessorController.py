@@ -189,9 +189,24 @@ class WordProcessorController (metaclass=Singleton):
         db_drop_collection(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
         db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, word_processor_default_cfg['fuzzy_terms_generator_config'])
         self.__fuzzy_generator_cfg = word_processor_default_cfg['fuzzy_terms_generator_config']
-    
+
+    # *************************************************************************************
+    # Getters
+    # *************************************************************************************
+
     def is_ready(self):
         return self.__init_success
+
+    def get_conjugator_active_theme(self):
+        return self.__conjugator_active_theme
+
+    def get_fuzzy_gen_active_theme(self):
+        return self.__fuzzy_gen_active_theme
+
+    def get_noun_converseor_active_theme(self):
+        return self.__noun_conversor_active_theme
+
+    # *************************************************************************************
 
     def __get_fuzzy_generator_cfg(self):
         """
@@ -312,9 +327,12 @@ class WordProcessorController (metaclass=Singleton):
         :return: [List(Dict)] - Lista con todos temas de configuración disponibles.
         """
         try:
+            Logger.log('L-0100')
             available_configs = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_CONJ_CFG_COLLECTION, fields={'_id': 0})
             available_exceptions = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, fields={'_id': 0})
             available_irr_groups = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_GROUPS_COLLECTION, fields={'_id': 0})
+            Logger.log('L-0101')
+            Logger.log('L-0102')
             available_config_themes = []
             for config_theme in available_configs:
                 theme_name = config_theme['theme']
@@ -326,8 +344,10 @@ class WordProcessorController (metaclass=Singleton):
                 del theme['general_settings']['theme']
                 del theme['irregular_verb_groups']['theme']
                 available_config_themes.append(theme)
+            Logger.log('L-0103')
             return available_config_themes
-        except:
+        except Exception as e:
+            Logger.log('L-0104', [{'text': e, 'color': ERROR_COLOR}])
             return []
 
     def get_available_fuzzy_gen_configs(self):
@@ -337,9 +357,12 @@ class WordProcessorController (metaclass=Singleton):
         :return: [List(Dict)] - Lista con todos los temas de configuración disponibles.
         """
         try:
+            Logger.log('L-0105')
             available_configs = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, fields={'_id': 0})
+            Logger.log('L-0106')
             return available_configs
-        except:
+        except Exception as e:
+            Logger.log('L-0107', [{'text': e, 'color': ERROR_COLOR}])
             return []
 
     def get_available_conversor_configs(self):
@@ -349,9 +372,12 @@ class WordProcessorController (metaclass=Singleton):
         :return: [List(Dict)] - Lista con todos los temas de configuración disponibles.
         """
         try:
+            Logger.log('L-0108')
             available_configs = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, fields={'_id': 0})
+            Logger.log('L-0109')
             return available_configs
-        except:
+        except Exception as e:
+            Logger.log('L-0110', [{'text': e, 'color': ERROR_COLOR}])
             return []
 
     def __get_existing_themes(self, collection_name):
@@ -380,9 +406,13 @@ class WordProcessorController (metaclass=Singleton):
         :return: [Bool] - True si se ha agregado exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0111')
             existing_theme = theme_name in self.__get_existing_themes(WORD_PROCESSOR_CONJ_CFG_COLLECTION)
             if existing_theme or not validate_config(WORD_PROCESSOR_SCHEMAS['CONJ_GENERAL_CFG'], theme_config) or not validate_config(WORD_PROCESSOR_SCHEMAS['CONJ_IRR_GROUPS'], theme_irregular_groups):
+                Logger.log('L-0112')
                 return False
+            Logger.log('L-0113')
+            Logger.log('L-0114')
             updated_theme_config = copy.deepcopy(theme_config)
             updated_irregular_groups = copy.deepcopy(theme_irregular_groups)
             updated_theme_config['theme'] = theme_name
@@ -391,9 +421,10 @@ class WordProcessorController (metaclass=Singleton):
                 {'type': DB_OPERATION_INSERT, 'col_name': WORD_PROCESSOR_CONJ_CFG_COLLECTION, 'data': updated_theme_config},
                 {'type': DB_OPERATION_INSERT, 'col_name': WORD_PROCESSOR_VERB_GROUPS_COLLECTION, 'data': updated_irregular_groups}
             ])
+            Logger.log('L-0115')
             return True
         except Exception as e:
-            print(e)
+            Logger.log('L-0116', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def add_conjugator_exceptions(self, theme_name, exceptions):
@@ -408,25 +439,37 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si se ha agregado exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0117')
             if theme_name == WORD_PROCESSOR_DEFAULT_THEME or not theme_name in self.__get_existing_themes(WORD_PROCESSOR_CONJ_CFG_COLLECTION):
+                Logger.log('L-0118')
                 return False
+            Logger.log('L-0119')
+            Logger.log('L-0120')
             transaction_data = []
             for exception in exceptions:
                 if not validate_config(WORD_PROCESSOR_SCHEMAS['CONJ_EXCEPTIONS'], exception):
+                    Logger.log('L-0121')
                     return False
                 if self.__check_exception_existence(theme_name, exception['key']):
+                    Logger.log('L-0122')
                     return False
                 updated_exception = copy.deepcopy(exception)
                 updated_exception['theme'] = theme_name
                 transaction_data.append({'type': DB_OPERATION_INSERT, 'col_name': WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, 'data': updated_exception})
+            Logger.log('L-0123')
+            Logger.log('L-0124')
             db_batch_operation(WORD_PROCESSOR_CONFIG_DB, transaction_data)
+            Logger.log('L-0125')
             if theme_name == self.__conjugator_active_theme:
+                Logger.log('L-0126')
                 updated_exceptions = self.get_conjugator_exceptions()
                 updated_exceptions.extend(exceptions)
                 self.__conjugator_verb_exceptions = updated_exceptions
                 self.__conjugator.set_irregular_verb_exceptions_config(self.__conjugator_verb_exceptions)
+                Logger.log('L-0127')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0128', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def add_fuzzy_gen_config(self, theme_name, config):
@@ -441,14 +484,20 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si se ha agregado exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0129')
             existing_theme = theme_name in self.__get_existing_themes(WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
             if existing_theme or not validate_config(WORD_PROCESSOR_SCHEMAS['FUZZY_GENERAL_CFG'], config):
+                Logger.log('L-0130')
                 return False
+            Logger.log('L-0131')
+            Logger.log('L-0132')
             updated_config = copy.deepcopy(config)
             updated_config['theme'] = theme_name
             db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, updated_config)
+            Logger.log('L-0133')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0134', [{'text': e, 'color': ERROR_COLOR}])
             return False
     
     def add_noun_conversor_config(self, theme_name, config):
@@ -463,14 +512,20 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si se ha agregado exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0135')
             existing_theme = theme_name in self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
             if existing_theme or not validate_config(WORD_PROCESSOR_SCHEMAS['NOUN_CONV_GENERAL_CFG'], config):
+                Logger.log('L-0136')
                 return False
+            Logger.log('L-0137')
+            Logger.log('L-0138')
             updated_config = copy.deepcopy(config)
             updated_config['theme'] = theme_name
             db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, updated_config)
+            Logger.log('L-0139')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0140', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def __get_theme_data(self, theme_name, collection_name):
@@ -502,25 +557,34 @@ class WordProcessorController (metaclass=Singleton):
         :return: [Bool] - True si la edición fue exitosa, False en caso contrario.
         """
         try:
+            Logger.log('L-0162')
             config_data = self.__get_theme_data(theme_name, WORD_PROCESSOR_CONJ_CFG_COLLECTION)
             irr_groups_data = self.__get_theme_data(theme_name, WORD_PROCESSOR_VERB_GROUPS_COLLECTION)
             if theme_name == WORD_PROCESSOR_DEFAULT_THEME or config_data is None or irr_groups_data is None:
+                Logger.log('L-0163')
                 return False
             updated_config_data = update_dict(config_data, theme_config_mod, ['theme'])
             updated_irr_groups_data = update_dict(irr_groups_data, theme_irr_groups_mod, ['theme'])
             if not validate_config(WORD_PROCESSOR_SCHEMAS['CONJ_GENERAL_CFG'], updated_config_data) or not validate_config(WORD_PROCESSOR_SCHEMAS['CONJ_IRR_GROUPS'], updated_irr_groups_data):
+                Logger.log('L-0164')
                 return False
+            Logger.log('L-0165')
+            Logger.log('L-0166')
             db_batch_operation(WORD_PROCESSOR_CONFIG_DB, [
                 {'type': DB_OPERATION_UPDATE, 'col_name': WORD_PROCESSOR_CONJ_CFG_COLLECTION, 'data': updated_config_data, 'query': {'theme': theme_name}},
                 {'type': DB_OPERATION_UPDATE, 'col_name': WORD_PROCESSOR_VERB_GROUPS_COLLECTION, 'data': updated_irr_groups_data, 'query': {'theme': theme_name}}
             ])
+            Logger.log('L-0167')
             if theme_name == self.__conjugator_active_theme:
+                Logger.log('L-0168')
                 self.__conjugator_general_cfg = updated_config_data
                 self.__conjugator_verb_groups = updated_irr_groups_data
                 self.__conjugator.set_general_config(updated_config_data)
-                self.__conjugator.set_irregular_verb_exceptions_config(updated_config_data)
+                self.__conjugator.set_irregular_verb_groups_config(updated_irr_groups_data)
+                Logger.log('L-0169')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0170', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def __check_exception_existence(self, theme_name, exception_key):
@@ -550,19 +614,28 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si se elimino exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0189')
             if not self.__check_exception_existence(theme_name, exception_key) or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                Logger.log('L-0190')
                 return False
             updated_exception_data = update_dict(exception_new_data, {'key': exception_key})
             if not validate_config(WORD_PROCESSOR_SCHEMAS['CONJ_EXCEPTIONS'], updated_exception_data):
+                Logger.log('L-0191')
                 return False
+            Logger.log('L-0192')
+            Logger.log('L-0193')
             updated_exception_data['theme'] = theme_name
             updated_entries = db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, {'theme': theme_name, 'key': exception_key}, updated_exception_data).matched_count
+            Logger.log('L-0194')
             if theme_name == self.__conjugator_active_theme:
+                Logger.log('L-0195')
                 remove_object_from_list(self.__conjugator_verb_exceptions, {'theme': theme_name, 'key': exception_key})
                 self.__conjugator_verb_exceptions.append(updated_exception_data)
                 self.__conjugator.set_irregular_verb_exceptions_config(self.__conjugator_verb_exceptions)
+                Logger.log('L-0196')
             return updated_entries > 0
-        except:
+        except Exception as e:
+            Logger.log('L-0197', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def update_fuzzy_gen_config(self, theme_name, theme_config_mod):
@@ -577,20 +650,29 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si la actualización fue exitosa, False en caso contrario.
         """
         try:
+            Logger.log('L-0171')
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                Logger.log('L-0172')
                 return False
             current_theme_data = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0, 'theme': 0})
             updated_theme_data = update_dict(current_theme_data, theme_config_mod)
             if not validate_config(WORD_PROCESSOR_SCHEMAS['FUZZY_GENERAL_CFG'], updated_theme_data):
+                Logger.log('L-0173')
                 return False
+            Logger.log('L-0174')
+            Logger.log('L-0175')
             updated_theme_data['theme'] = theme_name
             updated_entries = db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name}, updated_theme_data).matched_count
+            Logger.log('L-0176')
             if theme_name == self.__fuzzy_gen_active_theme:
+                Logger.log('L-0177')
                 self.__fuzzy_generator_cfg = updated_theme_data
                 self.__fuzzy_generator.set_config(self.__fuzzy_generator_cfg)
+                Logger.log('L-0178')
             return updated_entries > 0
-        except:
+        except Exception as e:
+            Logger.log('L-0179', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def update_noun_conversor_config(self, theme_name, theme_config_mod):
@@ -605,20 +687,29 @@ class WordProcessorController (metaclass=Singleton):
         :return: [Bool] - True si la actualización es exitosa, False en caso contrario.
         """
         try:
+            Logger.log('L-0180')
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                Logger.log('L-0181')
                 return False
             current_theme_data = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0, 'theme': 0})
             updated_theme_data = update_dict(current_theme_data, theme_config_mod)
             if not validate_config(WORD_PROCESSOR_SCHEMAS['NOUN_CONV_GENERAL_CFG'], updated_theme_data):
+                Logger.log('L-0182')
                 return False
+            Logger.log('L-0183')
+            Logger.log('L-0184')
             updated_theme_data['theme'] = theme_name
             updated_entries = db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name}, updated_theme_data).matched_count
+            Logger.log('L-0185')
             if theme_name == self.__noun_conversor_active_theme:
+                Logger.log('L-0186')
                 self.__noun_conversor_cfg = updated_theme_data
                 self.__conversor.set_config(updated_theme_data)
+                Logger.log('L-0187')
             return updated_entries > 0
-        except:
+        except Exception as e:
+            Logger.log('L-0188', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def remove_conjugator_theme(self, theme_name):
@@ -632,21 +723,30 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si el borrado se realizó exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0198')
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_CONJ_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                Logger.log('L-0199')
                 return False
+            Logger.log('L-0200')
             theme_changed = True
             if theme_name == self.__conjugator_active_theme:
+                Logger.log('L-0201')
                 theme_changed = self.set_conjugator_active_theme('default')
-            if not theme_changed:
-                return False
+                if not theme_changed:
+                    Logger.log('L-0203')
+                    return False
+                Logger.log('L-0202')
+            Logger.log('L-0204')
             db_batch_operation(WORD_PROCESSOR_CONFIG_DB, [
                 {'type': DB_OPERATION_DELETE, 'col_name': WORD_PROCESSOR_CONJ_CFG_COLLECTION, 'query': {'theme': theme_name}},
                 {'type': DB_OPERATION_DELETE_MANY, 'col_name': WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, 'query': {'theme': theme_name}},
                 {'type': DB_OPERATION_DELETE, 'col_name': WORD_PROCESSOR_VERB_GROUPS_COLLECTION, 'query': {'theme': theme_name}}
             ])
+            Logger.log('L-0205')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0206', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def remove_fuzzy_gen_theme(self, theme_name):
@@ -659,17 +759,26 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si el borrado se realizó exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0207')
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                Logger.log('L-0208')
                 return False
+            Logger.log('L-0209')
             theme_changed = True
             if theme_name == self.__fuzzy_gen_active_theme:
+                Logger.log('L-0210')
                 theme_changed = self.set_fuzzy_generator_active_theme('default')
-            if not theme_changed:
-                return False
+                if not theme_changed:
+                    Logger.log('L-0212')
+                    return False
+                Logger.log('L-0211')
+            Logger.log('L-0213')
             db_delete_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name})
+            Logger.log('L-0214')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0215', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def remove_noun_conversor_theme(self, theme_name):
@@ -682,17 +791,26 @@ class WordProcessorController (metaclass=Singleton):
         :return: [bool] - True si el borrado se realizó exitosamente, False en caso contrario.
         """
         try:
+            Logger.log('L-0216')
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
             if not theme_name in existing_themes or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
+                Logger.log('L-0217')
                 return False
+            Logger.log('L-0218')
             theme_changed = True
             if theme_name == self.__noun_conversor_active_theme:
+                Logger.log('L-0219')
                 theme_changed = self.set_noun_conversor_active_theme('default')
-            if not theme_changed:
-                return False
+                if not theme_changed:
+                    Logger.log('L-0221')
+                    return False
+                Logger.log('L-0220')
+            Logger.log('L-0222')
             db_delete_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name})
+            Logger.log('L-0223')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0224', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def set_conjugator_active_theme(self, theme_name):
@@ -705,11 +823,16 @@ class WordProcessorController (metaclass=Singleton):
         :return: [Bool] - True si el cambio se realizó con exito, False en caso contrario.
         """
         try:
+            Logger.log('L-0141')
             if theme_name == self.__conjugator_active_theme:
+                Logger.log('L-0142')
                 return False
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_CONJ_CFG_COLLECTION)
             if not theme_name in existing_themes:
+                Logger.log('L-0143')
                 return False
+            Logger.log('L-0144')
+            Logger.log('L-0145')
             next_config_theme = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_CONJ_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0})
             next_verb_exceptions = db_get_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, {'theme': theme_name}, {'_id': 0})
             next_verb_groups = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_GROUPS_COLLECTION, {'theme': theme_name}, {'_id': 0})
@@ -721,8 +844,10 @@ class WordProcessorController (metaclass=Singleton):
             self.__conjugator.set_general_config(next_config_theme)
             self.__conjugator.set_irregular_verb_exceptions_config(next_verb_exceptions)
             self.__conjugator.set_irregular_verb_groups_config(next_verb_groups)
+            Logger.log('L-0146')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0147', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def set_fuzzy_generator_active_theme(self, theme_name):
@@ -735,18 +860,25 @@ class WordProcessorController (metaclass=Singleton):
         :return: [Bool] - True si el cambio se realizó con exito. False en caso contrario.
         """
         try:
+            Logger.log('L-0148')
             if theme_name == self.__fuzzy_gen_active_theme:
+                Logger.log('L-0149')
                 return False
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION)
             if not theme_name in existing_themes:
+                Logger.log('L-0150')
                 return False
+            Logger.log('L-0151')
+            Logger.log('L-0152')
             next_config_theme = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0})
             db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_GENERAL_SETTING_COLLECTION, None, {'fuzzy_gen_active_theme': theme_name})
             self.__fuzzy_gen_active_theme = theme_name
             self.__fuzzy_generator_cfg = next_config_theme
             self.__fuzzy_generator.set_config(next_config_theme)
+            Logger.log('L-0153')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0154', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def set_noun_conversor_active_theme(self, theme_name):
@@ -759,18 +891,25 @@ class WordProcessorController (metaclass=Singleton):
         :return: [Bool] - True si el cambio se realizó con exito. False en caso contrario.
         """
         try:
+            Logger.log('L-0155')
             if theme_name == self.__noun_conversor_active_theme:
+                Logger.log('L-0156')
                 return False
             existing_themes = self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
             if not theme_name in existing_themes:
+                Logger.log('L-0157')
                 return False
+            Logger.log('L-0158')
+            Logger.log('L-0159')
             next_config_theme = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name}, {'_id': 0})
             db_update_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_GENERAL_SETTING_COLLECTION, None, {'fuzzy_gen_active_theme': theme_name})
             self.__noun_conversor_active_theme = theme_name
             self.__noun_conversor_cfg = next_config_theme
             self.__conversor.set_config(next_config_theme)
+            Logger.log('L-0160')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0161', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def conjugate_verb(self, verb=''):
