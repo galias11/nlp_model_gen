@@ -27,10 +27,10 @@ The project is limited to the features previously defined. Although it will have
 
 ### Installation
 - Run: `pip3 install nlp-model-gen`
-- After package is installed run: 
-MacOs: `nlp_model_gen_install.sh`
-Ubuntu: `/home/<user>/.local/bin/nlp_model_gen_install.sh`
-Windows: `python <python_path>\scripts\nlp_model_gen_install.sh`
+- After package is installed run:    
+MacOs: `nlp_model_gen_install.sh`    
+Ubuntu: `/home/<user>/.local/bin/nlp_model_gen_install.sh`    
+Windows: `python <python_path>\scripts\nlp_model_gen_install.sh`    
 - For importing the model admin from ipython or python console: `from nlp_model_gen import NLPModelAdmin`
 - Instanciate a new admin: `admin = NLPModelAdmin()`
 

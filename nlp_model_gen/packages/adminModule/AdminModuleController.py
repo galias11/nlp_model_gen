@@ -1,14 +1,21 @@
 # @Utils
 from nlp_model_gen.utils.fileUtils import remove_dir
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+
+# @Constants
+from nlp_model_gen.constants.constants import (
+    WORD_PROCESSOR_MODULE_KEY_CONJUGATOR,
+    WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN,
+    WORD_PROCESSOR_MODULE_KEY_NOUN_CONV
+)
+
 # @Classes
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from nlp_model_gen.packages.wordProcessor.WordProcessorController import WordProcessorController
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
-
-# @Logger
-from nlp_model_gen.packages.logger.Logger import Logger
 
 class AdminModuleController:
     __analyzer_rules_generator = None
@@ -164,3 +171,146 @@ class AdminModuleController:
             Logger.log('L-0097')
             return None
         return self.__model_manager.analyze_text(model_name, text, only_positives)
+
+    def get_word_processor_available_configs(self, module_key):
+        """
+        Devuelve una lista con las configuraciones disponibles para el modulo solicitado del
+        del word procesor.
+
+        :module_key: [String] - Clave del modulo a consultar
+
+        :return: [List(Dict)] - Lista con las configuraciones disponibles para el conjugador
+        """
+        if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
+            return self.__word_processor.get_available_conjugator_configs()
+        if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
+            return self.__word_processor.get_available_fuzzy_gen_configs()
+        if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
+            return self.__word_processor.get_available_conversor_configs()
+        return []
+
+    def add_word_processor_config_theme(self, module_key, theme_name, configs, irregular_groups=None):
+        """
+        Agrega un nuevo tema para sub modulo solicitado del modulo de procesamiento de palabras.
+
+        :module_key: [String] - Modulo a agregar el nuevo tema de configuración
+
+        :theme_name: [String] - Nombre del nuevo tema a agregar.
+
+        :configs: [Dict] - Configuraciones básicas del tema.
+
+        :irregular_groups: [Dict] - Grupos irregulares del tema. 
+
+        :return: [boolean] - True si la operación fue exitosa, False en caso contrario
+        """
+        if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
+            return self.__word_processor.add_conjugator_config(theme_name, configs, irregular_groups)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
+            return self.__word_processor.add_fuzzy_gen_config(theme_name, configs)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
+            return self.__word_processor.add_noun_conversor_config((theme_name, configs))
+        return False
+
+    def add_theme_conjugator_exceptions(self, theme_name, exceptions):
+        """
+        Agrega un set de excepciones al conjugador de verbos de un tema determinado.
+
+        :theme_name: [String] - Nombre del tema.
+
+        :exceptions: [List(Dict)] - Set de excepciones a agregar.
+
+        :return: [boolean] - True si las excepciones se agregaron exitosamente, False en caso contrario.
+        """
+        return self.__word_processor.add_conjugator_exceptions(theme_name, exceptions)
+
+    def get_word_processor_active_themes(self):
+        """
+        Devuelve los temas de configuración activos para cada modulo del modulo de procesamiento
+        de palabras.
+
+        :return: [Dict] - Diccionario con los temas activos para cada modulo.
+        """
+        return {
+            'conjugator': self.__word_processor.get_conjugator_active_theme(),
+            'fuzzy_generator': self.__word_processor.get_fuzzy_gen_active_theme(),
+            'noun_conversor': self.__word_processor.get_noun_converseor_active_theme()
+        }
+
+    def set_word_processor_active_theme(self, module_key, theme_name):
+        """
+        Cambia el tema a utilizar para el submodulo solicitado del modulo de procesamiento de palabras,
+        el tema debe existir y no ser el actual.
+
+        :module_key: [String] - Nombre del submodulo del modulo de procesamiento a cambiar.
+
+        :theme_name: [String] - Nombre del tema a activar para el conjugador.
+
+        :return: [boolean] - True si el tema se ha cambiado exitosamente, False en caso contrario.
+        """
+        if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
+            return self.__word_processor.set_conjugator_active_theme(theme_name)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
+            return self.__word_processor.set_fuzzy_generator_active_theme(theme_name)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
+            return self.__word_processor.set_noun_conversor_active_theme(theme_name)
+        return False
+
+    def update_word_processor_config_theme(self, module_key, theme_name, config_mod, irregular_groups_mod=None):
+        """
+        Modifica un tema de configuración con los datos provistos. El tema debe existir y no ser el tema
+        por defecto. Se modificarse el tema activo actual el comportamiento del modulo se adaptará
+        inmediatamente.
+
+        :module_key: [String] - Nombre del submodule del modulo de procesamiento a modificar.
+
+        :theme_name: [String] - Nombre del tema a modificar.
+
+        :config_mod: [Dict] - Opciones actualizadas de la configuración general (no es necesario incluir las
+        que no tienen cambio alguno).
+
+        :irregular_groups_mod: [Dict] - Opciones actualizadas de los grupos de verbos irregulares (no es
+        necesario incluir los grupos que no tienen cambios).
+
+        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
+        """
+        if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
+            return self.__word_processor.update_conjugator_configs(theme_name, config_mod, irregular_groups_mod)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
+            return self.__word_processor.update_fuzzy_gen_config(theme_name, config_mod)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
+            return self.__word_processor.update_noun_conversor_config(theme_name, config_mod)
+        return False
+
+    def update_theme_conjugator_exceptions(self, theme_name, exception_key, exception_data):
+        """
+        Modifica una excepción irregular del conjugador para un tema particular. Tanto el tema como la excepción
+        deben existir y los nuevos datos de la excepción deben ser completos.
+
+        :theme_name: [String] - Nombre del tema.
+
+        :exception_key: [String] - Clave de la excepción a modificar.
+
+        :exception_data: [Dict] - Nueva configuración de la expceción irregular.
+
+        :returns: [boolean] - True si la operación fue exitosa, False en caso contrario.
+        """
+        return self.__word_processor.update_conjugator_exception(theme_name, exception_key, exception_data)
+
+    def delete_word_processor_theme(self, module_key, theme_name):
+        """
+        Elimina un tema de configuración para el submodulo del modulo procesamiento de palabras seleccionado.
+        El tema debe existir y no puede ser el tema por defecto.
+
+        :module_key: [String] - Clave del modulo.
+
+        :theme_name: [String] - Nombre del tema a eliminar.
+
+        :return: [boolean] - True si el modulo pudo ser eliminado, False en caso contrario.
+        """
+        if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
+            return self.__word_processor.remove_conjugator_theme(theme_name)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
+            return self.__word_processor.remove_fuzzy_gen_theme(theme_name)
+        if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
+            return self.__word_processor.remove_noun_conversor_theme(theme_name)
+        return False
