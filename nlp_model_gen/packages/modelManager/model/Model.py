@@ -11,6 +11,7 @@ from ..entity.Entity import Entity
 from ..analyzer.Analyzer import Analyzer
 
 class Model:
+    __model_id = ''
     __model_name = ''
     __description = ''
     __author = ''
@@ -19,7 +20,8 @@ class Model:
     __reference = None
     __loaded = False
 
-    def __init__(self, model_name, description, author, path, __analyzer_rules_set):
+    def __init__(self, model_id, model_name, description, author, path, __analyzer_rules_set):
+        self.__model_id = model_id
         self.__model_name = model_name
         self.__description = description
         self.__author = author
@@ -27,6 +29,9 @@ class Model:
         self.__analyzer_rules_set = __analyzer_rules_set
         self.__reference = None
         self.__loaded = False
+
+    def get_model_id(self):
+        return self.__model_id
 
     def get_model_name(self):
         return self.__model_name
@@ -158,10 +163,11 @@ class Model:
         :return: [Dict] - Diccionario con los datos del modelo.
         """
         return dict({
-            "model_name": self.__model_name,
-            "descripcion": self.__description,
-            "author": self.__author,
-            "path": self.__path
+            'model_id': self.__model_id,
+            'model_name': self.__model_name,
+            'descripcion': self.__description,
+            'author': self.__author,
+            'path': self.__path
         })
 
     def __eq__(self, other):
@@ -170,4 +176,4 @@ class Model:
         """
         if other is None or not isinstance(other, Model):
             return False
-        return self.__model_name == other.get_model_name()
+        return self.__model_id == other.get_model_id()
