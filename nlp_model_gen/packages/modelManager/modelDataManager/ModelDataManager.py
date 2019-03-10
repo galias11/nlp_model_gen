@@ -33,22 +33,26 @@ class ModelDataManager:
             return None
 
     @staticmethod
-    def check_existing_model(model_name):
+    def check_existing_model(model_id):
         """
         Devuelve un listado de los identificadores de cada modelo disponible.
+
+        :model_id: [String] - id del modelo buscado. 
 
         :return: [List(String)] - Listado con los identificadores de cada modelo guardado.
         """
         available_model_names = list(map(
-            lambda model: model['model_name'], 
-            db_get_items(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, None, {'model_name': 1})
+            lambda model: model['model_id'], 
+            db_get_items(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, None, {'model_id': 1})
         ))
-        return model_name in available_model_names
+        return model_id in available_model_names
 
     @staticmethod
-    def save_model_data(model_name, description, author, path, analyser_rules_set):
+    def save_model_data(model_id, model_name, description, author, path, analyser_rules_set):
         """
         Guarda información de un modelo.
+
+        :model_id: [String] - Id del modelo.
 
         :model_name: [String] - Nombre del modelo (actua como id).
 
@@ -64,10 +68,11 @@ class ModelDataManager:
         """
         try:
             Logger.log('L-0026')
-            if ModelDataManager.check_existing_model(model_name): 
+            if ModelDataManager.check_existing_model(model_id):
                 Logger.log('L-0027')
                 return False
             data_dict = {
+                'model_id': model_id,
                 'model_name': model_name,
                 'description': description,
                 'author': author,
@@ -82,11 +87,13 @@ class ModelDataManager:
             return False
 
     @staticmethod
-    def modify_model_data(previous_model_name, model_name, description):
+    def modify_model_data(model_id, model_name, description):
         """
         Modifica el nombre o la descripción de un modelo, el nuevo nombre no debe existir y si debe hacerlo el previo.
 
-        :model_name: [String] - Nuevo nombre del modelo (actua como id).
+        :model_id: [String] - Id del modelo.
+
+        :model_name: [String] - Nuevo nombre del modelo.
 
         :description: [String] - Nueva descripción del modelo.
 
@@ -94,31 +101,28 @@ class ModelDataManager:
         """
         try:
             Logger.log('L-0080')
-            if previous_model_name != model_name and ModelDataManager.check_existing_model(model_name):
-                Logger.log('L-0081')
-                return False
             updated_data = {
                 'model_name': model_name,
                 'description': description
             }
-            update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': previous_model_name}, updated_data).modified_count
+            update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}, updated_data).modified_count
             return True if update_count > 0 else False
         except Exception as e:
             Logger.log('L-0079', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     @staticmethod
-    def remove_model_data(model_name):
+    def remove_model_data(model_id):
         """
         Elimina la entrada para un modelo.
 
-        :model_name: [String] - Nombre del modelo a eliminar.
+        :model_id: [String] - Id del modelo a eliminar.
 
         :return: [boolean] - True si se ha eliminado con exito, False en caso contrario.
         """
         try:
             Logger.log('L-0066')
-            delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_name': model_name}).deleted_count
+            delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
             return True if delete_count > 0 else False
         except Exception as e:
             Logger.log('L-0067', [{'text': e, 'color': ERROR_COLOR}])
