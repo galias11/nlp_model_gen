@@ -2,7 +2,7 @@
 import time
 
 # @Constants
-from nlp_model_gen.constants.constants import TASK_STATUS_QUEUED, TASK_STATUS_RUNNING
+from nlp_model_gen.constants.constants import TASK_STATUS_QUEUED, TASK_STATUS_RUNNING, TASK_STATUS_CANCELLED
 
 # @Classes
 from nlp_model_gen.utils.classUtills import Observer
@@ -11,7 +11,7 @@ from .modelTrainingTask.ModelTrainingTask import ModelTrainingTask
 from .textAnalysisTask.TextAnalysisTask import TextAnalysisTask
 
 class TaskManager(Observer):
-    def __init__(self):    
+    def __init__(self):
         Observer.__init__(self)
         self.__active_tasks = list([])
         self.__completed_tasks = list([])
@@ -57,6 +57,47 @@ class TaskManager(Observer):
         """
         self.__active_tasks = list(filter(lambda active_task: active_task is not task, self.__active_tasks))
         self.__completed_tasks.append(task)
+
+    def __get_task_from_active_list(self, task_id):
+        """
+        Obtiene una tarea de la lista de tareas activas.
+
+        :task_id: [int] - Id de la tarea a buscar.
+
+        :return: [Task] - Tarea correspondiente al id, None si no se ha encontrado.
+        """
+        try:
+            founded_task = next(active_task for active_task in self.__active_tasks if active_task.get_id() == task_id)
+            return founded_task
+        except:
+            return None
+    
+    def __get_task_from_finished_list(self, task_id):
+        """
+        Obtiene una tarea de la lista de tareas finalizadas.
+
+        :task_id: [int] - Id de la tarea a buscar.
+
+        :return: [Task] - Tarea correspondiente al id, None si no se ha encontrado.
+        """
+        try:
+            founded_task = next(completed_task for completed_task in self.__completed_tasks if completed_task.get_id() == task_id)
+            return founded_task
+        except:
+            return None
+    
+    def __get_task(self, task_id):
+        """
+        Obtiene una tarea de las listas de tareas.
+
+        :task_id: [int] - Id de la tarea a buscar.
+
+        :return: [Task] - Tarea correspondiente al id, None si no se ha encontrado.
+        """
+        founded_task = self.__get_task_from_active_list(task_id)
+        if founded_task is None:
+            return self.__get_task_from_finished_list(task_id)
+        return founded_task
 
     def update(self, data):
         """
@@ -141,17 +182,10 @@ class TaskManager(Observer):
 
         :return: [Dict] - Diccionario con el estado de la tarea.
         """
-        try:
-            founded_task = next(active_task for active_task in self.__active_tasks if active_task.get_id() == task_id)
-            if founded_task is not None:
-                return founded_task.get_task_status_data()
-        except:
-            try:
-                founded_task = next(completed_task for completed_task in self.__completed_tasks if completed_task.get_id() == task_id)
-                if founded_task is not None:
-                    return founded_task.get_task_status_data()
-            except:
-                return None
+        founded_task = self.__get_task(task_id)
+        if founded_task is None:
+            return None
+        return founded_task.get_task_status_data()
 
     def get_active_tasks(self):
         """
@@ -174,3 +208,17 @@ class TaskManager(Observer):
         for task in self.__completed_tasks:
             completed_tasks_data.append(task.get_task_status_data())
         return completed_tasks_data
+
+    def abort_task(self, task_id):
+        """
+        Aborta alguna de las tareas activas.
+
+        :task_id: [int] - Id de la tarea.
+
+        :return: [boolean] - True si la tarea pudo ser abortada, False en caso contrario
+        """
+        founded_task = self.__get_task_from_active_list(task_id)
+        if founded_task is None:
+            return False
+        self.__move_completed_task(founded_task)
+        return founded_task.abort()

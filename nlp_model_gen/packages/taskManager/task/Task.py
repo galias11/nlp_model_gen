@@ -74,6 +74,8 @@ class Task(Thread, Observable, ABC):
         """
         if self.__status == TASK_STATUS_QUEUED:
             self.__status = TASK_STATUS_CANCELLED
+            return True
+        return False
 
     def get_task_status_data(self):
         """
