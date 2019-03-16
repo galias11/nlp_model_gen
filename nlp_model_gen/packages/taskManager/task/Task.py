@@ -1,18 +1,30 @@
 # @Vendors
 from abc import ABC, abstractmethod
+import datetime
+from threading import Thread
 
-class Task(ABC):
-    def __init__(self):
-        pass
+# @Classes
+from nlp_model_gen.utils.classUtills import Observable
 
-    __id = -1
-    __status = ''
-    __error = { 'active': False, 'code': '', 'description': '' }
-    __init_time = -1
-    __end_time = -1
+# @Constants
+from nlp_model_gen.constants.constants import (
+    TASK_STATUS_CANCELLED,
+    TASK_STATUS_FINISHED,
+    TASK_STATUS_QUEUED,
+    TASK_STATUS_RUNNING
+)
 
+class Task(Thread, Observable, ABC):
     def __init__(self, id):
+        Thread.__init__(self)
+        Observable.__init__(self)
         self.__id = id
+        self.__status = TASK_STATUS_QUEUED
+        self.__error = {'active': False, 'code': '', 'description': ''}
+        self.__init_time = -1
+        self.__end_time = -1
+        self.__results = None
+        self.__observers = list([])
 
     def get_id(self):
         return self.__id
@@ -29,17 +41,34 @@ class Task(ABC):
     def get_end_time(self):
         return self.__end_time
 
+    def get_results(self):
+        return self.__results
+
+    def run(self):
+        """
+        Inicia la ejecución del thread
+        """
+        self.__init_time = datetime.datetime.now()
+        self.__status = TASK_STATUS_RUNNING
+        execution_result = self.task_init_hook()
+        self.__end_time = datetime.datetime.now()
+        self.__status = TASK_STATUS_FINISHED
+        self.__results = execution_result
+        self.notify(self)
+
     def init(self):
         """
         Inicia la tarea.
         """
-        pass
+        if self.__status == TASK_STATUS_QUEUED:
+            self.start()
 
     def abort(self):
         """
         Aborta la tarea. Su ejecución no debe haber iniciado para realizar esta operación.
         """
-        pass
+        if self.__status == TASK_STATUS_QUEUED:
+            self.__status = TASK_STATUS_CANCELLED
 
     def get_task_status_data(self):
         """
@@ -52,8 +81,22 @@ class Task(ABC):
             'status': self.get_status(),
             'init_time': self.get_init_time(),
             'end_time': self.get_end_time(),
-            'error': self.get_error()
+            'error': self.get_error(),
+            'results': self.get_results()
         }
+
+    @abstractmethod
+    def check_model_relation(self, model_id, model_name):
+        """
+        Determina si una tarea esta relacionada con un determinado modelo utilizando su
+        id y su nombre
+
+        :model_id: [String] - Id del modelo
+
+        :model_name: [String] - Nombre del modelo
+
+        :return: [boolean] - True si el modelo esta releacionado, False en caso contrario.
+        """
 
     @abstractmethod
     def task_init_hook(self):

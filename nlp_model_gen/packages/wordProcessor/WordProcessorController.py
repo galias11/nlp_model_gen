@@ -53,7 +53,7 @@ from .spanishNounConversor.Conversor import Conversor
 # @Configs
 word_processor_default_cfg = load_dict_from_json('wordProcessor-default_config')
 
-class WordProcessorController (metaclass=Singleton):
+class WordProcessorController(metaclass=Singleton):
     """
     Controlador del modulo de procesamiento de palabras. Administra los modulos y 
     permite crear, modificar y establecer diferentes configuraciones para los modulos.

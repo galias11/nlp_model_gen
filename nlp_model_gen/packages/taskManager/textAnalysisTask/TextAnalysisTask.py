@@ -1,12 +1,10 @@
 # @Classes
+from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
 from ..task.Task import Task
 
 class TextAnalysisTask(Task):
-    __model_id = -1
-    __text = ''
-    __only_positives = False
-
-    def __init__(self, model_id, text, only_positives):
+    def __init__(self, id, model_id, text, only_positives):
+        super(TextAnalysisTask, self).__init__(id)
         self.__model_id = model_id
         self.__text = text
         self.__only_positives = only_positives
@@ -20,11 +18,27 @@ class TextAnalysisTask(Task):
     def is_only_positives(self):
         return self.__only_positives
 
+    def check_model_relation(self, model_id, model_name):
+        """
+        Determina si una tarea esta relacionada con un determinado modelo utilizando su
+        id y su nombre
+
+        :model_id: [String] - Id del modelo
+
+        :model_name: [String] - Nombre del modelo
+
+        :return: [boolean] - True si el modelo esta releacionado, False en caso contrario.
+        """
+        return model_id == self.__model_id
+
     def task_init_hook(self):
         """
         Método hook para completar el template de inicializadion en el padre.
         """
-        pass
+        admin = AdminModuleController()
+        results = admin.analyse_text(self.__model_id, self.__text, self.__only_positives)
+        success = results is not None
+        return {'success': success, 'resource': results}
 
     def get_task_data(self):
         """

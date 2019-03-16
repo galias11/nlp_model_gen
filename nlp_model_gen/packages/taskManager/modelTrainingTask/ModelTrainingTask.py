@@ -2,10 +2,6 @@
 from ..task.Task import Task
 
 class ModelTrainingTask(Task):
-    __model_id = -1
-    __path = ''
-    __examples = list([])
-
     def __init__(self, model_id, path, examples):
         self.__model_id = model_id
         self.__path = path
@@ -25,6 +21,19 @@ class ModelTrainingTask(Task):
         Método que se ejecutará en el template del init de la task de la clase padre.
         """
         pass
+
+    def check_model_relation(self, model_id, model_name):
+        """
+        Determina si una tarea esta relacionada con un determinado modelo utilizando su
+        id y su nombre
+
+        :model_id: [String] - Id del modelo
+
+        :model_name: [String] - Nombre del modelo
+
+        :return: [boolean] - True si el modelo esta releacionado, False en caso contrario.
+        """
+        return self.__model_id == model_id
 
     def get_task_data(self):
         """
