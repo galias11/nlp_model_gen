@@ -46,7 +46,10 @@ class ModelCreationTask(Task):
         """
         admin = AdminModuleController()
         results = admin.generate_model(self.__model_id, self.__model_name, self.__description, self.__author, self.__tokenizer_exceptions, self.__max_dist)
-        return {'success': results, 'resource': self.get_task_data()}
+        if results:
+            self.set_results(self.get_task_data())
+        else:
+            self.set_error_data('0001', 'Generic error')
 
     def get_task_data(self):
         """

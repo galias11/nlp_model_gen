@@ -44,16 +44,21 @@ class Task(Thread, Observable, ABC):
     def get_results(self):
         return self.__results
 
+    def set_error_data(self, code, description):
+        self.__error = {'active': True, 'code': code, 'description': description}
+
+    def set_results(self, results):
+        self.__results = {'resource': results}
+
     def run(self):
         """
         Inicia la ejecución del thread
         """
         self.__init_time = datetime.datetime.now()
         self.__status = TASK_STATUS_RUNNING
-        execution_result = self.task_init_hook()
+        self.task_init_hook()
         self.__end_time = datetime.datetime.now()
         self.__status = TASK_STATUS_FINISHED
-        self.__results = execution_result
         self.notify(self)
 
     def init(self):
