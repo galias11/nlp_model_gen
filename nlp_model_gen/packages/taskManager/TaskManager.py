@@ -159,7 +159,10 @@ class TaskManager(Observer):
 
         :return: [List] - Listado de todas las tareas activas.
         """
-        return self.__active_tasks
+        active_tasks_data = list([])
+        for task in self.__active_tasks:
+            active_tasks_data.append(task.get_task_status_data())
+        return active_tasks_data
 
     def get_finished_tasks(self):
         """
@@ -167,4 +170,7 @@ class TaskManager(Observer):
 
         :return: [List] - Listado con las tareas finalizadas
         """
-        return self.__completed_tasks
+        completed_tasks_data = list([])
+        for task in self.__completed_tasks:
+            completed_tasks_data.append(task.get_task_status_data())
+        return completed_tasks_data
