@@ -2,7 +2,7 @@
 import time
 
 # @Constants
-from nlp_model_gen.constants.constants import TASK_STATUS_QUEUED
+from nlp_model_gen.constants.constants import TASK_STATUS_QUEUED, TASK_STATUS_RUNNING
 
 # @Classes
 from nlp_model_gen.utils.classUtills import Observer
@@ -31,7 +31,7 @@ class TaskManager(Observer):
         o nombre de modelo.
         """
         for task in self.__active_tasks:
-            if task.check_model_relation(model_id, model_name):
+            if task.check_model_relation(model_id, model_name) and task.get_status() == TASK_STATUS_RUNNING:
                 return True
         return False
 
@@ -141,7 +141,17 @@ class TaskManager(Observer):
 
         :return: [Dict] - Diccionario con el estado de la tarea.
         """
-        pass
+        try:
+            founded_task = next(active_task for active_task in self.__active_tasks if active_task.get_id() == task_id)
+            if founded_task is not None:
+                return founded_task.get_task_status_data()
+        except:
+            try:
+                founded_task = next(completed_task for completed_task in self.__completed_tasks if completed_task.get_id() == task_id)
+                if founded_task is not None:
+                    return founded_task.get_task_status_data()
+            except:
+                return None
 
     def get_active_tasks(self):
         """

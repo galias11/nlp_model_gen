@@ -37,8 +37,10 @@ class TextAnalysisTask(Task):
         """
         admin = AdminModuleController()
         results = admin.analyse_text(self.__model_id, self.__text, self.__only_positives)
-        success = results is not None
-        return {'success': success, 'resource': results}
+        if results is not None:
+            self.set_results(results)
+        else:
+            self.set_error_data('0001', 'Generic error')
 
     def get_task_data(self):
         """
