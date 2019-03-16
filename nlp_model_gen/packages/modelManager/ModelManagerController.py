@@ -173,7 +173,7 @@ class ModelManagerController:
         try:
             Logger.log('L-0021')
             custom_model = self.__initialize_custom_model()
-            new_model = Model(model_id, model_name, description, author, model_name, analyzer_rule_set)
+            new_model = Model(model_id, model_name, description, author, model_id, analyzer_rule_set)
             new_model.set_reference(custom_model)
             Logger.log('L-0022')
             self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
