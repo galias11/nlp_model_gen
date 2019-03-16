@@ -12,12 +12,13 @@ from nlp_model_gen.constants.constants import (
 )
 
 # @Classes
+from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from nlp_model_gen.packages.wordProcessor.WordProcessorController import WordProcessorController
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
 
-class AdminModuleController:
+class AdminModuleController(metaclass=Singleton):
     __analyzer_rules_generator = None
     __model_manager = None
     __tokenizer_rules_generator = None
