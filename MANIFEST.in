@@ -1,1 +1,3 @@
 recursive-include nlp_model_gen/ *
+recursive-exclude nlp_model_gen/models *
+recursive-exclude nlp_model_gen/tmp *
