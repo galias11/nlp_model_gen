@@ -1,8 +1,14 @@
 # @Vendors
 import time
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+
+# @Logger colors
+from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
+
 # @Constants
-from nlp_model_gen.constants.constants import TASK_STATUS_QUEUED, TASK_STATUS_RUNNING, TASK_STATUS_CANCELLED
+from nlp_model_gen.constants.constants import TASK_STATUS_QUEUED, TASK_STATUS_RUNNING
 
 # @Classes
 from nlp_model_gen.utils.classUtills import Observer
@@ -44,8 +50,10 @@ class TaskManager(Observer):
         :is_able_to_start: [boolean] - Indica si la tarea se puede inicializar inmediatamente 
         después de creada.
         """
+        Logger.log('L-0227')
         self.__active_tasks.append(task)
         task.add_observer(self)
+        Logger.log('L-0228')
         if is_able_to_start:
             task.init()
 
@@ -103,11 +111,14 @@ class TaskManager(Observer):
         """
         Escucha a las tareas y realiza las actualizaciones necesarias
         """
+        Logger.log('L-0235')
         task = data
         self.__move_completed_task(task)
         if not self.__active_tasks:
+            Logger.log('L-0236')
             return
         for active_task in self.__active_tasks:
+            Logger.log('L-0237', [{'text': active_task.get_id(), 'color': HIGHLIGHT_COLOR}])
             active_task_status = active_task.get_task_status_data()
             active_task_data = active_task.get_task_data()
             model_id = active_task_data.get('model_id', None)
@@ -115,6 +126,7 @@ class TaskManager(Observer):
             if active_task_status['status'] == TASK_STATUS_QUEUED and not self.__check_active_status_for_model(model_id, model_name):
                 active_task.init()
             time.sleep(5)
+        Logger.log('L-0238')
 
 
     def create_model_training_task(self, model_id, path, examples):
@@ -129,7 +141,8 @@ class TaskManager(Observer):
 
         :return: [int] - Id. de la tarea creada.
         """
-        pass
+        Logger.log('L-0231')
+        Logger.log('L-0232')
 
     def create_model_creation_task(self, model_id, model_name, description, author, tokenizer_exceptions, max_dist):
         """
@@ -149,10 +162,12 @@ class TaskManager(Observer):
 
         :return: [int] - Id. de la tarea creada.
         """
+        Logger.log('L-0225')
         next_task_id = self.__get_next_task_id()
         new_task = ModelCreationTask(next_task_id, model_id, model_name, description, author, tokenizer_exceptions, max_dist)
         is_able_to_init = not self.__check_active_status_for_model(model_id, model_name)
         self.__create_task(new_task, is_able_to_init)
+        Logger.log('L-0226')
         return next_task_id
 
     def create_text_analysis_task(self, model_id, text, only_positives):
@@ -168,10 +183,12 @@ class TaskManager(Observer):
 
         :return: [int] - Id. de la tarea creada.
         """
+        Logger.log('L-0233')
         next_task_id = self.__get_next_task_id()
         new_task = TextAnalysisTask(next_task_id, model_id, text, only_positives)
         is_able_to_init = not self.__check_active_status_for_model(model_id)
         self.__create_task(new_task, is_able_to_init)
+        Logger.log('L-0234')
         return next_task_id
 
     def get_task_status(self, task_id):
@@ -217,8 +234,14 @@ class TaskManager(Observer):
 
         :return: [boolean] - True si la tarea pudo ser abortada, False en caso contrario
         """
+        Logger.log('L-0239', [{'text': task_id, 'color': HIGHLIGHT_COLOR}])
         founded_task = self.__get_task_from_active_list(task_id)
         if founded_task is None:
+            Logger.log('L-0240')
             return False
-        self.__move_completed_task(founded_task)
-        return founded_task.abort()
+        if founded_task.abort():
+            self.__move_completed_task(founded_task)
+            Logger.log('L-0241')
+            return True
+        Logger.log('L-0242')
+        return False
