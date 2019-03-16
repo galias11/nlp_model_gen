@@ -6,7 +6,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='nlp_model_gen',
-    version='0.1.5',
+    version='0.1.6',
     author='Gerardo Alias',
     author_email='alias_gerardo@yahoo.com.ar',
     description='A spaCy model customizer and management tool',
