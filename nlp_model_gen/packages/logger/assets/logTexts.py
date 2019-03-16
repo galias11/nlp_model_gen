@@ -1347,4 +1347,112 @@ LOG_DATA = {
         'main_text': 'Excepción al borrar el tema de configuración: %s',
         'type': TYPE_INFO
     },
+    'L-0225': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_model_creation_task',
+        'main_text': 'Generando tarea de creación de modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0226': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_model_creation_task',
+        'main_text': 'Tarea creada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0227': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_task',
+        'main_text': 'Agregando tarea al administrador de tareas...',
+        'type': TYPE_INFO
+    },
+    'L-0228': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_task',
+        'main_text': 'Tarea agregada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0229': {
+        'class_name': 'Task',
+        'method_name': 'run',
+        'main_text': 'Ejecutando tarea %s...',
+        'type': TYPE_INFO
+    },
+    'L-0230': {
+        'class_name': 'Task',
+        'method_name': 'run',
+        'main_text': 'Tarea ejecutada con exito',
+        'type': TYPE_SUCCESS
+    },
+    'L-0231': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_model_training_task',
+        'main_text': 'Generando tarea de entrenamiento de modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0232': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_model_training_task',
+        'main_text': 'Tarea creada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0233': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_text_analysis_task',
+        'main_text': 'Generando tarea de análisis de texto...',
+        'type': TYPE_INFO
+    },
+    'L-0234': {
+        'class_name': 'TaskManager',
+        'method_name': 'create_text_analysis_task',
+        'main_text': 'Tarea creada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0235': {
+        'class_name': 'TaskManager',
+        'method_name': 'update',
+        'main_text': 'Actualizando estado de administrador de tareas...',
+        'type': TYPE_INFO
+    },
+    'L-0236': {
+        'class_name': 'TaskManager',
+        'method_name': 'update',
+        'main_text': 'No hay ninguna tarea en cola',
+        'type': TYPE_WRN
+    },
+    'L-0237': {
+        'class_name': 'TaskManager',
+        'method_name': 'update',
+        'main_text': 'Evaluando inicialización de tarea %s...',
+        'type': TYPE_INFO
+    },
+    'L-0238': {
+        'class_name': 'TaskManager',
+        'method_name': 'update',
+        'main_text': 'Estado del administrador de tareas actualizado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0239': {
+        'class_name': 'TaskManager',
+        'method_name': 'abort_task',
+        'main_text': 'Intentando abortar tarea %s...',
+        'type': TYPE_INFO
+    },
+    'L-0240': {
+        'class_name': 'TaskManager',
+        'method_name': 'abort_task',
+        'main_text': 'La tarea no se encuentra entre las tareas activas',
+        'type': TYPE_ERR
+    },
+    'L-0241': {
+        'class_name': 'TaskManager',
+        'method_name': 'abort_task',
+        'main_text': 'Tarea abortada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0242': {
+        'class_name': 'TaskManager',
+        'method_name': 'abort_task',
+        'main_text': 'La tarea ya se encuentra en ejecución',
+        'type': TYPE_WRN
+    },
 }

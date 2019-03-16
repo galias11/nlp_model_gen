@@ -3,6 +3,12 @@ from abc import ABC, abstractmethod
 import datetime
 from threading import Thread
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+
+# Logger colors
+from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
+
 # @Classes
 from nlp_model_gen.utils.classUtills import Observable
 
@@ -54,12 +60,14 @@ class Task(Thread, Observable, ABC):
         """
         Inicia la ejecución del thread
         """
+        Logger.log('L-0229', [{'text': self.__id, 'color': HIGHLIGHT_COLOR}])
         self.__init_time = datetime.datetime.now()
         self.__status = TASK_STATUS_RUNNING
         self.task_init_hook()
         self.__end_time = datetime.datetime.now()
         self.__status = TASK_STATUS_FINISHED
         self.notify(self)
+        Logger.log('L-0230')
 
     def init(self):
         """
