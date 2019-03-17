@@ -62,6 +62,10 @@ TOKEN_RULES_GEN_VERB_CFG = {
     'condA': {'time_keys': ['COND', 'COND', 'COND', 'COND', 'COND', 'COND'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
     'condB': {'time_keys': ['SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
 }
+TRAIN_EXAMPLE_STATUS_APPLIED = 'applied'
+TRAIN_EXAMPLE_STATUS_APPROVED = 'approved'
+TRAIN_EXAMPLE_STATUS_REJECTED = 'rejected'
+TRAIN_EXAMPLE_STATUS_SUBMITTED = 'submitted'
 WORD_PROCESSOR_CONFIG_DB = 'word_processor_config'
 WORD_PROCESSOR_CONJ_CFG_COLLECTION = 'wp_conjugator_config'
 WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION = 'wp_fuzzy_gen_config'
