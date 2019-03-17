@@ -8,12 +8,13 @@ from nlp_model_gen.constants.constants import TOKEN_RULES_GEN_RULES_EXT
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Classes
+from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.logger.Logger import Logger
 from .modelDataManager.ModelDataManager import ModelDataManager
 from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
 
-class ModelManagerController:
+class ModelManagerController(metaclass=Singleton):
     __models = list([])
     __init_success = False
 
