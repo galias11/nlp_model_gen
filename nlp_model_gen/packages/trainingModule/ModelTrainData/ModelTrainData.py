@@ -1,5 +1,7 @@
+# @Constants
+from nlp_model_gen.constants.constants import TRAIN_EXAMPLE_STATUS_APPROVED, TRAIN_EXAMPLE_STATUS_SUBMITTED
+
 # @Classes
-from nlp_model_gen.packages.modelManager.model.Model import Model
 from ..TrainExample.TrainExample import TrainExample
 
 class ModelTrainData:
@@ -37,15 +39,7 @@ class ModelTrainData:
 
         :return: [List(TrainExample)] - Listado de los ejemplos de entrenamiento aprobados.
         """
-        pass
-
-    def get_rejected_examples(self):
-        """
-        Devuelve un listado de los ejemplos rechazados para el modelo.
-
-        :return: [List(TrainExample)] - Listado de los ejemplos de entrenamiento rechazados.
-        """
-        pass
+        return list(filter(lambda example: example.get_status() == TRAIN_EXAMPLE_STATUS_APPROVED, self.__training_examples))
 
     def get_pending_examples(self):
         """
@@ -54,12 +48,4 @@ class ModelTrainData:
         :return: [List(TrainExample)] - Listado de los ejemplos de entrenamiento pendientes
         de definir su aprobación.
         """
-        pass
-
-    def get_examples_history(self):
-        """
-        Devuelve un listado completo de todos los ejemplos aplicados al modelo.
-
-        :return: [List(TrainExample)] - Listado de todos los ejemplos aplicados al modelo.
-        """
-        pass
+        return list(filter(lambda example: example.get_status() == TRAIN_EXAMPLE_STATUS_SUBMITTED, self.__training_examples))

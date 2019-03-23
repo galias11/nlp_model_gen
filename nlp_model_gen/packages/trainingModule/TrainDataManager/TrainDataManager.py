@@ -2,6 +2,7 @@
 from nlp_model_gen.constants.constants import (
     TRAIN_DATA_EXAMPLES_COLLECTION, 
     TRAIN_EXAMPLE_STATUS_APPLIED,
+    TRAIN_EXAMPLE_STATUS_REJECTED,
     TRAIN_EXAMPLE_STATUS_SUBMITTED,
     TRAIN_MANAGER_DB,
     TRAIN_MANAGER_SCHEMAS
@@ -12,6 +13,7 @@ from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_au
 from nlp_model_gen.packages.trainingModule.packageUtils.validations import validate_data
 
 # @Classes
+from ..TrainExample.TrainExample import TrainExample
 from ..CustomEntityTagManager.CustomEntityTagManager import CustomEntityTagManager
 from ..ModelTrainData.ModelTrainData import ModelTrainData
 
@@ -48,7 +50,11 @@ class TrainDataManager:
             for model in available_models:
                 model_train_data = ModelTrainData(model, [])
                 self.__models.append(model_train_data)
-            training_examples = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'status': {'$ne': TRAIN_EXAMPLE_STATUS_APPLIED}})
+            examples_query = {'$and': [
+                {'status': {'$ne': TRAIN_EXAMPLE_STATUS_APPLIED}}, 
+                {'status': {'$ne': TRAIN_EXAMPLE_STATUS_REJECTED}}
+            ]}
+            training_examples = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, examples_query)
             for training_example in training_examples:
                 model_id = training_example['model_id']
                 model_train_data = self.__find_model(model_id)
@@ -59,20 +65,22 @@ class TrainDataManager:
         except:
             self.__init_success = False
 
-    def __validate_example(self, example):
+    def __validate_examples(self, examples):
         """
         Valida un ejemplo de entrenamiento.
 
-        :example: [Dict] - Ejemplo de entrenamiento a validar.
+        :example: [List] - Ejemplo de entrenamiento a validar.
 
         :return: [boolean] - True si el ejemplo es válido. False en caso contrario.
         """
-        for tag in example['tags']:
-            tag_entity = tag['entity']
-            if not self.__custom_entity_manager.validate_tag(tag_entity):
+        for example in examples:
+            for tag in example['tags']:
+                tag_entity = tag['entity']
+                if not self.__custom_entity_manager.validate_tag(tag_entity):
+                    return False
+            example_data = {'sentence': example['sentence'], 'tags': example['tags'], 'type': example['type']}
+            if not validate_data(TRAIN_MANAGER_SCHEMAS['TRAIN_DATA'], example_data):
                 return False
-        if not validate_data(TRAIN_MANAGER_SCHEMAS['TRAIN_DATA'], {'sentence': example['sentence'], 'tags': example['tags'], 'type': example['type']}):
-            return False
         return True
 
     def __create_new_example_data(self, examples, model_id):
@@ -88,10 +96,10 @@ class TrainDataManager:
         :return: [List(dict)] - Datos de entrenamiento para insertar en la base de 
         datos.
         """
+        if not self.__validate_examples(examples):
+            raise Exception()
         examples_data = list([])
         for example in examples:
-            if not self.__validate_example(example):
-                raise Exception()
             examples_data.append({
                 'example_id': db_get_autoincremental_id(TRAIN_DATA_EXAMPLES_COLLECTION),
                 'model_id': model_id,
@@ -154,22 +162,50 @@ class TrainDataManager:
         """
         pass
 
-    def get_pending_examples(self):
+    def get_pending_examples(self, model_id):
         """
         Retorna un listado con todos los ejemplos que tienen su aprobación / rechazo aún
-        pendiente.
+        pendiente para un determinado modelo.
+
+        :model_id: [String] - Id del modelo.
 
         :return: [List] - Lista de los ejemplos pendientes de una decisión.
         """
-        pass
+        model_train_data = self.__find_model(model_id)
+        if not model_train_data:
+            return None
+        return model_train_data.get_pending_examples()
 
-    def get_approved_examples(self):
+    def get_approved_examples(self, model_id):
         """
-        Retorna un listado con todos los ejemplos aprobados.
+        Retorna un listado con todos los ejemplos aprobados para un determinado modelo.
+
+        :model_id: [String] - Id del modelo.
 
         :return: [List] - Lista de los ejemplos aprobados.
         """
-        pass
+        model_train_data = self.__find_model(model_id)
+        if not model_train_data:
+            return None
+        return model_train_data.get_approved_examples()
+
+    def get_examples_history(self, model_id):
+        """
+        Retorna un listado con todos los ejemplos, sin importar su estado, para un determinado
+        modelo.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [List] - Listado de todos los ejemplos para el modelo solicitado.
+        """
+        if not self.__find_model(model_id):
+            return None
+        results = list([])
+        examples_data = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'model_id': model_id})
+        for example_data in examples_data:
+            example = TrainExample(example_data['example_id'], example_data['sentence'], example_data['tags'], example_data['type'])
+            results.append(example)
+        return results
 
     def add_custom_entity(self, name, description):
         """

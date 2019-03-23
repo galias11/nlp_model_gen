@@ -56,7 +56,7 @@ class TrainExample:
         return {
             'id': self.get_example_id(),
             'sentence': self.get_sentece(),
-            'tags': self.get_sentece(),
+            'tags': self.get_tags(),
             'type': self.get_example_type(),
             'status': self.get_status()
         }
