@@ -8,17 +8,17 @@ from nlp_model_gen.constants.constants import TOKEN_RULES_GEN_RULES_EXT
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Classes
-from nlp_model_gen.utils.classUtills import Singleton
+from nlp_model_gen.utils.classUtills import ObservableSingleton
 from nlp_model_gen.packages.logger.Logger import Logger
 from .modelDataManager.ModelDataManager import ModelDataManager
 from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
 
-class ModelManagerController(metaclass=Singleton):
-    __models = list([])
-    __init_success = False
-
+class ModelManagerController(ObservableSingleton):
     def __init__(self):
+        ObservableSingleton.__init__(self)
+        __models = list([])
+        __init_success = False
         self.__initialize()
 
     def __initialize(self):
@@ -182,6 +182,7 @@ class ModelManagerController(metaclass=Singleton):
             ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path)
             self.__models.append(new_model)
             Logger.log('L-0025')
+            self.notify(new_model)
             return True
         except Exception as e:
             Logger.log('L-0020', [{'text': e, 'color': ERROR_COLOR}])

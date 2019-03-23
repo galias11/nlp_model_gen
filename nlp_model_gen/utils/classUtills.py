@@ -45,3 +45,35 @@ class Observer(ABC):
 
     def update(self, data):
         pass
+
+class ObservableSingleton(metaclass=Singleton):
+    """
+    Implementación de observable combinado con singleton
+    """
+    def __init__(self):
+        self.__observers = list([])
+
+    def add_observer(self, observer):
+        """
+        Agrega un observador
+        """
+        self.__observers.append(observer)
+
+    def notify(self, data):
+        """
+        Notifica a los observadores un evento.
+
+        :data: [Any] - Datos a notificar al observer
+        """
+        for observer in self.__observers:
+            observer.update(data)
+
+class ObserverSingleton(metaclass=Singleton):
+    """
+    Implementación de observer combinado con singleton
+    """
+    def __init__(self):
+        pass
+
+    def update(self, data):
+        pass
