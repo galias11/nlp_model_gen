@@ -59,7 +59,48 @@ class ModelTrainingController(metaclass=Singleton):
         :return: [List(Dict)] - Listado con los ejemplos de entrenamiento con una decisión
         pendiente para el modelo solicitado.
         """
-        pass
+        results = list([])
+        pending_examples = self.__train_data_manager.get_pending_examples(model_id)
+        if pending_examples is None:
+            return None
+        for pending_example in pending_examples:
+            results.append(pending_example.to_dict())
+        return results
+
+    def get_approved_training_examples(self, model_id):
+        """
+        Obtiene un listado de los ejemplos de entrenamiento aprobados par un determinado modelo.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [List (Dict)] - Listados con todos los ejemplos de entrenamiento aprobados para 
+        el modelo solicitado.
+        """
+        results = list([])
+        pending_examples = self.__train_data_manager.get_approved_examples(model_id)
+        if pending_examples is None:
+            return None
+        for pending_example in pending_examples:
+            results.append(pending_example.to_dict())
+        return results
+
+    def get_training_examples_history(self, model_id):
+        """
+        Obtiene el historial completo de todos los ejemplos de entrenamiento para un determinado
+        modelo sin importar el estado de dichos ejemplos.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [List(Dict)] - Listado con todos los ejemplos de entrenamiento, cuaquiera sea
+        su estado, para el modelo solicitado.
+        """
+        results = list([])
+        pending_examples = self.__train_data_manager.get_examples_history(model_id)
+        if pending_examples is None:
+            return None
+        for pending_example in pending_examples:
+            results.append(pending_example.to_dict())
+        return results
 
     def apply_training_approved_examples(self, model_id):
         """
