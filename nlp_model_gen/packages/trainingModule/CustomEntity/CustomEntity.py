@@ -9,6 +9,9 @@ class CustomEntity:
     def get_description(self):
         return self.__description
 
+    def set_description(self, description):
+        self.__description = description
+
     def to_dict(self):
         """
         Obtiene un diccionario a partir de los datos de la entidad.

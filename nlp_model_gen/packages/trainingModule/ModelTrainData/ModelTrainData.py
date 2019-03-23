@@ -1,14 +1,35 @@
 # @Classes
+from nlp_model_gen.packages.modelManager.model.Model import Model
 from ..TrainExample.TrainExample import TrainExample
 
 class ModelTrainData:
-    def __init__(self, model_id, model_name, training_examples_data):
-        self.__model_id = model_id
-        self.__model_name = model_name
+    def __init__(self, model, training_examples_data):
+        self.__model = model
         self.__training_examples = list([])
         for example_data in training_examples_data:
             example = TrainExample(example_data['id'], example_data['sentence'], example_data['tags'], example_data['type'], example_data['status'])
             self.__training_examples.append(example)
+
+    def add_training_example(self, example):
+        """
+        Agrega un ejemplo de entrenamiento al set de ejemplos de entrenamiento para el
+        modelo.
+
+        :example: [Dict] - Diccionario con los datos del ejemplo.
+        """
+        new_example = TrainExample(example['example_id'], example['sentence'], example['tags'], example['type'], example['status'])
+        self.__training_examples.append(new_example)
+
+    def check_model(self, model_id):
+        """
+        Valida si un id de modelo corresponde con el modelo del set del administrador.
+
+        :model_id: [String] - Id del modelo buscado
+
+        :return: [boolean] - True si el modelo al que hace referencia el objeto corresponde
+        con el id solicitado
+        """
+        return self.__model.get_model_id() == model_id
     
     def get_approved_examples(self):
         """

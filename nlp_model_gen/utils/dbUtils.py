@@ -9,6 +9,8 @@ from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Constants
 from nlp_model_gen.constants.constants import (
+    DB_GENERAL_SETTINGS_DB,
+    DB_AUTOINCREMENTAL_ID_COL,
     DB_CONNECTION_TIMEOUT,
     DB_OPERATION_DELETE,
     DB_OPERATION_DELETE_MANY,
@@ -96,6 +98,15 @@ def db_drop_collection(db_name, col_name):
     except Exception as e:
         Logger.log('L-0092', [{'text': e, 'color': ERROR_COLOR}])
         raise ConnectionError()
+
+def db_get_autoincremental_id(col_name):
+    col = get_collection(DB_GENERAL_SETTINGS_DB, DB_AUTOINCREMENTAL_ID_COL)
+    next_entry = col.find_and_modify(
+        {'collection': col_name},
+        {'$inc': { 'next_id': 1}},
+        True
+    )
+    return next_entry['next_id']
 
 def insert(db, collection_name, data=None, query=None):
     col = db[collection_name]

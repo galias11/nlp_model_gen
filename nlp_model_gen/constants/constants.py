@@ -1,4 +1,7 @@
+CUSTOM_ENTITY_MANAGER_COLLECTION = 'tm_custom_entities'
 DB_CONNECTION_TIMEOUT = 3000
+DB_GENERAL_SETTINGS_DB = 'nlp_general_settings'
+DB_AUTOINCREMENTAL_ID_COL = 'autoincrement_id_col'
 DB_OPERATION_DELETE = 'delete'
 DB_OPERATION_DELETE_MANY = 'delete_many'
 DB_OPERATION_INSERT = 'insert'
@@ -62,10 +65,16 @@ TOKEN_RULES_GEN_VERB_CFG = {
     'condA': {'time_keys': ['COND', 'COND', 'COND', 'COND', 'COND', 'COND'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
     'condB': {'time_keys': ['SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
 }
+TRAIN_DATA_EXAMPLES_COLLECTION = 'tm_training_examples'
 TRAIN_EXAMPLE_STATUS_APPLIED = 'applied'
 TRAIN_EXAMPLE_STATUS_APPROVED = 'approved'
 TRAIN_EXAMPLE_STATUS_REJECTED = 'rejected'
 TRAIN_EXAMPLE_STATUS_SUBMITTED = 'submitted'
+TRAIN_MANAGER_DB = 'train_manager_data'
+TRAIN_MANAGER_SCHEMAS = {
+    'CUSTOM_ENTITY': 'train_manager_entity_schema',
+    'TRAIN_DATA': 'train_manager_example_data_schema'
+}
 WORD_PROCESSOR_CONFIG_DB = 'word_processor_config'
 WORD_PROCESSOR_CONJ_CFG_COLLECTION = 'wp_conjugator_config'
 WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION = 'wp_fuzzy_gen_config'

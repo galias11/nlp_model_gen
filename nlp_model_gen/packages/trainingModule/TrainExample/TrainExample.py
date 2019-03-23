@@ -1,5 +1,13 @@
+# @Constants
+from nlp_model_gen.constants.constants import (
+    TRAIN_EXAMPLE_STATUS_APPLIED,
+    TRAIN_EXAMPLE_STATUS_APPROVED,
+    TRAIN_EXAMPLE_STATUS_REJECTED,
+    TRAIN_EXAMPLE_STATUS_SUBMITTED
+)
+
 class TrainExample:
-    def __init__(self, example_id, sentence, tags, example_type, status):
+    def __init__(self, example_id, sentence, tags, example_type, status=TRAIN_EXAMPLE_STATUS_SUBMITTED):
         self.__example_id = example_id
         self.__sentence = sentence
         self.__tags = tags
@@ -7,37 +15,37 @@ class TrainExample:
         self.__status = status
 
     def get_example_id(self):
-        self.__example_id
+        return self.__example_id
 
     def get_sentece(self):
-        self.__sentence
+        return self.__sentence
 
     def get_tags(self):
-        self.__tags
+        return self.__tags
 
     def get_example_type(self):
-        self.__example_type
+        return self.__example_type
 
     def get_status(self):
-        self.__status
+        return self.__status
 
     def apply(self):
         """
         Cambia el estado del ejemplo a aplicado.
         """
-        pass
+        self.__status = TRAIN_EXAMPLE_STATUS_APPLIED
 
     def approve(self):
         """
         Cambia el estado del ejemplo a aprobado.
         """
-        pass
+        self.__status = TRAIN_EXAMPLE_STATUS_APPROVED
 
     def reject(self):
         """
         Cambia el estado del ejemplo a rechazado.
         """
-        pass
+        self.__status = TRAIN_EXAMPLE_STATUS_REJECTED
 
     def to_dict(self):
         """
