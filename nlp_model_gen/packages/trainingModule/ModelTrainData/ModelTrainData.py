@@ -32,6 +32,21 @@ class ModelTrainData:
         con el id solicitado
         """
         return self.__model.get_model_id() == model_id
+
+    def get_example_by_id(self, example_id):
+        """
+        Valida si el modelo contiene un ejemplo cuyo id coincida con el solicitado.
+
+        :example_id: [Int] - Id del ejemplo.
+
+        :return: [TrainingExample] - Ejemplo de entrenamiento encontrado, None si no se 
+        encontró.
+        """
+        try:
+            training_example = next(example for example in self.__training_examples if example.get_example_id() == example_id)
+            return training_example
+        except:
+            return None
     
     def get_approved_examples(self):
         """

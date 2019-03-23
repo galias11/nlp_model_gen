@@ -17,8 +17,8 @@ from .model.Model import Model
 class ModelManagerController(ObservableSingleton):
     def __init__(self):
         ObservableSingleton.__init__(self)
-        __models = list([])
-        __init_success = False
+        self.__models = list([])
+        self.__init_success = False
         self.__initialize()
 
     def __initialize(self):
