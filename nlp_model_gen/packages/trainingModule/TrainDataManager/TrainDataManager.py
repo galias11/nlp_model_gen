@@ -2,6 +2,7 @@
 from nlp_model_gen.constants.constants import (
     TRAIN_DATA_EXAMPLES_COLLECTION, 
     TRAIN_EXAMPLE_STATUS_APPLIED,
+    TRAIN_EXAMPLE_STATUS_APPROVED,
     TRAIN_EXAMPLE_STATUS_REJECTED,
     TRAIN_EXAMPLE_STATUS_SUBMITTED,
     TRAIN_MANAGER_DB,
@@ -9,7 +10,7 @@ from nlp_model_gen.constants.constants import (
 )
 
 # @Utils
-from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id
+from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id, db_update_item
 from nlp_model_gen.packages.trainingModule.packageUtils.validations import validate_data
 
 # @Classes
@@ -41,6 +42,21 @@ class TrainDataManager:
             return model
         except:
             return None
+    
+    def __find_example(self, example_id):
+        """
+        Busca un ejemplo de entrenamiento con el id solicitado en los modelos activos.
+        Si no lo encuentra devuelve None.
+
+        :example_id: [Int] - Id del ejemplo.
+
+        :return: [TrainingExample] - Ejemplo encontrado, None si no existe.
+        """
+        for model in self.__models:
+            example = model.get_example_by_id(example_id)
+            if example is not None:
+                return example
+        return None
 
     def __init(self, available_models):
         """
@@ -158,18 +174,34 @@ class TrainDataManager:
 
         :return: [boolean] - True si el ejemplo fue aprobado, False en caso contrario.
         """
-        pass
+        example = self.__find_example(example_id)
+        if example is None:
+            return False
+        example_id = example.get_example_id()
+        updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED})
+        if updated_items.matched_count > 0:
+            example.approve()
+            return True
+        return False
 
     def discard_example(self, example_id):
         """
-        Rechaza el ejemplo de entrenamiento. El ejemplo solicitado debe existir y no 
+        Rechaza el ejemplo de entrenamiento. El ejemplo solicitado debe existir y no
         estar ya rechazado o aplicado.
 
         :example_id: [int] - Id del ejemplo de entrenamiento.
 
         :return: [boolean] - True si el ejemplo fue rechazado, False en caso contrario.
         """
-        pass
+        example = self.__find_example(example_id)
+        if example is None:
+            return False
+        example_id = example.get_example_id()
+        updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_REJECTED})
+        if updated_items.matched_count > 0:
+            example.reject()
+            return True
+        return False
 
     def get_pending_examples(self, model_id):
         """
@@ -212,7 +244,7 @@ class TrainDataManager:
         results = list([])
         examples_data = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'model_id': model_id})
         for example_data in examples_data:
-            example = TrainExample(example_data['example_id'], example_data['sentence'], example_data['tags'], example_data['type'])
+            example = TrainExample(example_data['example_id'], example_data['sentence'], example_data['tags'], example_data['type'], example_data['status'])
             results.append(example)
         return results
 

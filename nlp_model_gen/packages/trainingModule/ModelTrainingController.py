@@ -22,6 +22,9 @@ class ModelTrainingController(ObserverSingleton):
     def is_ready(self):
         return self.__init_success
 
+    def update(self, data):
+        self.__add_model(data)
+
     def __init(self):
         """
         Inicializa el módulo.
@@ -36,24 +39,19 @@ class ModelTrainingController(ObserverSingleton):
         self.__train_data_manager = TrainDataManager(available_models)
         self.__init_success = self.__train_data_manager.is_ready() and self.__model_manager.is_ready()
 
-    def update(self, data):
-        self.__train_data_manager.insert_new_model(data)
+    def __add_model(self, model):
+        """
+        Agrega un modelo (aplicable en los casos que se añade un nuevo modelo al sistema).
+
+        :model: [Model] - Modelo a agregar.
+        """
+        self.__train_data_manager.insert_new_model(model)
 
     def retry_init(self):
         """
         Reintenta la inicialización del módulo
         """
         self.__init()
-
-    def add_model(self, model_id):
-        """
-        Agrega un modelo (aplicable en los casos que se añade un nuevo modelo al sistema).
-
-        :model_id: [String] - Id del modelo.
-
-        :return: [boolean] - True si se ha agregado exitosamente, False en caso contrario.
-        """
-        pass
 
     def get_pending_training_examples(self, model_id):
         """
@@ -128,10 +126,13 @@ class ModelTrainingController(ObserverSingleton):
 
         :examples_id_list: [List(int)] - Listado con los ids de los ejemplos a rechazar.
 
-        :return: [boolean] - True si el listado pudo ser rechazado exitosamente, False en caso 
-        contrario.
+        :return: [List(dict)] - Listado indicando los ejemplos de entrenamiento que se han podido
+        rechazar y los que no.
         """
-        pass
+        results = list([])
+        for example_id in examples_id_list:
+            results.append({'example_id': example_id, 'status': self.__train_data_manager.discard_example(example_id)})
+        return results
 
     def add_training_examples(self, model_id, examples_list):
         """
@@ -160,10 +161,13 @@ class ModelTrainingController(ObserverSingleton):
 
         :examples_id_list: [List(int)] - Lista con los ids de los ejemplos de entrenamiento a aprobar.
 
-        :return: [boolean] - True si los ejempos se han aprobado correctamente, False en caso
-        contrario.
+        :return: [List(dict)] - Listado indicando los ejemplos de entrenamiento que se han podido
+        aceptar y los que no.
         """
-        pass
+        results = list([])
+        for example_id in examples_id_list:
+            results.append({'example_id': example_id, 'status': self.__train_data_manager.approve_example(example_id)})
+        return results
 
     def add_custom_entity(self, name, description):
         """
