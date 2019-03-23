@@ -1,22 +1,38 @@
+# @Constants
+from nlp_model_gen.constants.constants import TRAIN_MANAGER_SCHEMAS
+
 # @Classes
 from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from .ModelTrainerManager.ModelTrainerManager import ModelTrainerManager
 from .TrainDataManager.TrainDataManager import TrainDataManager
 
+# @Utils
+from .packageUtils.validations import validate_data
+
 class ModelTrainingController(metaclass=Singleton):
     def __init__(self):
-        self.__model_manager = ModelManagerController()
-        self.__model_trainer = ModelTrainerManager()
-        self.__train_data_manager = TrainDataManager()
+        self.__model_manager = None
+        self.__model_trainer = None
+        self.__train_data_manager = None
         self.__init_success = False
         self.__init()
+
+    def is_ready(self):
+        return self.__init_success
 
     def __init(self):
         """
         Inicializa el módulo.
         """
-        pass
+        self.__model_trainer = ModelTrainerManager()
+        self.__model_manager = ModelManagerController()
+        if not self.__model_manager.is_ready():
+            self.__init_success = False
+            return
+        available_models = self.__model_manager.get_available_models()
+        self.__train_data_manager = TrainDataManager(available_models)
+        self.__init_success = self.__train_data_manager.is_ready() and self.__model_manager.is_ready()
 
     def retry_init(self):
         """
@@ -71,17 +87,24 @@ class ModelTrainingController(metaclass=Singleton):
         """
         pass
 
-    def add_training_examples(self, examples_list):
+    def add_training_examples(self, model_id, examples_list):
         """
         Agrega una lista de ejemplos de entrenamiento. Para que la operación sea exitosa todos los
         ejemplos deben poder ser validados correctamente, en caso contrario no se añadirá ninguno.
+
+        :model_id: [String] - Id del modelo al cual se aplicará el ejemplo.
 
         :examples_list: [List(Dict)] - Listado de ejemplos de entrenamiento.
 
         :return: [boolean] - True si el listado pudo ser agregado exitosamente, False en caso
         contrario.
         """
-        pass
+        if not self.is_ready():
+            return False
+        model = self.__model_manager.get_model(model_id)
+        if model is None:
+            return False
+        return self.__train_data_manager.add_training_examples(model_id, examples_list)
 
     def approve_traning_examples(self, examples_id_list):
         """
@@ -107,7 +130,13 @@ class ModelTrainingController(metaclass=Singleton):
 
         :return: [boolean] - True si se ha agregado correctamente, False en caso contrario.
         """
-        pass
+        if not self.is_ready():
+            return False
+        if not validate_data(TRAIN_MANAGER_SCHEMAS['CUSTOM_ENTITY'], {'name': name, 'description': description}):
+            return False
+        if not name:
+            return False
+        return self.__train_data_manager.add_custom_entity(name.upper(), description)
 
     def edit_custom_entity(self, name, description):
         """
@@ -118,7 +147,13 @@ class ModelTrainingController(metaclass=Singleton):
 
         :description: [String] - Descripción de la entidad.
         """
-        pass
+        if not self.is_ready():
+            return False
+        if not validate_data(TRAIN_MANAGER_SCHEMAS['CUSTOM_ENTITY'], {'name': name, 'description': description}):
+            return False
+        if not name:
+            return False
+        return self.__train_data_manager.edit_custom_entity(name.upper(), description)
 
     def get_available_entities(self):
         """
@@ -126,4 +161,6 @@ class ModelTrainingController(metaclass=Singleton):
 
         :return: [List(Dict)] - Listado con todas las entidades personalizadas disponibles.
         """
-        pass
+        if not self.is_ready():
+            return None
+        return self.__train_data_manager.get_available_entities()
