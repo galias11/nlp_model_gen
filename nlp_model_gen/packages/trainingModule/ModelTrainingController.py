@@ -2,7 +2,7 @@
 from nlp_model_gen.constants.constants import TRAIN_MANAGER_SCHEMAS
 
 # @Classes
-from nlp_model_gen.utils.classUtills import Singleton
+from nlp_model_gen.utils.classUtills import ObserverSingleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from .ModelTrainerManager.ModelTrainerManager import ModelTrainerManager
 from .TrainDataManager.TrainDataManager import TrainDataManager
@@ -10,8 +10,9 @@ from .TrainDataManager.TrainDataManager import TrainDataManager
 # @Utils
 from .packageUtils.validations import validate_data
 
-class ModelTrainingController(metaclass=Singleton):
+class ModelTrainingController(ObserverSingleton):
     def __init__(self):
+        ObserverSingleton.__init__(self)
         self.__model_manager = None
         self.__model_trainer = None
         self.__train_data_manager = None
@@ -27,12 +28,16 @@ class ModelTrainingController(metaclass=Singleton):
         """
         self.__model_trainer = ModelTrainerManager()
         self.__model_manager = ModelManagerController()
+        self.__model_manager.add_observer(self)
         if not self.__model_manager.is_ready():
             self.__init_success = False
             return
         available_models = self.__model_manager.get_available_models()
         self.__train_data_manager = TrainDataManager(available_models)
         self.__init_success = self.__train_data_manager.is_ready() and self.__model_manager.is_ready()
+
+    def update(self, data):
+        self.__train_data_manager.insert_new_model(data)
 
     def retry_init(self):
         """

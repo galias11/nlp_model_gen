@@ -118,6 +118,15 @@ class TrainDataManager:
         """
         self.__init(available_models)
 
+    def insert_new_model(self, new_model):
+        """
+        Inserta un nuevo contenedor de ejemplos para modelo y lo agrega a la lista.
+
+        :new_model: [Model] - Modelo a agregar.
+        """
+        new_model_train_data = ModelTrainData(new_model, [])
+        self.__models.append(new_model_train_data)
+
     def add_training_examples(self, model_id, examples):
         """
         Agrega un nuevo ejemplo de entrenamiento. El ejemplo debe ser válido.
