@@ -12,7 +12,7 @@ from nlp_model_gen.constants.constants import (
 
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
-from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
+from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR
 
 # @Utils
 from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id, db_update_item
@@ -208,15 +208,25 @@ class TrainDataManager:
 
         :return: [boolean] - True si el ejemplo fue aprobado, False en caso contrario.
         """
-        example = self.__find_example(example_id)
-        if example is None:
+        try:
+            Logger.log('L-0307', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
+            example = self.__find_example(example_id)
+            if example is None:
+                Logger.log('L-0308')
+                return False
+            example_id = example.get_example_id()
+            Logger.log('L-0309')
+            updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED})        
+            if updated_items.matched_count > 0:
+                Logger.log('L-0310')
+                example.approve()
+                Logger.log('L-0311', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
+                return True
+            Logger.log('L-0312')
             return False
-        example_id = example.get_example_id()
-        updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED})
-        if updated_items.matched_count > 0:
-            example.approve()
-            return True
-        return False
+        except Exception as e:
+            Logger.log('L-0313', [{'text': example_id, 'color': HIGHLIGHT_COLOR}, {'text': e, 'color': ERROR_COLOR}])
+            return False
 
     def discard_example(self, example_id):
         """
@@ -227,15 +237,24 @@ class TrainDataManager:
 
         :return: [boolean] - True si el ejemplo fue rechazado, False en caso contrario.
         """
-        example = self.__find_example(example_id)
-        if example is None:
+        try:
+            Logger.log('L-0316', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
+            example = self.__find_example(example_id)
+            if example is None:
+                Logger.log('L-0317')
+                return False
+            Logger.log('L-0318')
+            updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_REJECTED})
+            if updated_items.matched_count > 0:
+                Logger.log('L-0319')
+                example.reject()
+                Logger.log('L-0320', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
+                return True
+            Logger.log('L-0321')
             return False
-        example_id = example.get_example_id()
-        updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_REJECTED})
-        if updated_items.matched_count > 0:
-            example.reject()
-            return True
-        return False
+        except Exception as e:
+            Logger.log('L-0322', [{'text': example_id, 'color': HIGHLIGHT_COLOR}, {'text': e, 'color': ERROR_COLOR}])
+            return False
 
     def get_pending_examples(self, model_id):
         """

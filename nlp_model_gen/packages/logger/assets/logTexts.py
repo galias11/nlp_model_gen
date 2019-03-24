@@ -1826,5 +1826,113 @@ LOG_DATA = {
         'method_name': 'add_training_examples',
         'main_text': 'Ha ocurrido una excepción al guardar los ejemplos de entrenamiento %s',
         'type': TYPE_INFO
-    }
+    },
+    'L-0305': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Procesando aprobación de los ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0306': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Aprobación procesada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0307': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Aprobando ejemplo: %s...',
+        'type': TYPE_INFO
+    },
+    'L-0308': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Ejemplo inexistente',
+        'type': TYPE_ERR
+    },
+    'L-0309': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Actualizando datos en base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0310': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Datos actualizados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0311': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Ejemplo: %s aprobado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0312': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Error al aprobar el ejemplo de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0313': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Ocurrio una excepción al aprobar el ejemplo %s: %s',
+        'type': TYPE_INFO
+    },
+    'L-0314': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Procesando rechazo de los ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0315': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Rechazo procesado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0316': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Rechazando ejemplo: %s...',
+        'type': TYPE_INFO
+    },
+    'L-0317': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Ejemplo inexistente',
+        'type': TYPE_ERR
+    },
+    'L-0318': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Actualizando datos en base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0319': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Datos actualizados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0320': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Ejemplo: %s rechazado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0321': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Error al rechazar el ejemplo de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0322': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Ocurrio una excepción al rechazar el ejemplo %s: %s',
+        'type': TYPE_INFO
+    },
 }

@@ -153,9 +153,11 @@ class ModelTrainingController(ObserverSingleton):
         :return: [List(dict)] - Listado indicando los ejemplos de entrenamiento que se han podido
         rechazar y los que no.
         """
+        Logger.log('L-0314')
         results = list([])
         for example_id in examples_id_list:
             results.append({'example_id': example_id, 'status': self.__train_data_manager.discard_example(example_id)})
+        Logger.log('L-0315')
         return results
 
     def add_training_examples(self, model_id, examples_list):
@@ -195,9 +197,11 @@ class ModelTrainingController(ObserverSingleton):
         :return: [List(dict)] - Listado indicando los ejemplos de entrenamiento que se han podido
         aceptar y los que no.
         """
+        Logger.log('L-0305')
         results = list([])
         for example_id in examples_id_list:
             results.append({'example_id': example_id, 'status': self.__train_data_manager.approve_example(example_id)})
+        Logger.log('L-0306')
         return results
 
     def add_custom_entity(self, name, description):
