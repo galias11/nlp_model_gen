@@ -1935,4 +1935,52 @@ LOG_DATA = {
         'main_text': 'Ocurrio una excepción al rechazar el ejemplo %s: %s',
         'type': TYPE_INFO
     },
+    'L-0323': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Obteniendo historial de ejemplos de entrenamiento para el modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0324': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Datos obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0325': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
+    'L-0326': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Obteniendo ejemplos desde la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0327': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Datos obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0328': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Contruyendo datos de los ejemplos...',
+        'type': TYPE_INFO
+    },
+    'L-0329': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Datos construidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0330': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Excepción al obtener los ejemplos en la base de datos: %s',
+        'type': TYPE_INFO
+    }
 }
