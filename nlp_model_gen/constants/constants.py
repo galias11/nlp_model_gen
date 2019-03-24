@@ -77,6 +77,7 @@ TRAIN_MANAGER_SCHEMAS = {
     'CUSTOM_ENTITY': 'train_manager_entity_schema',
     'TRAIN_DATA': 'train_manager_example_data_schema'
 }
+TRAIN_MANAGER_SCHEMA_VALIDATION_ERROR = 'Error al validar estructura de los datos'
 WORD_PROCESSOR_CONFIG_DB = 'word_processor_config'
 WORD_PROCESSOR_CONJ_CFG_COLLECTION = 'wp_conjugator_config'
 WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION = 'wp_fuzzy_gen_config'

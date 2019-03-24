@@ -1,6 +1,10 @@
 # @Constants
 from nlp_model_gen.constants.constants import EVENT_MODEL_CREATED, EVENT_MODEL_DELETED, TRAIN_MANAGER_SCHEMAS
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
+
 # @Classes
 from nlp_model_gen.utils.classUtills import ObserverSingleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
@@ -34,15 +38,21 @@ class ModelTrainingController(ObserverSingleton):
         """
         Inicializa el módulo.
         """
+        Logger.log('L-0243')
         self.__model_trainer = ModelTrainerManager()
         self.__model_manager = ModelManagerController()
         self.__model_manager.add_observer(self)
         if not self.__model_manager.is_ready():
+            Logger.log('L-0244')
             self.__init_success = False
             return
         available_models = self.__model_manager.get_available_models()
         self.__train_data_manager = TrainDataManager(available_models)
-        self.__init_success = self.__train_data_manager.is_ready() and self.__model_manager.is_ready()
+        if self.__train_data_manager.is_ready() and self.__model_manager.is_ready():
+            Logger.log('L-0245')
+            self.__init_success = True
+            return
+        Logger.log('L-0246')
 
     def __add_model(self, model):
         """
@@ -111,12 +121,14 @@ class ModelTrainingController(ObserverSingleton):
         :return: [List(Dict)] - Listado con todos los ejemplos de entrenamiento, cuaquiera sea
         su estado, para el modelo solicitado.
         """
+        Logger.log('L-0323')
         results = list([])
         pending_examples = self.__train_data_manager.get_examples_history(model_id)
         if pending_examples is None:
             return None
         for pending_example in pending_examples:
             results.append(pending_example.to_dict())
+        Logger.log('L-0324')
         return results
 
     def apply_training_approved_examples(self, model_id):
@@ -143,9 +155,11 @@ class ModelTrainingController(ObserverSingleton):
         :return: [List(dict)] - Listado indicando los ejemplos de entrenamiento que se han podido
         rechazar y los que no.
         """
+        Logger.log('L-0314')
         results = list([])
         for example_id in examples_id_list:
             results.append({'example_id': example_id, 'status': self.__train_data_manager.discard_example(example_id)})
+        Logger.log('L-0315')
         return results
 
     def add_training_examples(self, model_id, examples_list):
@@ -160,12 +174,19 @@ class ModelTrainingController(ObserverSingleton):
         :return: [boolean] - True si el listado pudo ser agregado exitosamente, False en caso
         contrario.
         """
+        Logger.log('L-0292')
         if not self.is_ready():
+            Logger.log('L-0293')
             return False
         model = self.__model_manager.get_model(model_id)
         if model is None:
+            Logger.log('L-0294')
             return False
-        return self.__train_data_manager.add_training_examples(model_id, examples_list)
+        if self.__train_data_manager.add_training_examples(model_id, examples_list):
+            Logger.log('L-0295')
+            return True
+        Logger.log('L-0296')
+        return False
 
     def approve_traning_examples(self, examples_id_list):
         """
@@ -178,9 +199,11 @@ class ModelTrainingController(ObserverSingleton):
         :return: [List(dict)] - Listado indicando los ejemplos de entrenamiento que se han podido
         aceptar y los que no.
         """
+        Logger.log('L-0305')
         results = list([])
         for example_id in examples_id_list:
             results.append({'example_id': example_id, 'status': self.__train_data_manager.approve_example(example_id)})
+        Logger.log('L-0306')
         return results
 
     def add_custom_entity(self, name, description):
@@ -194,30 +217,44 @@ class ModelTrainingController(ObserverSingleton):
 
         :return: [boolean] - True si se ha agregado correctamente, False en caso contrario.
         """
+        Logger.log('L-0264')
         if not self.is_ready():
+            Logger.log('L-0265')
             return False
+        Logger.log('L-0266')
         if not validate_data(TRAIN_MANAGER_SCHEMAS['CUSTOM_ENTITY'], {'name': name, 'description': description}):
+            Logger.log('L-0267')
             return False
-        if not name:
-            return False
-        return self.__train_data_manager.add_custom_entity(name.upper(), description)
+        Logger.log('L-0268')
+        if self.__train_data_manager.add_custom_entity(name.upper(), description):
+            Logger.log('L-0269')
+            return True
+        Logger.log('L-0270')
+        return False
 
     def edit_custom_entity(self, name, description):
         """
         Edita la descripción de una entidad personalizada. La misma debe existir de lo contrario 
-        fallará la operación. 
+        fallará la operación.
 
         :name: [String] - Nombre de la entidad a modificar.
 
         :description: [String] - Descripción de la entidad.
         """
+        Logger.log('L-0277', [{'text': name, 'color': HIGHLIGHT_COLOR}])
         if not self.is_ready():
+            Logger.log('L-0278')
             return False
+        Logger.log('L-0279')
         if not validate_data(TRAIN_MANAGER_SCHEMAS['CUSTOM_ENTITY'], {'name': name, 'description': description}):
+            Logger.log('L-0280')
             return False
-        if not name:
-            return False
-        return self.__train_data_manager.edit_custom_entity(name.upper(), description)
+        Logger.log('L-0281')
+        if self.__train_data_manager.edit_custom_entity(name.upper(), description):
+            Logger.log('L-0282')
+            return True
+        Logger.log('L-0283')
+        return False
 
     def get_available_entities(self):
         """

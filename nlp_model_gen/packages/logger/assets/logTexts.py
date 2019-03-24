@@ -1455,4 +1455,532 @@ LOG_DATA = {
         'main_text': 'La tarea ya se encuentra en ejecución',
         'type': TYPE_WRN
     },
+    'L-0243': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Inicializando modulo de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0244': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Error al inicializar el modulo de administración de modelos',
+        'type': TYPE_ERR
+    },
+    'L-0245': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Módulo de entrenamiento inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0246': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Error al inicializar el modulo de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0247': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Iniciando administrador de datos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0248': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Creando datos de modelo para entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0249': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Datos de modelo para entrenamiento creados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0250': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Obteniendo datos de ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0251': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Datos de ejemplos de entrenamiento obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0252': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Agregando ejemplos a datos de entrenamiento para modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0253': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Datos de ejemplos agregados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0254': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Administrador de datos de entrenamiento inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0255': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Error al inicializar administrador de datos de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0256': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Ocurrio una excepción al inicialidar el administrador de datos de entrenamiento: %s',
+        'type': TYPE_INFO
+    },
+    'L-0257': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Iniciando el administrador de entidades...',
+        'type': TYPE_INFO
+    },
+    'L-0258': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Obteniendo datos de entidades personalizadas...',
+        'type': TYPE_INFO
+    },
+    'L-0259': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Datos de entidades obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0260': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Generando objetos de entidades...',
+        'type': TYPE_INFO
+    },
+    'L-0261': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Objetos generados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0262': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Administrador de entidades inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0263': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Ha ocurrido una excepción al inicializar el administrador de entidades: %s',
+        'type': TYPE_INFO
+    },
+    'L-0264': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Agregando nueva entidad personalizada...',
+        'type': TYPE_INFO
+    },
+    'L-0265': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'El modulo no esta inicializado',
+        'type': TYPE_ERR
+    },
+    'L-0266': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Validando estructura de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0267': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Error al validar la estructura de datos',
+        'type': TYPE_ERR
+    },
+    'L-0268': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Estructura de datos validada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0269': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Entidad personalizada agregada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0270': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Error al agregar la entidad personalizada',
+        'type': TYPE_ERR
+    },
+    'L-0271': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Creando nueva entidad personalizada...',
+        'type': TYPE_INFO
+    },
+    'L-0272': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Ya existe una entidad personalizada con la misma etiqueta',
+        'type': TYPE_ERR
+    },
+    'L-0273': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Guardando nueva en entidad en base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0274': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Nueva entidad guardada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0275': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Nueva entidad creada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0276': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Ocurrio una excepción al crear la nueva entidad: %s',
+        'type': TYPE_INFO
+    },
+    'L-0277': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Edititando entidad personalizada: %s',
+        'type': TYPE_INFO
+    },
+    'L-0278': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'El modulo no esta inicializado',
+        'type': TYPE_ERR
+    },
+    'L-0279': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Validando estructura de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0280': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Error al validar la estructura de datos',
+        'type': TYPE_ERR
+    },
+    'L-0281': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Estructura de datos validada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0282': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Entidad personalizada editada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0283': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Error al editar entidad personalizada',
+        'type': TYPE_ERR
+    },
+    'L-0284': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Editando datos de la entidad personalizada...',
+        'type': TYPE_SUCCESS
+    },
+    'L-0285': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'La entidad no existe',
+        'type': TYPE_ERR
+    },
+    'L-0286': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'La descripción provista es la misma que la registrada',
+        'type': TYPE_ERR
+    },
+    'L-0287': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Editando datos de la entidad en la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0288': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Datos editados exitosamente en la base de datos',
+        'type': TYPE_SUCCESS
+    },
+    'L-0289': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Ha ocurrido un error al editar los datos en la base de datos',
+        'type': TYPE_ERR
+    },
+    'L-0290': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Datos de la entidad editados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0291': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Ha ocurrido un excepción al editar los datos de la entidad: %s',
+        'type': TYPE_INFO
+    },
+    'L-0292': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'Agregando lote de ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0293': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'El modulo no esta inicializado',
+        'type': TYPE_ERR
+    },
+    'L-0294': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
+    'L-0295': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos de entrenamiento agregados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0296': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ha ocurrido un error al agregar los ejemplos de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0297': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Guardando ejemplos de entrenamiento...',
+        'type': TYPE_SUCCESS
+    },
+    'L-0298': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'El modelo esta inicializado en el modulo de administración de datos de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0299': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Validando ejemplos y generando datos...',
+        'type': TYPE_INFO
+    },
+    'L-0300': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos validados y datos generados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0301': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Guardando ejemplos en la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0302': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos guardados en la base de datos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0303': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos de entrenamiento guardados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0304': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ha ocurrido una excepción al guardar los ejemplos de entrenamiento %s',
+        'type': TYPE_INFO
+    },
+    'L-0305': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Procesando aprobación de los ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0306': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Aprobación procesada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0307': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Aprobando ejemplo: %s...',
+        'type': TYPE_INFO
+    },
+    'L-0308': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Ejemplo inexistente',
+        'type': TYPE_ERR
+    },
+    'L-0309': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Actualizando datos en base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0310': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Datos actualizados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0311': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Ejemplo: %s aprobado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0312': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Error al aprobar el ejemplo de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0313': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_traning_examples',
+        'main_text': 'Ocurrio una excepción al aprobar el ejemplo %s: %s',
+        'type': TYPE_INFO
+    },
+    'L-0314': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Procesando rechazo de los ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0315': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Rechazo procesado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0316': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Rechazando ejemplo: %s...',
+        'type': TYPE_INFO
+    },
+    'L-0317': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Ejemplo inexistente',
+        'type': TYPE_ERR
+    },
+    'L-0318': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Actualizando datos en base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0319': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Datos actualizados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0320': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Ejemplo: %s rechazado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0321': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Error al rechazar el ejemplo de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0322': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_training_examples',
+        'main_text': 'Ocurrio una excepción al rechazar el ejemplo %s: %s',
+        'type': TYPE_INFO
+    },
+    'L-0323': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Obteniendo historial de ejemplos de entrenamiento para el modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0324': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Datos obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0325': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
+    'L-0326': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Obteniendo ejemplos desde la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0327': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Datos obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0328': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Contruyendo datos de los ejemplos...',
+        'type': TYPE_INFO
+    },
+    'L-0329': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Datos construidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0330': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'get_training_examples_history',
+        'main_text': 'Excepción al obtener los ejemplos en la base de datos: %s',
+        'type': TYPE_INFO
+    }
 }
