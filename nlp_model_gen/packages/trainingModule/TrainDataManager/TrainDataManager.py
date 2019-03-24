@@ -6,7 +6,8 @@ from nlp_model_gen.constants.constants import (
     TRAIN_EXAMPLE_STATUS_REJECTED,
     TRAIN_EXAMPLE_STATUS_SUBMITTED,
     TRAIN_MANAGER_DB,
-    TRAIN_MANAGER_SCHEMAS
+    TRAIN_MANAGER_SCHEMAS,
+    TRAIN_MANAGER_SCHEMA_VALIDATION_ERROR
 )
 
 # @Logger
@@ -129,7 +130,7 @@ class TrainDataManager:
         datos.
         """
         if not self.__validate_examples(examples):
-            raise Exception()
+            raise Exception(TRAIN_MANAGER_SCHEMA_VALIDATION_ERROR)
         examples_data = list([])
         for example in examples:
             examples_data.append({
@@ -178,16 +179,24 @@ class TrainDataManager:
 
         :return: [boolean] - True si el ejemplo es válido, False en caso contrario.
         """
+        Logger.log('L-0297')
         try:
             model_train_data = self.__find_model(model_id)
             if model_train_data is None:
+                Logger.log('L-0298')
                 return False
+            Logger.log('L-0299')
             examples_data = self.__create_new_example_data(examples, model_id)
+            Logger.log('L-0300')
+            Logger.log('L-0301')
             db_insert_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, examples_data)
+            Logger.log('L-0302')
             for example in examples_data:
                 model_train_data.add_training_example(example)
+            Logger.log('L-0303')
             return True
-        except:
+        except Exception as e:
+            Logger.log('L-0304', [{'text': e, 'color': ERROR_COLOR}])
             return False
 
     def approve_example(self, example_id):

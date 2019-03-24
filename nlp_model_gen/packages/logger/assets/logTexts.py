@@ -1749,4 +1749,82 @@ LOG_DATA = {
         'main_text': 'Ha ocurrido un excepción al editar los datos de la entidad: %s',
         'type': TYPE_INFO
     },
+    'L-0292': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'Agregando lote de ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0293': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'El modulo no esta inicializado',
+        'type': TYPE_ERR
+    },
+    'L-0294': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
+    'L-0295': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos de entrenamiento agregados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0296': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ha ocurrido un error al agregar los ejemplos de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0297': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Guardando ejemplos de entrenamiento...',
+        'type': TYPE_SUCCESS
+    },
+    'L-0298': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'El modelo esta inicializado en el modulo de administración de datos de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0299': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Validando ejemplos y generando datos...',
+        'type': TYPE_INFO
+    },
+    'L-0300': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos validados y datos generados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0301': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Guardando ejemplos en la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0302': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos guardados en la base de datos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0303': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ejemplos de entrenamiento guardados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0304': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'add_training_examples',
+        'main_text': 'Ha ocurrido una excepción al guardar los ejemplos de entrenamiento %s',
+        'type': TYPE_INFO
+    }
 }

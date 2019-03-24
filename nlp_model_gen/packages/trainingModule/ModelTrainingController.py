@@ -170,12 +170,19 @@ class ModelTrainingController(ObserverSingleton):
         :return: [boolean] - True si el listado pudo ser agregado exitosamente, False en caso
         contrario.
         """
+        Logger.log('L-0292')
         if not self.is_ready():
+            Logger.log('L-0293')
             return False
         model = self.__model_manager.get_model(model_id)
         if model is None:
+            Logger.log('L-0294')
             return False
-        return self.__train_data_manager.add_training_examples(model_id, examples_list)
+        if self.__train_data_manager.add_training_examples(model_id, examples_list):
+            Logger.log('L-0295')
+            return True
+        Logger.log('L-0296')
+        return False
 
     def approve_traning_examples(self, examples_id_list):
         """

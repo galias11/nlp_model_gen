@@ -126,10 +126,10 @@ class CustomEntityTagManager:
         try:
             Logger.log('L-0287')
             updated_entries = db_update_item(TRAIN_MANAGER_DB, CUSTOM_ENTITY_MANAGER_COLLECTION, {'name': name}, {'description': description})
-            Logger.log('L-0288')
             if updated_entries == 0:
                 Logger.log('L-0289')
                 return False
+            Logger.log('L-0288')
             entity.set_description(description)
             Logger.log('L-0290')
             return True
