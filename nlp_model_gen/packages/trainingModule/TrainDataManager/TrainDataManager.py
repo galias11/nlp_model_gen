@@ -9,6 +9,10 @@ from nlp_model_gen.constants.constants import (
     TRAIN_MANAGER_SCHEMAS
 )
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
+
 # @Utils
 from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id, db_update_item
 from nlp_model_gen.packages.trainingModule.packageUtils.validations import validate_data
@@ -63,22 +67,34 @@ class TrainDataManager:
         Inicializa el modulo.
         """
         try:
+            Logger.log('L-0247')
+            Logger.log('L-0248')
             for model in available_models:
                 model_train_data = ModelTrainData(model, [])
                 self.__models.append(model_train_data)
+            Logger.log('L-0249')
+            Logger.log('L-0250')
             examples_query = {'$and': [
                 {'status': {'$ne': TRAIN_EXAMPLE_STATUS_APPLIED}}, 
                 {'status': {'$ne': TRAIN_EXAMPLE_STATUS_REJECTED}}
             ]}
             training_examples = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, examples_query)
+            Logger.log('L-0251')
+            Logger.log('L-0252')
             for training_example in training_examples:
                 model_id = training_example['model_id']
                 model_train_data = self.__find_model(model_id)
                 if model_train_data is not None:
                     model_train_data.add_training_example(training_example)
+            Logger.log('L-0253')
             self.__custom_entity_manager = CustomEntityTagManager()
-            self.__init_success = self.__custom_entity_manager.is_ready()
-        except:
+            if self.__custom_entity_manager.is_ready():
+                Logger.log('L-0254')
+                self.__init_success = True
+                return
+            Logger.log('L-0255')
+        except Exception as e:
+            Logger.log('L-0256', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
 
     def __validate_examples(self, examples):

@@ -1,3 +1,7 @@
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
+
 # @Constants
 from nlp_model_gen.constants.constants import CUSTOM_ENTITY_MANAGER_COLLECTION, TRAIN_MANAGER_DB
 
@@ -21,12 +25,19 @@ class CustomEntityTagManager:
         Inicializa el administrador de tags personalizados.
         """
         try:
+            Logger.log('L-0257')
+            Logger.log('L-0258')
             stored_entities = db_get_items(TRAIN_MANAGER_DB, CUSTOM_ENTITY_MANAGER_COLLECTION)
+            Logger.log('L-0259')
+            Logger.log('L-0260')
             for stored_entity in stored_entities:
                 entity = CustomEntity(stored_entity['name'], stored_entity['description'])
                 self.__custom_entities.append(entity)
+            Logger.log('L-0261')
             self.__init_susccess = True
-        except:
+            Logger.log('L-0262')
+        except Exception as e:
+            Logger.log('L-0263', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_susccess = False
 
     def __check_entity_existence(self, name):

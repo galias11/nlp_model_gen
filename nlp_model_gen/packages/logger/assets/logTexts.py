@@ -1455,4 +1455,130 @@ LOG_DATA = {
         'main_text': 'La tarea ya se encuentra en ejecución',
         'type': TYPE_WRN
     },
+    'L-0243': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Inicializando modulo de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0244': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Error al inicializar el modulo de administración de modelos',
+        'type': TYPE_ERR
+    },
+    'L-0245': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Módulo de entrenamiento inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0246': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'init',
+        'main_text': 'Error al inicializar el modulo de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0247': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Iniciando administrador de datos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0248': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Creando datos de modelo para entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0249': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Datos de modelo para entrenamiento creados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0250': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Obteniendo datos de ejemplos de entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0251': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Datos de ejemplos de entrenamiento obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0252': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Agregando ejemplos a datos de entrenamiento para modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0253': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Datos de ejemplos agregados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0254': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Administrador de datos de entrenamiento inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0255': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Error al inicializar administrador de datos de entrenamiento',
+        'type': TYPE_ERR
+    },
+    'L-0256': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'init',
+        'main_text': 'Ocurrio una excepción al inicialidar el administrador de datos de entrenamiento: %s',
+        'type': TYPE_INFO
+    },
+    'L-0257': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Iniciando el administrador de entidades...',
+        'type': TYPE_INFO
+    },
+    'L-0258': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Obteniendo datos de entidades personalizadas...',
+        'type': TYPE_INFO
+    },
+    'L-0259': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Datos de entidades obtenidos exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0260': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Generando objetos de entidades...',
+        'type': TYPE_INFO
+    },
+    'L-0261': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Objetos generados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0262': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Administrador de entidades inicializado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0263': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'init',
+        'main_text': 'Ha ocurrido una excepción al inicializar el administrador de entidades: %s',
+        'type': TYPE_INFO
+    },
 }

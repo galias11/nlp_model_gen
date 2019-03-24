@@ -1,6 +1,9 @@
 # @Constants
 from nlp_model_gen.constants.constants import EVENT_MODEL_CREATED, EVENT_MODEL_DELETED, TRAIN_MANAGER_SCHEMAS
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+
 # @Classes
 from nlp_model_gen.utils.classUtills import ObserverSingleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
@@ -34,15 +37,21 @@ class ModelTrainingController(ObserverSingleton):
         """
         Inicializa el módulo.
         """
+        Logger.log('L-0243')
         self.__model_trainer = ModelTrainerManager()
         self.__model_manager = ModelManagerController()
         self.__model_manager.add_observer(self)
         if not self.__model_manager.is_ready():
+            Logger.log('L-0244')
             self.__init_success = False
             return
         available_models = self.__model_manager.get_available_models()
         self.__train_data_manager = TrainDataManager(available_models)
-        self.__init_success = self.__train_data_manager.is_ready() and self.__model_manager.is_ready()
+        if self.__train_data_manager.is_ready() and self.__model_manager.is_ready():
+            Logger.log('L-0245')
+            self.__init_success = True
+            return
+        Logger.log('L-0246')
 
     def __add_model(self, model):
         """
@@ -205,12 +214,13 @@ class ModelTrainingController(ObserverSingleton):
     def edit_custom_entity(self, name, description):
         """
         Edita la descripción de una entidad personalizada. La misma debe existir de lo contrario 
-        fallará la operación. 
+        fallará la operación.
 
         :name: [String] - Nombre de la entidad a modificar.
 
         :description: [String] - Descripción de la entidad.
         """
+
         if not self.is_ready():
             return False
         if not validate_data(TRAIN_MANAGER_SCHEMAS['CUSTOM_ENTITY'], {'name': name, 'description': description}):
