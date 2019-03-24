@@ -1581,4 +1581,172 @@ LOG_DATA = {
         'main_text': 'Ha ocurrido una excepción al inicializar el administrador de entidades: %s',
         'type': TYPE_INFO
     },
+    'L-0264': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Agregando nueva entidad personalizada...',
+        'type': TYPE_INFO
+    },
+    'L-0265': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'El modulo no esta inicializado',
+        'type': TYPE_ERR
+    },
+    'L-0266': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Validando estructura de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0267': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Error al validar la estructura de datos',
+        'type': TYPE_ERR
+    },
+    'L-0268': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Estructura de datos validada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0269': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Entidad personalizada agregada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0270': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Error al agregar la entidad personalizada',
+        'type': TYPE_ERR
+    },
+    'L-0271': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Creando nueva entidad personalizada...',
+        'type': TYPE_INFO
+    },
+    'L-0272': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Ya existe una entidad personalizada con la misma etiqueta',
+        'type': TYPE_ERR
+    },
+    'L-0273': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Guardando nueva en entidad en base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0274': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Nueva entidad guardada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0275': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Nueva entidad creada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0276': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'add_custom_entity',
+        'main_text': 'Ocurrio una excepción al crear la nueva entidad: %s',
+        'type': TYPE_INFO
+    },
+    'L-0277': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Edititando entidad personalizada: %s',
+        'type': TYPE_INFO
+    },
+    'L-0278': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'El modulo no esta inicializado',
+        'type': TYPE_ERR
+    },
+    'L-0279': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Validando estructura de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0280': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Error al validar la estructura de datos',
+        'type': TYPE_ERR
+    },
+    'L-0281': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Estructura de datos validada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0282': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Entidad personalizada editada exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0283': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Error al editar entidad personalizada',
+        'type': TYPE_ERR
+    },
+    'L-0284': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Editando datos de la entidad personalizada...',
+        'type': TYPE_SUCCESS
+    },
+    'L-0285': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'La entidad no existe',
+        'type': TYPE_ERR
+    },
+    'L-0286': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'La descripción provista es la misma que la registrada',
+        'type': TYPE_ERR
+    },
+    'L-0287': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Editando datos de la entidad en la base de datos...',
+        'type': TYPE_INFO
+    },
+    'L-0288': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Datos editados exitosamente en la base de datos',
+        'type': TYPE_SUCCESS
+    },
+    'L-0289': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Ha ocurrido un error al editar los datos en la base de datos',
+        'type': TYPE_ERR
+    },
+    'L-0290': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Datos de la entidad editados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0291': {
+        'class_name': 'CustomEntityTagManager',
+        'method_name': 'edit_custom_entity',
+        'main_text': 'Ha ocurrido un excepción al editar los datos de la entidad: %s',
+        'type': TYPE_INFO
+    },
 }
