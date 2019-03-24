@@ -143,6 +143,15 @@ class TrainDataManager:
         new_model_train_data = ModelTrainData(new_model, [])
         self.__models.append(new_model_train_data)
 
+    def remove_model(self, model_id):
+        """
+        Elimina un modelo de la lista de modelos del administrador de datos de 
+        entrenamiento.
+
+        :model_id: [String] - Id del modelo.
+        """
+        self.__models = filter((lambda model: model.get_model_id() != model_id), self.__models)
+
     def add_training_examples(self, model_id, examples):
         """
         Agrega un nuevo ejemplo de entrenamiento. El ejemplo debe ser válido.

@@ -1,5 +1,5 @@
 # @Constants
-from nlp_model_gen.constants.constants import TRAIN_MANAGER_SCHEMAS
+from nlp_model_gen.constants.constants import EVENT_MODEL_CREATED, EVENT_MODEL_DELETED, TRAIN_MANAGER_SCHEMAS
 
 # @Classes
 from nlp_model_gen.utils.classUtills import ObserverSingleton
@@ -23,7 +23,12 @@ class ModelTrainingController(ObserverSingleton):
         return self.__init_success
 
     def update(self, data):
-        self.__add_model(data)
+        if data['event'] == EVENT_MODEL_CREATED:
+            self.__add_model(data['payload'])
+            return
+        if data['event'] == EVENT_MODEL_DELETED:
+            self.__remove_model(data['payload'])
+            return
 
     def __init(self):
         """
@@ -46,6 +51,15 @@ class ModelTrainingController(ObserverSingleton):
         :model: [Model] - Modelo a agregar.
         """
         self.__train_data_manager.insert_new_model(model)
+
+    def __remove_model(self, model_id):
+        """
+        Elimina un modelo del TrainDataManager cuando este es eliminado desde el modulo de
+        administración de modelos.
+
+        :model_id: [String] - Id del modelo a eliminar.
+        """
+        self.__train_data_manager.remove_model(model_id)
 
     def retry_init(self):
         """

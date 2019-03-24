@@ -2,7 +2,7 @@
 from nlp_model_gen.utils.fileUtils import get_files_in_dir, load_json_file
 
 # @Contants
-from nlp_model_gen.constants.constants import TOKEN_RULES_GEN_RULES_EXT
+from nlp_model_gen.constants.constants import TOKEN_RULES_GEN_RULES_EXT, EVENT_MODEL_CREATED, EVENT_MODEL_DELETED
 
 # @Log colors
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
@@ -182,7 +182,7 @@ class ModelManagerController(ObservableSingleton):
             ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path)
             self.__models.append(new_model)
             Logger.log('L-0025')
-            self.notify(new_model)
+            self.notify({'event': EVENT_MODEL_CREATED, 'payload': new_model})
             return True
         except Exception as e:
             Logger.log('L-0020', [{'text': e, 'color': ERROR_COLOR}])
@@ -235,5 +235,6 @@ class ModelManagerController(ObservableSingleton):
             return False
         Logger.log('L-0072')
         self.__models.remove(selected_model)
+        self.notify({'event': EVENT_MODEL_DELETED, 'payload': model_id})
         Logger.log('L-0073')
         return True
