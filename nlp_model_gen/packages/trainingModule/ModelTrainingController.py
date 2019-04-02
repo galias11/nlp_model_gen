@@ -142,7 +142,23 @@ class ModelTrainingController(ObserverSingleton):
         :return: [boolean] -  True si el entrenamiento se ha realizado exitosamente, False en 
         caso contrario.
         """
-        pass
+        Logger.log('L-0331')
+        model = self.__model_manager.get_model(model_id)
+        if model is None:
+            Logger.log('L-0332')
+            return False
+        approved_examples_list = self.__train_data_manager.get_approved_examples(model_id)
+        if approved_examples_list is None or not approved_examples_list:
+            Logger.log('L-0333')
+            return False
+        if self.__model_trainer.train_model(model, approved_examples_list):
+            Logger.log('L-0334')
+            self.__train_data_manager.set_applied_state(approved_examples_list)
+            Logger.log('L-0335')
+            Logger.log('L-0336')
+            return True
+        Logger.log('L-0337')
+        return False
 
     def discard_training_examples(self, examples_id_list):
         """

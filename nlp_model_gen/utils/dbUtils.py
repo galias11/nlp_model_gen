@@ -75,6 +75,14 @@ def db_update_item(db_name, col_name, query, updated_item):
     except:
         raise ConnectionError()
 
+def db_update_many(db_name, col_name, query, updated_item):
+    try:
+        search_query = query if query is not None else {}
+        col = get_collection(db_name, col_name)
+        return col.update_many(search_query, {'$set': updated_item})
+    except:
+        raise ConnectionError()
+
 def db_delete_item(db_name, col_name, query):
     try:
         col = get_collection(db_name, col_name)

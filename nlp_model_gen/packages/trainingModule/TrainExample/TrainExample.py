@@ -60,3 +60,16 @@ class TrainExample:
             'type': self.get_example_type(),
             'status': self.get_status()
         }
+
+    def get_annotations(self):
+        """
+        Devuelve un diccionario con el formato requerido por el NER de spacy para las
+        anotaciones.
+
+        :return: [List(Dict)] - Listado de anotaciones para el ejemplo
+        """
+        entities = list([])
+        for entity in self.get_tags():
+            data = (entity['i_pos'], entity['e_pos'], entity['entity'])
+            entities.append(data)
+        return (self.get_sentece(), {'entities': entities})
