@@ -1982,5 +1982,143 @@ LOG_DATA = {
         'method_name': 'get_training_examples_history',
         'main_text': 'Excepción al obtener los ejemplos en la base de datos: %s',
         'type': TYPE_INFO
+    },
+    'L-0331': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'apply_training_approved_examples',
+        'main_text': 'Iniciando entrenamiento...',
+        'type': TYPE_INFO
+    },
+    'L-0332': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'apply_training_approved_examples',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
+    'L-0333': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'apply_training_approved_examples',
+        'main_text': 'No se han encontrado ejemplos que aplicar',
+        'type': TYPE_ERR
+    },
+    'L-0334': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'apply_training_approved_examples',
+        'main_text': 'Cambiando estado de los ejemplos aprobados...',
+        'type': TYPE_INFO
+    },
+    'L-0335': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'apply_training_approved_examples',
+        'main_text': 'Estado de los ejemplos guardado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0336': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'apply_training_approved_examples',
+        'main_text': 'Entrenamiento realizado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0337': {
+        'class_name': 'ModelTrainingController',
+        'method_name': 'apply_training_approved_examples',
+        'main_text': 'Error al entrenar el modelo',
+        'type': TYPE_ERR
+    },
+    'L-0338': {
+        'class_name': 'ModelTrainerManager',
+        'method_name': 'build_annotations',
+        'main_text': 'Construyendo anotaciones...',
+        'type': TYPE_INFO
+    },
+    'L-0339': {
+        'class_name': 'ModelTrainerManager',
+        'method_name': 'build_annotations',
+        'main_text': 'Anotaciones construidas exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0340': {
+        'class_name': 'Model',
+        'method_name': 'train_model',
+        'main_text': 'Cargando modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0341': {
+        'class_name': 'Model',
+        'method_name': 'train_model',
+        'main_text': 'Error al cargar el modelo',
+        'type': TYPE_ERR
+    },
+    'L-0342': {
+        'class_name': 'Model',
+        'method_name': 'train_model',
+        'main_text': 'Modelo cargado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0343': {
+        'class_name': 'ModelLoader',
+        'method_name': 'get_model_ner',
+        'main_text': 'Obteniendo NER del modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0344': {
+        'class_name': 'ModelLoader',
+        'method_name': 'get_model_ner',
+        'main_text': 'NER obtenido exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0345': {
+        'class_name': 'ModelLoader',
+        'method_name': 'add_ner_labels',
+        'main_text': 'Agregando nuevas etiquetas al NER...',
+        'type': TYPE_INFO
+    },
+    'L-0346': {
+        'class_name': 'ModelLoader',
+        'method_name': 'add_ner_labels',
+        'main_text': 'Etiquetas agregadas al NER exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0347': {
+        'class_name': 'ModelLoader',
+        'method_name': 'apply_training_data',
+        'main_text': 'Entrenando modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0348': {
+        'class_name': 'ModelLoader',
+        'method_name': 'apply_training_data',
+        'main_text': 'Modelo entrenado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0349': {
+        'class_name': 'ModelLoader',
+        'method_name': 'apply_training_data',
+        'main_text': 'Ha ocurrido una excepción al entrenar el modelo: %s',
+        'type': TYPE_INFO
+    },
+    'L-0350': {
+        'class_name': 'ModelLoader',
+        'method_name': 'apply_training_loop',
+        'main_text': 'Aplicando iteración %s de %s...',
+        'type': TYPE_INFO
+    },
+    'L-0351': {
+        'class_name': 'ModelLoader',
+        'method_name': 'apply_training_loop',
+        'main_text': 'Iteración %s finalizada. Factor de perdida: %s',
+        'type': TYPE_INFO
+    },
+    'L-0352': {
+        'class_name': 'ModelLoader',
+        'method_name': 'update_model_info',
+        'main_text': 'Actualizando datos del modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0353': {
+        'class_name': 'ModelLoader',
+        'method_name': 'update_model_info',
+        'main_text': 'Datos actualizados exitosamente',
+        'type': TYPE_SUCCESS
     }
 }

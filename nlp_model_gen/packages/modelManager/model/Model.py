@@ -48,6 +48,9 @@ class Model:
     def get_analyser_rules_set(self):
         return self.__analyzer_rules_set
 
+    def get_reference(self):
+        return self.__reference
+
     def set_model_name(self, model_name):
         self.__model_name = model_name
 
@@ -70,6 +73,17 @@ class Model:
             Logger.log('L-0057')
             self.__loaded = True
         self.__reference = model_reference
+
+    def __get_model_ner(self):
+        """
+        Devuelve el NER del modelo si existe o un NER en blanco en caso que no exista.
+
+        :return: [SpacyNER] - NER del modelo. Si el modelo no estuviese cargado devuelve
+        None.
+        """
+        if not self.is_loaded():
+            return None
+        return ModelLoader.get_model_ner(self.__reference)
 
     def __process_tokenizer_results(self, doc, only_positives=False):
         """
@@ -155,7 +169,16 @@ class Model:
 
         :return: [boolean] - True si el entrenamiento fue exitoso, False en caso contrario.
         """
-        pass
+        if training_data is None:
+            return False
+        if not self.is_loaded():
+            Logger.log('L-0340')
+            self.load()
+            if not self.is_loaded():
+                Logger.log('L-0341')
+                return False
+            Logger.log('L-0342')
+        return ModelLoader.apply_training_data(self, training_data)
 
     def to_dict(self):
         """

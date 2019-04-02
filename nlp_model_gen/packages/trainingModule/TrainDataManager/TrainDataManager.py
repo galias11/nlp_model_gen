@@ -15,7 +15,7 @@ from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR
 
 # @Utils
-from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id, db_update_item
+from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id, db_update_item, db_update_many
 from nlp_model_gen.packages.trainingModule.packageUtils.validations import validate_data
 
 # @Classes
@@ -345,3 +345,24 @@ class TrainDataManager:
         :return: [List] - Listado de todas las entidades personalizadas disponibles.
         """
         return self.__custom_entity_manager.get_available_entities()
+
+    def set_applied_state(self, examples_list):
+        """
+        Cambia el estado de un set de ejemplos a aplicado.
+
+        :examples_list: [List(TrainExample)] - Lista de ejemplos a los cuales cambiar el estado.
+
+        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
+        """
+        examples_id_list = list([example.get_example_id() for example in examples_list])
+        updated_count = db_update_many(
+            TRAIN_MANAGER_DB,
+            TRAIN_DATA_EXAMPLES_COLLECTION,
+            {'example_id': {'$in': examples_id_list}},
+            {'status': TRAIN_EXAMPLE_STATUS_APPLIED}
+        ).matched_count
+        for example in examples_list:
+            example.apply()
+        if len(examples_list) == updated_count:
+            return True
+        return False
