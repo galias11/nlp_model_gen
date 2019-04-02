@@ -26,3 +26,25 @@
 - TFI-0002: No se puede crear un modelo a pesar de que no hay ninguno con ese nombre.
 - TFI-0005: No se puede borrar un modelo durante la misma sesión de su creación.
 - TFI-0004: Color no válido para el logger en plataforma Windows
+
+## Version 0.1.7:
+
+#### New features
+
+- TF-0046: Procesar los resultados del análisis del tokenizer a nivel oración.
+- TF-0043: Crear y guardar ejemplos de entrenamiento.
+- TF-0064: Obtener la lista de ejemplo por modelo y estado.
+- TF-0065: Actualizar el controlador de entrenamiento cuando se crea un nuevo modelo.
+- TF-0038: Aprobar o desaprobar un ejemplo de entrenamiento.
+- TF-0066: Actualizar el controlador de entrenamiento cuando se elimina un modelo.
+- TF-0039: Aplicar los ejemplos de entrenamiento aprobados para un modelo.
+
+#### Tasks / Improvements
+
+- TF-0067: Agregar logs a las operaciones que realiza el modulo de entrenamiento.
+- TF-0052: System controller: Implementación del diagrama de clases.
+- TF-0049: Implementación de la estructura del modulo de entrenamiento.
+
+#### Bugs fixed
+
+- TFI-0004: Color no válido para el logger en plataforma Windows.

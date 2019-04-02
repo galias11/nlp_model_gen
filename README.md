@@ -15,10 +15,8 @@ The project is limited to the features previously defined. Although it will have
 - Text analysis with custom models: It allows to use custom models to analyze text. Actually it gets two kind of results: The ones obtained from tokenizer and the ones obtained from entity recognition. Actually entity recognition module can not be trained.
 - Model save, edit and deletion: It allows to fully manage custom models by allowing its modification or deletion.
 - Word processing utilities set up (WIP): It allows to set different setups for the word processing module. This allows to manage how words are added to the tokenizer rules of the current module. This feature is implement, but integration with main controller is pending.
-
-### Future releases
-- Training manager module: This module will allow to store, view, edit or discard examples submitted. This will grant administrators a full control of model training and, at the same time, it will allow a collaborative enhancement of models.
-- Training model: This feature will allow administrator to apply different sets of training data over the models.
+- Training manager module: This module allows to store, view, edit or discard examples submitted. This grants administrators a full control of model training and, at the same time, it will allow a collaborative enhancement of models. 
+- Training models: This feature allows administrator to apply approved sets of training data over the models.
 
 ### Requirements
 - Python 3. (Developed with python 3.7).
