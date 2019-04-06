@@ -52,7 +52,32 @@ class Logger:
         return text
 
     @staticmethod
-    def log(code, inserted_texts=''):
+    def format_composed_text(code, inserted_texts):
+        """
+        Construye el texto con textos insertados (permite recuperar el color original luego 
+        de usar otro).
+
+        :code: [String] - Código de acción a loguear
+
+        :inserted_texts: [List(String)] - Lista de textos a insertar.
+
+        :return: [String] - texto formateado
+        """
+        main_text = LOG_DATA[code]['main_text']
+        splitted_texts = main_text.split(LOGGER_WILDCARD)
+        splitted_length = len(splitted_texts)
+        if not inserted_texts or not splitted_length - 1 == len(inserted_texts):
+            return Logger.get_main_text_color(main_text, LOG_DATA[code]['type'])
+        formatted_text = Logger.get_main_text_color(splitted_texts[0], LOG_DATA[code]['type'])
+        for pos, text in enumerate(inserted_texts, 1):
+            formatted_inserted_text = colored(text['text'], text['color'])
+            splitted_text = splitted_texts[pos]
+            formatted_splitted_text = Logger.get_main_text_color(splitted_text, LOG_DATA[code]['type'])
+            formatted_text = formatted_text + formatted_inserted_text + formatted_splitted_text
+        return formatted_text
+
+    @staticmethod
+    def log(code, inserted_texts=None):
         """
         Loggea por consola un texto. Reemplaza dentro del mismo los distintos wildcards con la
         información provista en los textos insertados.
@@ -61,12 +86,8 @@ class Logger:
         """
         if not code in LOG_DATA.keys():
             return
-        class_name = LOG_DATA[code]['class_name'] 
-        method_name = LOG_DATA[code]['method_name'] 
-        main_text = Logger.get_main_text_color(LOG_DATA[code]['main_text'], LOG_DATA[code]['type'])
+        class_name = LOG_DATA[code]['class_name']
+        method_name = LOG_DATA[code]['method_name']
         log_id_text = '[ ' + Logger.get_current_time() + ' |' + colored(class_name, CLASS_COLOR) + '|' + colored(method_name, METHOD_COLOR) + '| ]: '
-        formatted_text = main_text
-        for text in inserted_texts:
-            formatted_text = formatted_text.replace(LOGGER_WILDCARD, colored(text['text'], text['color']), 1)
+        formatted_text = Logger.format_composed_text(code, inserted_texts)
         print(log_id_text + formatted_text)
-        
