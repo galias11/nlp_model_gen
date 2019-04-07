@@ -214,6 +214,9 @@ class TrainDataManager:
             if example is None:
                 Logger.log('L-0308')
                 return False
+            if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
+                Logger.log('L-0354')
+                return False
             example_id = example.get_example_id()
             Logger.log('L-0309')
             updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED})        
@@ -242,6 +245,9 @@ class TrainDataManager:
             example = self.__find_example(example_id)
             if example is None:
                 Logger.log('L-0317')
+                return False
+            if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
+                Logger.log('L-0355')
                 return False
             Logger.log('L-0318')
             updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_REJECTED})
