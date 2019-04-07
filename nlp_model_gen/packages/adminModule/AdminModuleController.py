@@ -368,17 +368,17 @@ class AdminModuleController(metaclass=Singleton):
         """
         return self.__train_manager.discard_training_examples(training_examples_list)
 
-#    def apply_approved_examples(self, model_id):
-#        """
-#        Aplica todos los ejemplos de entrenamiento aprobados para un modelo y realiza la rutina de 
-#        entrenamiento. Al finalizar la operación los ejemplos utilizados se marcarán como 
-#        aplicados.
-#
-#        :model_id: [String] - Id del modelo.
-#
-#        :return: [boolean] - True si la operación ha sido exitosa, False en caso contrario.
-#        """
-#        return self.__train_manager.apply_training_approved_examples(model_id)
+    def apply_approved_examples(self, model_id):
+        """
+        Aplica todos los ejemplos de entrenamiento aprobados para un modelo y realiza la rutina de 
+        entrenamiento. Al finalizar la operación los ejemplos utilizados se marcarán como 
+        aplicados.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [boolean] - True si la operación ha sido exitosa, False en caso contrario.
+        """
+        return self.__train_manager.apply_training_approved_examples(model_id)
 
     def get_available_entities(self):
         """
