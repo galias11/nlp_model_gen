@@ -40,7 +40,7 @@ class ApplicationModuleController:
         :return: [boolean] - True si el ejemplo fue agregado exitosamente, False en caso 
         contrario.
         """
-        pass
+        return self.__model_trainer.add_training_examples(model_id, [example])
 
     def get_available_tagging_entities(self):
         """
@@ -49,4 +49,8 @@ class ApplicationModuleController:
 
         :return: [List(Dict)] - Lista con todas las entidades posibles.
         """
-        pass
+        available_entities_list = list([])
+        available_entities = self.__model_trainer.get_available_entities()
+        for entity in available_entities:
+            available_entities_list.append(entity.to_dict())
+        return available_entities_list
