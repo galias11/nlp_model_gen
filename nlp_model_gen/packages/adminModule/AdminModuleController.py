@@ -6,6 +6,9 @@ from nlp_model_gen.packages.logger.Logger import Logger
 
 # @Constants
 from nlp_model_gen.constants.constants import (
+    TRAIN_EXAMPLE_STATUS_APPROVED,
+    TRAIN_EXAMPLE_STATUS_HISTORIC,
+    TRAIN_EXAMPLE_STATUS_SUBMITTED,
     WORD_PROCESSOR_MODULE_KEY_CONJUGATOR,
     WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN,
     WORD_PROCESSOR_MODULE_KEY_NOUN_CONV
@@ -15,17 +18,18 @@ from nlp_model_gen.constants.constants import (
 from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from nlp_model_gen.packages.wordProcessor.WordProcessorController import WordProcessorController
+from nlp_model_gen.packages.trainingModule.ModelTrainingController import ModelTrainingController
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
 
 class AdminModuleController(metaclass=Singleton):
-    __analyzer_rules_generator = None
-    __model_manager = None
-    __tokenizer_rules_generator = None
-    __word_processor = None
-    __init_success = False
-
     def __init__(self):
+        self.__analyzer_rules_generator = None
+        self.__model_manager = None
+        self.__tokenizer_rules_generator = None
+        self.__train_manager = None
+        self.__word_processor = None
+        self.__init_success = False
         self.__initialize()
 
     def __initialize(self, is_retry=False):
@@ -41,11 +45,14 @@ class AdminModuleController(metaclass=Singleton):
         if is_retry:
             self.__word_processor.retry_initialization()
         if not self.__word_processor.is_ready():
-            return # TODO: Normalize when error handler is ready.
+            return # Normalize when error handler is ready.
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
         self.__model_manager = ModelManagerController()
         if not self.__model_manager.is_ready():
-            return # TODO: Normalize when error handler is ready.
+            return # Normalize when error handler is ready.
+        self.__train_manager = ModelTrainingController()
+        if not self.__train_manager.is_ready():
+            return # Normalize when error handler is ready.
         self.__analyzer_rules_generator = AnalyzerRulesGerator()
         self.__init_success = True
         Logger.log('L-0037')
@@ -304,3 +311,107 @@ class AdminModuleController(metaclass=Singleton):
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
             return self.__word_processor.remove_noun_conversor_theme(theme_name)
         return False
+
+    def submit_training_examples(self, model_id, training_examples_list):
+        """
+        Agrega una lista de nuevos ejemplos de entrenamiento para un modelo particular. El
+        modelo debe existir y los ejemplos deben validar la schema de validación.
+
+        :model_id: [String] - Id del modelo.
+
+        :training_examples_list: [List(dict)] - Lista de ejemplos a agregar.
+
+        :return: [List] - Estado particular para cada ejemplo que inidica si pudo ser agregado.
+        """
+        return self.__train_manager.add_training_examples(model_id, training_examples_list)
+
+    def get_submitted_training_examples(self, model_id, status):
+        """
+        Obtiene un listado de los ejemplos de un modelo para un estado particular. Los estados posibles
+        son: submitted, approved, historic.
+
+        :model_id: [String] - Id del modelo.
+
+        :status: [String] - Estado de los ejemplos.
+
+        :return: [List(Dict)] - Listado de los ejemplos
+        """
+        if status == TRAIN_EXAMPLE_STATUS_APPROVED:
+            return self.__train_manager.get_approved_training_examples(model_id)
+        if status == TRAIN_EXAMPLE_STATUS_HISTORIC:
+            return self.__train_manager.get_training_examples_history(model_id)
+        if status == TRAIN_EXAMPLE_STATUS_SUBMITTED:
+            return self.__train_manager.get_pending_training_examples(model_id)
+        return None
+    
+    def approve_training_examples(self, training_examples_list):
+        """
+        Aprueba una lista de ejemplos de entrenamiento. La lista de ejemplo debe contener los ids de
+        los mismos. Los resultados se verificarán uno por uno, por lo que la operación retornará
+        los resultados de la misma a nivel ejemplo.
+
+        :training_examples_list: [List(int)] - Lista de los ids, de los ejemplos a aprobar.
+
+        :return: [List(Dict)] - Lista con el resultado para cada ejemplo particular.
+        """
+        return self.__train_manager.approve_traning_examples(training_examples_list)
+
+    def discard_training_examples(self, training_examples_list):
+        """
+        Descarta una lista de ejemplos de entrenamiento. La lista debe contener los ids de los mismos.
+        Los resultados se verificarán uno por uno, por lo que la operación retornará los resultados
+        de la misma a nivel ejemplo.
+
+        :training_examples_list: [List(int)] - Lista de los ids, de los ejemplos a descartar.
+
+        :return: [List(Dict)] - Lista con el resultado para cada ejemplo particular.
+        """
+        return self.__train_manager.discard_training_examples(training_examples_list)
+
+#    def apply_approved_examples(self, model_id):
+#        """
+#        Aplica todos los ejemplos de entrenamiento aprobados para un modelo y realiza la rutina de 
+#        entrenamiento. Al finalizar la operación los ejemplos utilizados se marcarán como 
+#        aplicados.
+#
+#        :model_id: [String] - Id del modelo.
+#
+#        :return: [boolean] - True si la operación ha sido exitosa, False en caso contrario.
+#        """
+#        return self.__train_manager.apply_training_approved_examples(model_id)
+
+    def get_available_entities(self):
+        """
+        Devuelve una lista con todas las entidades personalizadas registradas en el sistema.
+
+        :return: [List(Dict)] - Listado con todas las entidades personalizadas.
+        """
+        available_entities_list = list([])
+        available_entities = self.__train_manager.get_available_entities()
+        for entity in available_entities:
+            available_entities_list.append(entity.to_dict())
+        return available_entities_list
+
+    def add_custom_entity(self, name, description):
+        """
+        Agrega una nueva entidad personalizada. La misma no debe existir previeamente.
+
+        :name: [String] - Nombre de la entidad personalizada, se utilizará como identificador.
+
+        :description: [String] - Descripción de la entidad.
+
+        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
+        """
+        return self.__train_manager.add_custom_entity(name, description)
+
+    def edit_custom_entity(self, name, description):
+        """
+        Edita una entidad personalizada. La misma debe existir previamente.
+
+        :name: [String] - Nombre de la entidad personalizada, debe existir.
+
+        :description: [String] - Descripción de la entidad.
+
+        :return: [boolean] - True si la operación fue exitosa, False en caso contrario
+        """
+        return self.__train_manager.edit_custom_entity(name, description)
