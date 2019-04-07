@@ -162,23 +162,6 @@ class AdminModuleController(metaclass=Singleton):
             return None
         return self.__model_manager.remove_model(model_id)
 
-    def analyse_text(self, model_id, text, only_positives=False):
-        """
-        Analiza un texto aplicandole el modelo solicitado. El modelo debe existir.
-
-        :model_id: [String] - Id del modelo a utilizar.
-
-        :text: [String] - Texto a analizar.
-
-        :only_positives: [boolean] - Si esta activado, devuelve solo los resultados positivos.
-
-        :return: [List(Dict)] - Resultados del analisis, None si ha ocurrido un error.
-        """
-        if not self.__init_success:
-            Logger.log('L-0097')
-            return None
-        return self.__model_manager.analyze_text(model_id, text, only_positives)
-
     def get_word_processor_available_configs(self, module_key):
         """
         Devuelve una lista con las configuraciones disponibles para el modulo solicitado del
