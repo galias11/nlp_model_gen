@@ -2120,5 +2120,17 @@ LOG_DATA = {
         'method_name': 'update_model_info',
         'main_text': 'Datos actualizados exitosamente',
         'type': TYPE_SUCCESS
+    },
+    'L-0354': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'approve_example',
+        'main_text': 'El ejemplo ya ha sido aprobado, desaprobado o aplicado',
+        'type': TYPE_ERR
+    },
+    'L-0355': {
+        'class_name': 'TrainDataManager',
+        'method_name': 'discard_example',
+        'main_text': 'El ejemplo ya ha sido aprobado, desaprobado o aplicado',
+        'type': TYPE_ERR
     }
 }
