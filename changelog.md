@@ -48,3 +48,20 @@
 #### Bugs fixed
 
 - TFI-0004: Color no válido para el logger en plataforma Windows.
+
+## Version 0.1.8:
+
+#### New features
+
+- TF-0057: Mover funcionalidad de análisis de texto al modulo de aplicación.
+- TF-0058: Aplicar los ejemplos de entrenamiento desde el módulo de administración.
+
+#### Tasks / Improvements
+
+- TF-0056: Implementar modelo de clases del modulo de aplicación.
+- TF-0068: Agregar los métodos para el control de los ejemplos de entrenamiento al admin module.
+
+#### Bugs fixed
+
+- TFI-0007: Se pierde el color del log principal cuando se aplican textos insertados con otros colores.
+- TFI-0006: Se pueden aprobar / desaprobar ejemplos previamente aprobados / desaprobados.
