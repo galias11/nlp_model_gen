@@ -2132,5 +2132,11 @@ LOG_DATA = {
         'method_name': 'discard_example',
         'main_text': 'El ejemplo ya ha sido aprobado, desaprobado o aplicado',
         'type': TYPE_ERR
+    },
+    'L-0356': {
+        'class_name': 'ApplicationModuleController',
+        'method_name': 'analyse_text',
+        'main_text': 'El modulo de administración de modelos no fue inicializado correctamente',
+        'type': TYPE_ERR
     }
 }
