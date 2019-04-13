@@ -246,3 +246,17 @@ class TaskManager(Observer):
             return True
         Logger.log('L-0242')
         return False
+
+    def check_model_creation_tasks(self, taks_keys):
+        """
+        Verifica si hay una tarea de creación de modelo pendiente o en ejecución.
+
+        :task_keys: [List] - Lista con las claves de las tareas a verificar
+
+        :return: [boolean] - True si se encuentra alguna tarea, false en caso contrario.
+        """
+        for task in self.__active_tasks:
+            if task.is_blocking(taks_keys):
+                return True
+        return False
+    

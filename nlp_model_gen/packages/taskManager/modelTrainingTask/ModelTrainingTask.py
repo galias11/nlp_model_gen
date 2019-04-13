@@ -1,10 +1,16 @@
+# @Constants
+from nlp_model_gen.constants.constants import (
+    TASK_KEYS_MODEL_UPDATE,
+    TASK_KEYS_WORD_PROCESSOR
+)
+
 # @Classes
 from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
 from ..task.Task import Task
 
 class ModelTrainingTask(Task):
     def __init__(self, id, model_id):
-        super(ModelTrainingTask, self).__init__(id)
+        super(ModelTrainingTask, self).__init__(id, {TASK_KEYS_MODEL_UPDATE: True, TASK_KEYS_WORD_PROCESSOR: False})
         self.__model_id = model_id
 
     def get_model_id(self):

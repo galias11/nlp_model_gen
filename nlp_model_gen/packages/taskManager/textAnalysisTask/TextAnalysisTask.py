@@ -1,10 +1,16 @@
+# @Constants
+from nlp_model_gen.constants.constants import (
+    TASK_KEYS_MODEL_UPDATE,
+    TASK_KEYS_WORD_PROCESSOR
+)
+
 # @Classes
 from nlp_model_gen.packages.applicationModule.ApplicationModuleController import ApplicationModuleController
 from ..task.Task import Task
 
 class TextAnalysisTask(Task):
     def __init__(self, id, model_id, text, only_positives):
-        super(TextAnalysisTask, self).__init__(id)
+        super(TextAnalysisTask, self).__init__(id, {TASK_KEYS_MODEL_UPDATE: True, TASK_KEYS_WORD_PROCESSOR: False})
         self.__model_id = model_id
         self.__text = text
         self.__only_positives = only_positives

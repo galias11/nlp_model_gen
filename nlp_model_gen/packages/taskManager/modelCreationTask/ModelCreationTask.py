@@ -1,10 +1,16 @@
+# @Constants
+from nlp_model_gen.constants.constants import (
+    TASK_KEYS_MODEL_UPDATE,
+    TASK_KEYS_WORD_PROCESSOR
+)
+
 # @Classes
 from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
 from ..task.Task import Task
 
 class ModelCreationTask(Task):
     def __init__(self, id, model_id, model_name, description, author, tokenizer_exceptions, max_dist):
-        super(ModelCreationTask, self).__init__(id)
+        super(ModelCreationTask, self).__init__(id, {TASK_KEYS_MODEL_UPDATE: False, TASK_KEYS_WORD_PROCESSOR: True})
         self.__model_id = model_id
         self.__model_name = model_name
         self.__description = description

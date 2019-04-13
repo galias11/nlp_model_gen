@@ -3,6 +3,13 @@ from nlp_model_gen.packages.applicationModule.ApplicationModuleController import
 from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
 from nlp_model_gen.packages.taskManager.TaskManager import TaskManager
 
+# @Constants
+from nlp_model_gen.constants.constants import (
+    ERROR_GENERIC,
+    TASK_KEYS_MODEL_UPDATE,
+    TASK_KEYS_WORD_PROCESSOR
+)
+
 class SystemController:
     def __init__(self):
         self.__admin_module = None
@@ -21,6 +28,22 @@ class SystemController:
         self.__application_module = ApplicationModuleController()
         self.__task_manager = TaskManager()
         self.__ready = True
+
+    def __build_response_object(self, operation_success, payload=None):
+        """
+        Construye el diccionario de respuesta para las solicitudes al controlador.
+
+        :operation_success: [boolean] - Indica el exito de la tarea.
+
+        :payload: [Dict] - Diccionario conteniendo los datos a retornar.
+        """
+        resource = payload
+        if not operation_success:
+            resource = ERROR_GENERIC
+        return {
+            'success': operation_success,
+            'resource': resource
+        }
 
     def retry_init(self):
         """
@@ -50,9 +73,12 @@ class SystemController:
         :max_dist: [int] - Distancia de demerau levenstein máxima para las deformaciónes del
         modelo.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        task_id = self.__task_manager.create_model_creation_task(model_id, model_name, description, author, tokenizer_exceptions, max_dist)
+        return self.__build_response_object(True, {'task_id': task_id})
 
     def delete_word_processor_theme(self, module_key, theme_name):
         """
@@ -64,9 +90,14 @@ class SystemController:
 
         :theme_name: [String] - Nombre del tema a borrar.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
+            return self.__build_response_object(False)
+        results = self.__admin_module.delete_word_processor_theme(module_key, theme_name)
+        return self.__build_response_object(results)
 
     def update_theme_conjugator_exceptions(self, theme_name, exception_key, exception_data):
         """
@@ -80,9 +111,14 @@ class SystemController:
 
         :exception_data: [Dict] - Diccionario con la nueva configuración de la excepción.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
+            return self.__build_response_object(False)
+        results = self.__admin_module.update_theme_conjugator_exceptions(theme_name, exception_key, exception_data)
+        return self.__build_response_object(results)
 
     def update_word_processor_config_theme(self, module_key, theme_name, config_mod, irregular_groups_mod=None):
         """
@@ -100,9 +136,14 @@ class SystemController:
         :irregular_groups_mod: [Dict] - Campos a actualizar de los grupos irregulares, solo son necesarios
         los campos a actualizar. Solo es requerido cuando se actualiza el modulo de conjugación.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
+            return self.__build_response_object(False)
+        results = self.__admin_module.update_word_processor_config_theme(module_key, theme_name, config_mod, irregular_groups_mod)
+        return self.__build_response_object(results)
 
     def set_word_processor_active_theme(self, module_key, theme_name):
         """
@@ -114,17 +155,25 @@ class SystemController:
 
         :theme_name: [String] - Nombre del tema a utilizar.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
+            return self.__build_response_object(False)
+        results = self.__admin_module.set_word_processor_active_theme(module_key, theme_name)
+        return self.__build_response_object(results)
 
     def get_word_processor_active_themes(self): 
         """
         Devuelve un objeto con los temas activos para cada modulo del conjugador de palabras
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        active_themes = self.__admin_module.get_word_processor_active_themes()
+        return self.__build_response_object(True, {'active_themes': active_themes})
 
     def add_theme_conjugator_exceptions(self, theme_name, exceptions):
         """
@@ -137,9 +186,14 @@ class SystemController:
 
         :exceptions: [List(Dict)] - Lista de excepciones a agregar para el tema de configuración.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
+            return self.__build_response_object(False)
+        results = self.__admin_module.add_theme_conjugator_exceptions(theme_name, exceptions)
+        return self.__build_response_object(results)
 
     def add_word_processor_config_theme(self, module_key, theme_name, configs, irregular_groups=None):
         """
@@ -157,9 +211,14 @@ class SystemController:
         :irregular_groups: [Dict] - Configuración de los grupos irregulares. Solo es necesario
         para los nuevos temas del modulo de conjugación.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
+            return self.__build_response_object(False)
+        results = self.__admin_module.add_word_processor_config_theme(module_key, theme_name, configs, irregular_groups)
+        return self.__build_response_object(results)
 
     def get_word_processor_available_configs(self, module_key):
         """
@@ -168,9 +227,12 @@ class SystemController:
 
         :module_key: [String] - Clave del submodulo.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        available_configs = self.__admin_module.get_word_processor_available_configs(module_key)
+        return self.__build_response_object(True, {'available_configs': available_configs})
 
     def delete_model(self, model_id):
         """
@@ -179,11 +241,16 @@ class SystemController:
 
         :model_id: [String] - Id del modelo.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_MODEL_UPDATE]):
+            return self.__build_response_object(False)
+        results = self.__admin_module.delete_model_data(model_id)
+        return self.__build_response_object(results)
 
-    def edit_model_data(self, model_id, new_model_name, new_description):
+    def edit_model_data(self, model_id, new_model_name=None, new_description=None):
         """
         Edita los datos del modelo identificado con el id solicitado. El modelo debe existir.
         No hay restricciones para la realización de esta operación.
@@ -196,17 +263,23 @@ class SystemController:
         :new_description: [String] - Nueva descripción a aplicar al modelo (si no es provista
         se mantendrá la actual).
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        results = self.__admin_module.edit_model_data(model_id, new_model_name, new_description)
+        return self.__build_response_object(results)
 
     def get_available_models(self):
         """
         Devuelve un listado con los modelos disponibles y sus datos.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        available_models = self.__admin_module.get_available_models()
+        return self.__build_response_object(True, available_models)
 
     def approve_training_examples(self, training_examples_list):
         """
@@ -214,19 +287,27 @@ class SystemController:
 
         :training_examples_list: [List(String)] - Lista de los ids de los ejemplos a aprobar.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        results = self.__admin_module.approve_training_examples(training_examples_list)
+        return self.__build_response_object(True, {'results': results})
 
-    def get_submitted_training_examples(self, model_id):
+    def get_submitted_training_examples(self, model_id, status):
         """
         Obtiene un listado de los ejemplos de entrenamiento existentes para un determinado modelo.
 
         :model_id: [String] - Id del modelo para el cual obtener los ejemplos.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :status: [String] - Estado de los ejemplos a buscar.
+
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        submitted_training_examples = self.__admin_module.get_submitted_training_examples(model_id, status)
+        return self.__build_response_object(True, {'status': status, 'examples': submitted_training_examples})
 
     def submit_training_examples(self, model_id, examples):
         """
@@ -237,9 +318,12 @@ class SystemController:
 
         :examples: [List(Dict)] - Listado de ejemplos. Debe haber al menos un ejemplo.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [Dict] - Resultados de la tarea.
         """
-        pass
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        results = self.__admin_module.submit_training_examples(model_id, examples)
+        return self.__build_response_object(True, {'results': results})
 
     def submit_single_training_example(self, model_id, example):
         """
@@ -249,9 +333,26 @@ class SystemController:
 
         :example: [Dict] - Ejemplo de entrenamiento a agregar.
 
-        :return: [boolean] - True si el ejemplo fue agregado correctamente, False en caso contrario.
+        :return: [Dict] - Resultados de la tarea.
         """
-        return self.__application_module.submit_training_example(model_id, example)
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        results = self.__application_module.submit_training_example(model_id, example)
+        return self.__build_response_object(True, {'results': results})
+
+    def apply_approved_training_examples(self, model_id):
+        """
+        Inicia un proceso de entrenamiento para un modelo. Aplicando todos los ejemplos de entrenamiento
+        aprobados que haya en el sistema.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [Dict] - Resultados de la tarea.
+        """
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        task_id = self.__task_manager.create_model_training_task(model_id)
+        return self.__build_response_object(True, {'task_id': task_id})
 
     def analyze_text(self, model_id, text, only_positives=False):
         """
@@ -266,11 +367,12 @@ class SystemController:
         :only_positives: [boolean] - Flag que indica si solo devolver los resultados positivos del 
         análisis con el modelo. Por defecto sera falsa.
 
-        :return: [int] - Id de la tarea creada.
+        :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return None
-        return self.__task_manager.create_text_analysis_task(model_id, text, only_positives)
+            return self.__build_response_object(False)
+        task_id = self.__task_manager.create_text_analysis_task(model_id, text, only_positives)
+        return self.__build_response_object(True, {'task_id': task_id})
 
     def get_task_status(self, task_id):
         """
@@ -279,18 +381,22 @@ class SystemController:
 
         :task_id: [int] - Id de la tarea.
 
-        :return: [Dict] - Diccionario que contiene el estado actual de la tarea.
+        :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return None
-        return self.__task_manager.get_task_status(task_id)
+            return self.__build_response_object(False)
+        task_status = self.__task_manager.get_task_status(task_id)
+        if not task_status:
+            return self.__build_response_object(False)
+        return self.__build_response_object(True, {'task_status': task_status})
 
     def get_available_tagging_entities(self):
         """
         Devuelve un listado con las entitades de etiquetado para el NER disponibles en el sistema.
 
-        :return: [List] - Lista con las entidades personalizadas.
+        :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return None
-        return self.__application_module.get_available_tagging_entities()
+            return self.__build_response_object(False)
+        tagging_entities = self.__application_module.get_available_tagging_entities()
+        return self.__build_response_object(True, {'custom_entities': tagging_entities})

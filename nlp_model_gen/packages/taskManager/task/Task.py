@@ -14,6 +14,8 @@ from nlp_model_gen.utils.classUtills import Observable
 
 # @Constants
 from nlp_model_gen.constants.constants import (
+    TASK_KEYS_MODEL_UPDATE,
+    TASK_KEYS_WORD_PROCESSOR,
     TASK_STATUS_CANCELLED,
     TASK_STATUS_FINISHED,
     TASK_STATUS_QUEUED,
@@ -21,7 +23,7 @@ from nlp_model_gen.constants.constants import (
 )
 
 class Task(Thread, Observable, ABC):
-    def __init__(self, id):
+    def __init__(self, id, blocking_data=None):
         Thread.__init__(self)
         Observable.__init__(self)
         self.__id = id
@@ -30,6 +32,7 @@ class Task(Thread, Observable, ABC):
         self.__init_time = -1
         self.__end_time = -1
         self.__results = None
+        self.__blocking_data = blocking_data if blocking_data is not None else {TASK_KEYS_WORD_PROCESSOR: False, TASK_KEYS_MODEL_UPDATE: False}
         self.__observers = list([])
 
     def get_id(self):
@@ -49,6 +52,12 @@ class Task(Thread, Observable, ABC):
 
     def get_results(self):
         return self.__results
+
+    def is_blocking(self, task_keys):
+        for key in task_keys:
+            if self.__blocking_data[key]:
+                return True
+        return False
 
     def set_error_data(self, code, description):
         self.__error = {'active': True, 'code': code, 'description': description}
