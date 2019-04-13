@@ -1,5 +1,5 @@
 # @Classes
-from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
+from nlp_model_gen.packages.applicationModule.ApplicationModuleController import ApplicationModuleController
 from ..task.Task import Task
 
 class TextAnalysisTask(Task):
@@ -35,8 +35,8 @@ class TextAnalysisTask(Task):
         """
         Método hook para completar el template de inicializadion en el padre.
         """
-        admin = AdminModuleController()
-        results = admin.analyse_text(self.__model_id, self.__text, self.__only_positives)
+        application_module = ApplicationModuleController()
+        results = application_module.analyse_text(self.__model_id, self.__text, self.__only_positives)
         if results is not None:
             self.set_results(results)
         else:

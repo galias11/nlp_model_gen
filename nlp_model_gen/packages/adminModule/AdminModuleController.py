@@ -32,6 +32,9 @@ class AdminModuleController(metaclass=Singleton):
         self.__init_success = False
         self.__initialize()
 
+    def is_ready(self):
+        return self.__init_success
+
     def __initialize(self, is_retry=False):
         """
         Inicializa el modulo. Si la inicialización es exitosa, setea el atributo ready a True.
