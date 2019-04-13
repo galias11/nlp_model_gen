@@ -1,11 +1,35 @@
 # @Classes
+from nlp_model_gen.packages.applicationModule.ApplicationModuleController import ApplicationModuleController
 from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
 from nlp_model_gen.packages.taskManager.TaskManager import TaskManager
 
 class SystemController:
     def __init__(self):
+        self.__admin_module = None
+        self.__application_module = None
+        self.__task_manager = None
+        self.__ready = False
+        self.__init()
+
+    def __init(self):
+        """
+        Inicializa el modulo
+        """
         self.__admin_module = AdminModuleController()
+        if not self.__admin_module.is_ready():
+            return
+        self.__application_module = ApplicationModuleController()
         self.__task_manager = TaskManager()
+        self.__ready = True
+
+    def retry_init(self):
+        """
+        Reintenta la inicialización del módulo
+        """
+        self.__init()
+
+    def is_ready(self):
+        return self.__ready
 
     def generate_model(self, model_id, model_name, description, author, tokenizer_exceptions, max_dist):
         """
@@ -217,6 +241,18 @@ class SystemController:
         """
         pass
 
+    def submit_single_training_example(self, model_id, example):
+        """
+        Registra un único ejemplo de entrenamiento utilizando el módulo de aplicación para ello.
+
+        :model_id: [String] - Id del modelo.
+
+        :example: [Dict] - Ejemplo de entrenamiento a agregar.
+
+        :return: [boolean] - True si el ejemplo fue agregado correctamente, False en caso contrario.
+        """
+        return self.__application_module.submit_training_example(model_id, example)
+
     def analyze_text(self, model_id, text, only_positives=False):
         """
         Analiza un texto utilizando el modelo deseado. El modelo debe existir. Si no se activa el flag
@@ -230,5 +266,31 @@ class SystemController:
         :only_positives: [boolean] - Flag que indica si solo devolver los resultados positivos del 
         análisis con el modelo. Por defecto sera falsa.
 
-        :return: [Dict] - Diccionario con el detalle de los resultados de la operación.
+        :return: [int] - Id de la tarea creada.
         """
+        if not self.is_ready():
+            return None
+        return self.__task_manager.create_text_analysis_task(model_id, text, only_positives)
+
+    def get_task_status(self, task_id):
+        """
+        Devuelve el estado de una tarea particular. La tarea debe existir, de lo contrario se devolverá
+        None.
+
+        :task_id: [int] - Id de la tarea.
+
+        :return: [Dict] - Diccionario que contiene el estado actual de la tarea.
+        """
+        if not self.is_ready():
+            return None
+        return self.__task_manager.get_task_status(task_id)
+
+    def get_available_tagging_entities(self):
+        """
+        Devuelve un listado con las entitades de etiquetado para el NER disponibles en el sistema.
+
+        :return: [List] - Lista con las entidades personalizadas.
+        """
+        if not self.is_ready():
+            return None
+        return self.__application_module.get_available_tagging_entities()

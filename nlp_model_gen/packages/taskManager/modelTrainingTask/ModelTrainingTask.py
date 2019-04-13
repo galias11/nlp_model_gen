@@ -1,26 +1,25 @@
 # @Classes
+from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
 from ..task.Task import Task
 
 class ModelTrainingTask(Task):
-    def __init__(self, model_id, path, examples):
+    def __init__(self, id, model_id):
+        super(ModelTrainingTask, self).__init__(id)
         self.__model_id = model_id
-        self.__path = path
-        self.__examples = examples
 
     def get_model_id(self):
         return self.__model_id
 
-    def get_path(self):
-        return self.__path
-
-    def get_examples(self):
-        return self.__examples
-
-    def init_task_hook(self):
+    def task_init_hook(self):
         """
         Método que se ejecutará en el template del init de la task de la clase padre.
         """
-        pass
+        admin = AdminModuleController()
+        results = admin.apply_approved_examples(self.__model_id)
+        if results:
+            self.set_results(self.get_task_data())
+        else:
+            self.set_error_data('0001', 'Generic error')
 
     def check_model_relation(self, model_id, model_name):
         """
@@ -42,7 +41,5 @@ class ModelTrainingTask(Task):
         :return: [Dict] - Diccionario con los datos de la tarea.
         """
         return {
-            'model_id': self.get_model_id(),
-            'path': self.get_path(),
-            'examples': self.get_examples()
+            'model_id': self.get_model_id()
         }

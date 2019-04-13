@@ -129,20 +129,21 @@ class TaskManager(Observer):
         Logger.log('L-0238')
 
 
-    def create_model_training_task(self, model_id, path, examples):
+    def create_model_training_task(self, model_id):
         """
         Crea y agrega a la cola una nueva tarea de entrenamiento de modelo.
 
-        :model_id: [int] - Id del modelo a utilizar.
-
-        :path: [String] - Ruta en disco del modelo a entrenar.
-
-        :examples: [List] - Set de ejemplos de entrenamiento a aplicar.
+        :model_id: [String] - Id del modelo a utilizar.
 
         :return: [int] - Id. de la tarea creada.
         """
         Logger.log('L-0231')
+        next_task_id = self.__get_next_task_id()
+        new_task = ModelTrainingTask(next_task_id, model_id)
+        is_able_to_init = not self.__check_active_status_for_model(model_id)
+        self.__create_task(new_task, is_able_to_init)
         Logger.log('L-0232')
+        return next_task_id
 
     def create_model_creation_task(self, model_id, model_name, description, author, tokenizer_exceptions, max_dist):
         """

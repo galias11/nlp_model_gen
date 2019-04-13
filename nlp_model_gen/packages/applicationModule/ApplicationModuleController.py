@@ -1,11 +1,12 @@
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
-# @Vendors
+# @Classes
+from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from nlp_model_gen.packages.trainingModule.ModelTrainingController import ModelTrainingController
 
-class ApplicationModuleController:
+class ApplicationModuleController(metaclass=Singleton):
     def __init__(self):
         self.__model_manager = ModelManagerController()
         self.__model_trainer = ModelTrainingController()
