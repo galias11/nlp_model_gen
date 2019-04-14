@@ -15,6 +15,7 @@ from nlp_model_gen.utils.classUtills import Observer
 from .modelCreationTask.ModelCreationTask import ModelCreationTask
 from .modelTrainingTask.ModelTrainingTask import ModelTrainingTask
 from .textAnalysisTask.TextAnalysisTask import TextAnalysisTask
+from .filesAnalysisTask.FilesAnalysisTask import FilesAnalysisTask
 
 class TaskManager(Observer):
     def __init__(self):
@@ -175,7 +176,7 @@ class TaskManager(Observer):
         """
         Crea y agrega a la cola una nueva tarea de análisis de texto.
 
-        :model_id: [int] - Id del modelo a utilizar.
+        :model_id: [String] - Id del modelo a utilizar.
 
         :text: [String] - Texto a analizar.
 
@@ -190,6 +191,26 @@ class TaskManager(Observer):
         is_able_to_init = not self.__check_active_status_for_model(model_id)
         self.__create_task(new_task, is_able_to_init)
         Logger.log('L-0234')
+        return next_task_id
+
+    def create_files_analysis_task(self, model_id, files, only_positives):
+        """
+        Crea y agrega a la cola una nueva tarea de análisis de mútilples archivos de texto.
+
+        :model_id: [String] - Id del modelo a utilizar para el análisis.
+
+        :files: [List(files)] - Lista con los archivos a analizar, los mismos deben estar abiertos
+        previamente.
+
+        :only_positives: [boolean] - Indica si deben almacenarse los resultados positivos
+        solamente.
+
+        :return: [int] - Id. de la tarea creada.
+        """
+        next_task_id = self.__get_next_task_id()
+        new_task = FilesAnalysisTask(next_task_id, model_id, files, only_positives)
+        is_able_to_init = not self.__check_active_status_for_model(model_id)
+        self.__create_task(new_task, is_able_to_init)
         return next_task_id
 
     def get_task_status(self, task_id):
