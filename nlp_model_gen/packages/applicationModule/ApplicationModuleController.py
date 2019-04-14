@@ -5,6 +5,7 @@ from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from nlp_model_gen.packages.trainingModule.ModelTrainingController import ModelTrainingController
+from .dataSanitizer.DataSanitizer import DataSanitizer
 
 class ApplicationModuleController(metaclass=Singleton):
     def __init__(self):
@@ -26,7 +27,8 @@ class ApplicationModuleController(metaclass=Singleton):
         if not self.__model_manager.is_ready():
             Logger.log('L-0356')
             return None
-        return self.__model_manager.analyze_text(model_id, text, only_positives)
+        sanitized_text = DataSanitizer.sanitize_text_for_analysis(text)
+        return self.__model_manager.analyze_text(model_id, sanitized_text, only_positives)
 
     def submit_training_example(self, model_id, example):
         """
