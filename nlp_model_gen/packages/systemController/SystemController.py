@@ -400,3 +400,22 @@ class SystemController:
             return self.__build_response_object(False)
         tagging_entities = self.__application_module.get_available_tagging_entities()
         return self.__build_response_object(True, {'custom_entities': tagging_entities})
+
+    def analyze_files(self, model_id, files, only_positives):
+        """
+        Analiza un conjunto de archivos (ya abiertos) de manera similar a como analizaría un
+        único texto.
+
+        :model_id: [String] - Id del modelo a utilizar para el analisis.
+
+        :files: [List(File)] - Lista de archivos a analizar.
+
+        :only_positives: [boolean] - Indica si solo deben informarse los resultados positivos.
+
+        :return: [Dict] - Diccionario con los resultados de la operación.
+        """
+        if not self.is_ready():
+            return self.__build_response_object(False)
+        task_id = self.__task_manager.create_files_analysis_task(model_id, files, only_positives)
+        return self.__build_response_object(True, {'task_id': task_id})
+        

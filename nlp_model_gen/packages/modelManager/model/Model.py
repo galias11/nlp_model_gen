@@ -68,6 +68,8 @@ class Model:
         Setea al modelo como cargado.
         """
         Logger.log('L-0056')
+        if self.is_loaded():
+            return
         model_reference = ModelLoader.load_model(self.__path)
         if model_reference is not None:
             Logger.log('L-0057')
