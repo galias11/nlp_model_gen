@@ -41,7 +41,6 @@ class FilesAnalysisTask(Task, Observer):
     def __build_results(self):
         results = list([])
         for task in self.__analysis_tasks:
-            print('pinzajos')
             task_status = {'file': task['file'], 'status': task['task'].get_results()}
             results.append(task_status)
         return results

@@ -104,7 +104,7 @@ class Model:
         token_analyzer = Analyzer(self.__analyzer_rules_set)
         for sent in doc.sents:
             for token in sent:
-                generated_token = Token(token.lemma_, token.is_oov, token.pos_, token.sent, token.sentiment, token.tag_, sent.text)
+                generated_token = Token(token.lemma_, token.is_oov, token.pos_, token.sent, token.sentiment, token.tag_, token.text)
                 token_analyzer.analyze_token(generated_token)
                 if not only_positives or generated_token.is_positive():
                     results.append(generated_token)
