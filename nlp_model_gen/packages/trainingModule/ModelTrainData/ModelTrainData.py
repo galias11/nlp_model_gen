@@ -12,6 +12,14 @@ class ModelTrainData:
             example = TrainExample(example_data['id'], example_data['sentence'], example_data['tags'], example_data['type'], example_data['status'])
             self.__training_examples.append(example)
 
+    def get_model_id(self):
+        """
+        Devuelve el id del modelo al que corresponde el set de datos de entrenamiento.
+
+        :return: [String] - Id del modelo.
+        """
+        return self.__model.get_model_id()
+
     def add_training_example(self, example):
         """
         Agrega un ejemplo de entrenamiento al set de ejemplos de entrenamiento para el

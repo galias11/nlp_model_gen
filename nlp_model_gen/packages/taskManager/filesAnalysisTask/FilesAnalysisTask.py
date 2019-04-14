@@ -81,8 +81,7 @@ class FilesAnalysisTask(Task, Observer):
                 analysis_task.add_observer(self)
                 self.__analysis_tasks.append({'file': file.name, 'task': analysis_task})
                 analysis_task.init()
-        except Exception as e:
-            print(e)
+        except:
             self.set_error_data('0001', 'Generic error')
             return
         while not self.__check_task_finalized():

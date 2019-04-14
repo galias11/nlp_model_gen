@@ -167,7 +167,7 @@ class TrainDataManager:
 
         :model_id: [String] - Id del modelo.
         """
-        self.__models = filter((lambda model: model.get_model_id() != model_id), self.__models)
+        self.__models = list(filter((lambda model: model.get_model_id() != model_id), self.__models))
 
     def add_training_examples(self, model_id, examples):
         """
