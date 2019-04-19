@@ -19,6 +19,7 @@ from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from nlp_model_gen.packages.wordProcessor.WordProcessorController import WordProcessorController
 from nlp_model_gen.packages.trainingModule.ModelTrainingController import ModelTrainingController
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
 
@@ -48,14 +49,14 @@ class AdminModuleController(metaclass=Singleton):
         if is_retry:
             self.__word_processor.retry_initialization()
         if not self.__word_processor.is_ready():
-            return # Normalize when error handler is ready.
+            ErrorHandler.raise_error('E-0002')
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
         self.__model_manager = ModelManagerController()
         if not self.__model_manager.is_ready():
-            return # Normalize when error handler is ready.
+            ErrorHandler.raise_error('E-0003')
         self.__train_manager = ModelTrainingController()
         if not self.__train_manager.is_ready():
-            return # Normalize when error handler is ready.
+            ErrorHandler.raise_error('E-0004')
         self.__analyzer_rules_generator = AnalyzerRulesGerator()
         self.__init_success = True
         Logger.log('L-0037')
@@ -83,16 +84,12 @@ class AdminModuleController(metaclass=Singleton):
         :tokenizer_exceptions: [Dict] - Conjunto de excepciones a agregar al tokenizer del nuevo modelo.
         """
         if not self.__init_success:
-            Logger.log('L-0094')
-            return None
+            ErrorHandler.raise_error('E-0005')
         Logger.log('L-0001')
         if self.__model_manager.get_model(model_id):
-            Logger.log('L-0002')
-            return False
+            ErrorHandler.raise_error('E-0006')
         tokenizer_exceptions_path = self.__tokenizer_rules_generator.generate_model_data(tokenizer_exceptions, model_id, max_dist)
         analyzer_rule_set = self.__analyzer_rules_generator.create_analyzer_rule_set(tokenizer_exceptions)
-        if not tokenizer_exceptions_path or analyzer_rule_set is None:
-            return False
         model_creation_success = self.__model_manager.create_model(model_id, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
         Logger.log('L-0034')
         if remove_dir(tokenizer_exceptions_path, True):
