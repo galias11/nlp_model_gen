@@ -90,4 +90,64 @@ ERROR_DATA = {
         'source': {'class': '', 'method': 'copy_file'},
         'log': 'L-0361'
     },
+    'E-0019': {
+        'description': 'Error generico en el controlador de sistema',
+        'source': {'class': 'SystemController', 'method': 'build_response_object'},
+        'log': None
+    },
+    'E-0020': {
+        'description': 'Error al inicializar modulo de procesamiento de palabras',
+        'source': {'class': 'WordProcessorController', 'method': 'initializate_cfg'},
+        'log': 'L-0040'
+    },
+    'E-0021': {
+        'description': 'Error al inicializar modulo de gestión de modelos',
+        'source': {'class': 'ModelManagerController', 'method': 'initialize'},
+        'log': 'L-0053'
+    },
+    'E-0022': {
+        'description': 'Error al inicializar modulo de gestión de modelos desde modulo de entrenamiento',
+        'source': {'class': 'ModelTrainingController', 'method': 'init'},
+        'log': 'L-0244'
+    },
+    'E-0023': {
+        'description': 'Error al incializar modulo de datos de entrenamiento',
+        'source': {'class': 'TrainDataManager', 'method': 'init'},
+        'log': 'L-0256'
+    },
+    'E-0024': {
+        'description': 'Error al inicializar el modulo de etiquetas personalizadas',
+        'source': {'class': 'CustomEntityTagManager', 'method': 'init'},
+        'log': 'L-0263'
+    },
+    'E-0025': {
+        'description': 'Ya existe un modelo con el id deseado',
+        'source': {'class': 'AdminModuleController', 'method': 'generate_model'},
+        'log': None
+    },
+    'E-0026': {
+        'description': 'La semilla de excepciones del tokenizer no es valida',
+        'source': {'class': 'AdminModuleController', 'method': 'generate_model'},
+        'log': None
+    },
+    'E-0027': {
+        'description': 'El directorio temporal requerido para el modelo se encuentra ocupado',
+        'source': {'class': 'TokenizerRulesGenerator', 'method': 'generate_model_data'},
+        'log': None
+    },
+    'E-0028': {
+        'description': 'Error al cargar modelo base de Spacy',
+        'source': {'class': 'ModelLoader', 'method': 'initiate_default_model'},
+        'log': None
+    },
+    'E-0029': {
+        'description': 'El modelo ya existe en la base de datos',
+        'source': {'class': 'ModelDataManager', 'method': 'save_model_data'},
+        'log': 'L-0027'
+    },
+    'E-0030': {
+        'description': 'El directorio donde debe guardarse el modelo ya existe',
+        'source': {'class': 'ModelLoader', 'method': 'save_model'},
+        'log': 'L-0031'
+    }
 }

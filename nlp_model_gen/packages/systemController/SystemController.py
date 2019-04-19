@@ -1,14 +1,13 @@
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Classes
 from nlp_model_gen.packages.applicationModule.ApplicationModuleController import ApplicationModuleController
 from nlp_model_gen.packages.adminModule.AdminModuleController import AdminModuleController
 from nlp_model_gen.packages.taskManager.TaskManager import TaskManager
 
 # @Constants
-from nlp_model_gen.constants.constants import (
-    ERROR_GENERIC,
-    TASK_KEYS_MODEL_UPDATE,
-    TASK_KEYS_WORD_PROCESSOR
-)
+from nlp_model_gen.constants.constants import (TASK_KEYS_MODEL_UPDATE, TASK_KEYS_WORD_PROCESSOR)
 
 class SystemController:
     def __init__(self):
@@ -22,14 +21,16 @@ class SystemController:
         """
         Inicializa el modulo
         """
-        self.__admin_module = AdminModuleController()
-        if not self.__admin_module.is_ready():
-            return
-        self.__application_module = ApplicationModuleController()
-        self.__task_manager = TaskManager()
-        self.__ready = True
+        try:
+            self.__admin_module = AdminModuleController()
+            self.__application_module = ApplicationModuleController()
+            self.__task_manager = TaskManager()
+            self.__ready = True
+        except Exception as e:
+            print(e) # TODO: Remove this
+            self.__ready = False
 
-    def __build_response_object(self, operation_success, payload=None):
+    def __build_response_object(self, operation_success, payload=None, error=None):
         """
         Construye el diccionario de respuesta para las solicitudes al controlador.
 
@@ -39,7 +40,13 @@ class SystemController:
         """
         resource = payload
         if not operation_success:
-            resource = ERROR_GENERIC
+            error_data = error
+            if not error_data:
+                error_data = ErrorHandler.get_error('E-0019', [])
+            return {
+                'success': False,
+                'error_data': error_data
+            }
         return {
             'success': operation_success,
             'resource': resource

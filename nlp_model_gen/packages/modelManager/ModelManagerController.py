@@ -1,6 +1,12 @@
 # @Utils
 from nlp_model_gen.utils.fileUtils import get_files_in_dir, load_json_file
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Contants
 from nlp_model_gen.constants.constants import TOKEN_RULES_GEN_RULES_EXT, EVENT_MODEL_CREATED, EVENT_MODEL_DELETED
 
@@ -9,7 +15,6 @@ from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Classes
 from nlp_model_gen.utils.classUtills import ObservableSingleton
-from nlp_model_gen.packages.logger.Logger import Logger
 from .modelDataManager.ModelDataManager import ModelDataManager
 from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
@@ -34,8 +39,8 @@ class ModelManagerController(ObservableSingleton):
             Logger.log('L-0052')
             self.__init_success = True
         except Exception as e:
-            Logger.log('L-0053', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
+            ErrorHandler.raise_error('E-0021', [{'text': e, 'color': ERROR_COLOR}])
 
     def is_ready(self):
         return self.__init_success
@@ -117,19 +122,7 @@ class ModelManagerController(ObservableSingleton):
         if not selected_model.is_loaded():
             Logger.log('L-0058')
             return None
-        return selected_model.analyse_text(text, only_positives)    
-
-    def train_model(self, model_id, training_data):
-        """
-        Aplica un set de datos de entrenamiento al modelo solicitado.
-
-        :model_id: [String] - Nombre del modelo a entrenar.
-
-        :training_data: [List(Dict)] - Set de datos de entrenamiento.
-
-        :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
-        """
-        pass
+        return selected_model.analyse_text(text, only_positives)
 
     def __apply_tokenizer_exceptions(self, model, tokenizer_exceptions_path):
         """
@@ -165,28 +158,18 @@ class ModelManagerController(ObservableSingleton):
         :tokenizer_exceptions_path: [List(Dict)] - Lista de excepciones del modulo tokenizer del modelo.
 
         :analyzer_rule_set: [List(Dict)] - Lista de reglas para el analizador.
-
-        :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
         """
-        if self.get_model(model_id) is not None:
-            Logger.log('L-0019')
-            return False
-        try:
-            Logger.log('L-0021')
-            custom_model = self.__initialize_custom_model()
-            new_model = Model(model_id, model_name, description, author, model_id, analyzer_rule_set)
-            new_model.set_reference(custom_model)
-            Logger.log('L-0022')
-            self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
-            ModelDataManager.save_model_data(model_id, model_name, description, author, model_id, analyzer_rule_set)
-            ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path)
-            self.__models.append(new_model)
-            Logger.log('L-0025')
-            self.notify({'event': EVENT_MODEL_CREATED, 'payload': new_model})
-            return True
-        except Exception as e:
-            Logger.log('L-0020', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0021')
+        custom_model = self.__initialize_custom_model()
+        new_model = Model(model_id, model_name, description, author, model_id, analyzer_rule_set)
+        new_model.set_reference(custom_model)
+        Logger.log('L-0022')
+        self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
+        ModelDataManager.save_model_data(model_id, model_name, description, author, model_id, analyzer_rule_set)
+        ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path)
+        self.__models.append(new_model)
+        Logger.log('L-0025')
+        self.notify({'event': EVENT_MODEL_CREATED, 'payload': new_model})
 
     def edit_model(self, model_id, model_name, description):
         """

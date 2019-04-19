@@ -2,6 +2,9 @@
 from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constants
 from nlp_model_gen.constants.constants import CUSTOM_ENTITY_MANAGER_COLLECTION, TRAIN_MANAGER_DB
 
@@ -37,8 +40,8 @@ class CustomEntityTagManager:
             self.__init_susccess = True
             Logger.log('L-0262')
         except Exception as e:
-            Logger.log('L-0263', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_susccess = False
+            ErrorHandler.raise_error('E-0024', [{'text': e, 'color': ERROR_COLOR}])
 
     def __check_entity_existence(self, name):
         """

@@ -39,20 +39,14 @@ class ModelTrainingController(ObserverSingleton):
         Inicializa el módulo.
         """
         Logger.log('L-0243')
+        self.__init_success = False
         self.__model_trainer = ModelTrainerManager()
         self.__model_manager = ModelManagerController()
         self.__model_manager.add_observer(self)
-        if not self.__model_manager.is_ready():
-            Logger.log('L-0244')
-            self.__init_success = False
-            return
         available_models = self.__model_manager.get_available_models()
         self.__train_data_manager = TrainDataManager(available_models)
-        if self.__train_data_manager.is_ready() and self.__model_manager.is_ready():
-            Logger.log('L-0245')
-            self.__init_success = True
-            return
-        Logger.log('L-0246')
+        Logger.log('L-0245')
+        self.__init_success = True
 
     def __add_model(self, model):
         """

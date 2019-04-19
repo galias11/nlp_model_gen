@@ -23,6 +23,9 @@ from nlp_model_gen.constants.constants import (
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Logger colors
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
@@ -90,8 +93,8 @@ class WordProcessorController(metaclass=Singleton):
             Logger.log('L-0039')
             self.__init_success = True
         except Exception as e:
-            Logger.log('L-0040', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
+            ErrorHandler.raise_error('E-0020', [{'text': e, 'color': ERROR_COLOR}])
 
     def __initialize_controller(self):
         """

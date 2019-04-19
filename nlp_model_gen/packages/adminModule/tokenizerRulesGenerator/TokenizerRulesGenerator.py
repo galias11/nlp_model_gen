@@ -10,8 +10,11 @@ from nlp_model_gen.constants.constants import (
     TOKEN_RULES_GEN_RULES_EXT
 )
 
-# @Log
-from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR
+# @Logger
+from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
+
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
 # @Classes
 from nlp_model_gen.packages.logger.Logger import Logger
@@ -104,19 +107,15 @@ class TokenizerRulesGenerator:
         """
         base_path = build_path(TOKEN_RULES_GEN_TMP_ROOT_PATH, path)
         if check_dir_existence(base_path):
-            return False
-        try:
-            Logger.log('L-0003')
-            create_dir_if_not_exist(base_path)
-            self.__save_model_seed(model_seed, base_path)
-            nouns_path = build_path(base_path, TOKEN_RULES_GEN_TYPE_NOUN)
-            create_dir_if_not_exist(nouns_path)
-            verbs_path = build_path(base_path, TOKEN_RULES_GEN_TYPE_VERB)
-            create_dir_if_not_exist(verbs_path)
-            self.__generate_noun_rules(model_seed['nouns'], max_dist, nouns_path)
-            self.__generate_verb_rules(model_seed['verbs'], max_dist, verbs_path)
-            Logger.log('L-0004')
-            return get_absoulute_path(base_path)
-        except Exception as e:
-            Logger.log('L-0005', [ {'text': e, 'color': ERROR_COLOR}])
-            return False
+            ErrorHandler.raise_error('E-0027')
+        Logger.log('L-0003')
+        create_dir_if_not_exist(base_path)
+        self.__save_model_seed(model_seed, base_path)
+        nouns_path = build_path(base_path, TOKEN_RULES_GEN_TYPE_NOUN)
+        create_dir_if_not_exist(nouns_path)
+        verbs_path = build_path(base_path, TOKEN_RULES_GEN_TYPE_VERB)
+        create_dir_if_not_exist(verbs_path)
+        self.__generate_noun_rules(model_seed['nouns'], max_dist, nouns_path)
+        self.__generate_verb_rules(model_seed['verbs'], max_dist, verbs_path)
+        Logger.log('L-0004')
+        return get_absoulute_path(base_path)

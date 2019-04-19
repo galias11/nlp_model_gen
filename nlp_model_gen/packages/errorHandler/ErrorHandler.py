@@ -1,8 +1,12 @@
 # @Vendors
 from ast import literal_eval
+import datetime
 
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
+
+# @Constants
+from nlp_model_gen.constants.constants import STD_TIME_OUTPUT
 
 # @Assets
 from .assets.errors import ERROR_DATA, GENERIC_ERROR
@@ -10,6 +14,16 @@ from .assets.errors import ERROR_DATA, GENERIC_ERROR
 class ErrorHandler:
     def __init__(self):
         pass
+
+    @staticmethod
+    def get_timestamp():
+        """
+        Devuelve una cadena con la fecha y hora actual.
+
+        :return: [String] - Cadena de caracteres con la fecha y hora actual
+        """ 
+        current_date = datetime.datetime.now()
+        return current_date.strftime(STD_TIME_OUTPUT)
 
     @staticmethod
     def get_error_dict(exception):
@@ -47,18 +61,22 @@ class ErrorHandler:
 
         :return: [Dict] - Diccionario con la información del error.
         """
+        
+
         if code in ERROR_DATA.keys():
             error_data = ERROR_DATA[code]
             ErrorHandler.log_error(error_data, log_data)
             return {
                 'code': code, 
                 'description': error_data['description'],
-                'source': error_data['source']
+                'source': error_data['source'],
+                'timestamp': ErrorHandler.get_timestamp()
             }
         return {
             'code': GENERIC_ERROR['error_code'], 
             'description': GENERIC_ERROR['description'],
-            'source': GENERIC_ERROR['source']
+            'source': GENERIC_ERROR['source'],
+            'timestamp': ErrorHandler.get_timestamp()
         }
 
     @staticmethod

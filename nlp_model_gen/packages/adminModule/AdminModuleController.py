@@ -4,6 +4,9 @@ from nlp_model_gen.utils.fileUtils import remove_dir
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constants
 from nlp_model_gen.constants.constants import (
     TRAIN_EXAMPLE_STATUS_APPROVED,
@@ -19,9 +22,11 @@ from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from nlp_model_gen.packages.wordProcessor.WordProcessorController import WordProcessorController
 from nlp_model_gen.packages.trainingModule.ModelTrainingController import ModelTrainingController
-from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
+
+# @Validations
+from .packageUtils.validations import validate_model_seed
 
 class AdminModuleController(metaclass=Singleton):
     def __init__(self):
@@ -48,15 +53,9 @@ class AdminModuleController(metaclass=Singleton):
         self.__word_processor = WordProcessorController()
         if is_retry:
             self.__word_processor.retry_initialization()
-        if not self.__word_processor.is_ready():
-            ErrorHandler.raise_error('E-0002')
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
         self.__model_manager = ModelManagerController()
-        if not self.__model_manager.is_ready():
-            ErrorHandler.raise_error('E-0003')
         self.__train_manager = ModelTrainingController()
-        if not self.__train_manager.is_ready():
-            ErrorHandler.raise_error('E-0004')
         self.__analyzer_rules_generator = AnalyzerRulesGerator()
         self.__init_success = True
         Logger.log('L-0037')
@@ -83,18 +82,17 @@ class AdminModuleController(metaclass=Singleton):
 
         :tokenizer_exceptions: [Dict] - Conjunto de excepciones a agregar al tokenizer del nuevo modelo.
         """
-        if not self.__init_success:
-            ErrorHandler.raise_error('E-0005')
         Logger.log('L-0001')
         if self.__model_manager.get_model(model_id):
-            ErrorHandler.raise_error('E-0006')
+            ErrorHandler.raise_error('E-0025')
+        if not validate_model_seed(tokenizer_exceptions):
+            ErrorHandler.raise_error('E-0026')
         tokenizer_exceptions_path = self.__tokenizer_rules_generator.generate_model_data(tokenizer_exceptions, model_id, max_dist)
         analyzer_rule_set = self.__analyzer_rules_generator.create_analyzer_rule_set(tokenizer_exceptions)
-        model_creation_success = self.__model_manager.create_model(model_id, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
+        self.__model_manager.create_model(model_id, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
         Logger.log('L-0034')
         if remove_dir(tokenizer_exceptions_path, True):
             Logger.log('L-0035')
-        return model_creation_success
 
     def get_available_models(self):
         """

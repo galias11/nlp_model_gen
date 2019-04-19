@@ -1,11 +1,14 @@
 # @Vendors
-import spacy
 import random
+import spacy
 from spacy.util import minibatch, compounding
 
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR, SUCCESS_COLOR
+
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
 # @Utils
 from nlp_model_gen.utils.fileUtils import (
@@ -61,8 +64,11 @@ class ModelLoader:
     
         :return: [SpacyModelRef] - Referencia al modelo de spacy
         """
-        default_nlp_model = spacy.load(MODEL_MANAGER_DEFAULT_BASE_MODEL)
-        return default_nlp_model
+        try:
+            default_nlp_model = spacy.load(MODEL_MANAGER_DEFAULT_BASE_MODEL)
+            return default_nlp_model
+        except:
+            ErrorHandler.raise_error('E-0028')
 
     @staticmethod
     def save_model(model, path, tmp_files_path):
@@ -77,24 +83,18 @@ class ModelLoader:
 
         :return: [boolean] - True si el modelo fue cargado correctamente, False en caso contrario.
         """
-        try:
-            Logger.log('L-0030')
-            base_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
-            if check_dir_existence(base_path):
-                Logger.log('L-0031')
-                return False
-            model_storage_path = get_absoulute_path(base_path)
-            model.to_disk(model_storage_path)
-            custom_model_files_path = build_path(base_path, MODEL_MANAGER_CUSTOM_FILES_DIR)
-            create_dir_if_not_exist(custom_model_files_path)
-            model_seed_path = build_path(tmp_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME)
-            model_seed_copy_path = build_path(custom_model_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME, add_absolute_root=True)
-            copy_file(model_seed_path, model_seed_copy_path, is_absolute_path=True)
-            Logger.log('L-0032')
-            return True
-        except Exception as e:
-            Logger.log('L-0033', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0030')
+        base_path = build_path(MODEL_MANAGER_ROOT_DIR, path)
+        if check_dir_existence(base_path):
+            ErrorHandler.raise_error('E-0030')
+        model_storage_path = get_absoulute_path(base_path)
+        model.to_disk(model_storage_path)
+        custom_model_files_path = build_path(base_path, MODEL_MANAGER_CUSTOM_FILES_DIR)
+        create_dir_if_not_exist(custom_model_files_path)
+        model_seed_path = build_path(tmp_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME)
+        model_seed_copy_path = build_path(custom_model_files_path, TOKEN_RULES_GEN_MODEL_SEED_FILENAME, add_absolute_root=True)
+        copy_file(model_seed_path, model_seed_copy_path, is_absolute_path=True)
+        Logger.log('L-0032')
 
     @staticmethod
     def delete_model_files(path):

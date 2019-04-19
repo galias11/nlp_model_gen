@@ -14,6 +14,9 @@ from nlp_model_gen.constants.constants import (
 from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Utils
 from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id, db_update_item, db_update_many
 from nlp_model_gen.packages.trainingModule.packageUtils.validations import validate_data
@@ -95,8 +98,8 @@ class TrainDataManager:
                 return
             Logger.log('L-0255')
         except Exception as e:
-            Logger.log('L-0256', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
+            ErrorHandler.raise_error('E-0023', [{'text': e, 'color': ERROR_COLOR}])
 
     def __validate_examples(self, examples):
         """

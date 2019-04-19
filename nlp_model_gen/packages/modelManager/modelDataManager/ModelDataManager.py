@@ -1,6 +1,9 @@
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constatns
 from nlp_model_gen.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
 
@@ -66,25 +69,19 @@ class ModelDataManager:
 
         :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
-        try:
-            Logger.log('L-0026')
-            if ModelDataManager.check_existing_model(model_id):
-                Logger.log('L-0027')
-                return False
-            data_dict = {
-                'model_id': model_id,
-                'model_name': model_name,
-                'description': description,
-                'author': author,
-                'path': path,
-                'analyzer_rules_set': analyser_rules_set
-            }
-            db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
-            Logger.log('L-0029')
-            return True
-        except Exception as e:
-            Logger.log('L-0028', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0026')
+        if ModelDataManager.check_existing_model(model_id):
+            ErrorHandler.raise_error('E-0029')
+        data_dict = {
+            'model_id': model_id,
+            'model_name': model_name,
+            'description': description,
+            'author': author,
+            'path': path,
+            'analyzer_rules_set': analyser_rules_set
+        }
+        db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
+        Logger.log('L-0029')
 
     @staticmethod
     def modify_model_data(model_id, model_name, description):
