@@ -5,10 +5,7 @@ from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
 # @Constatns
-from nlp_model_gen.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
-
-# @Log colors
-from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
+from nlp_model_gen.constants.constants import (MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION)
 
 # @Helpers
 from nlp_model_gen.utils.dbUtils import ( 
@@ -93,20 +90,15 @@ class ModelDataManager:
         :model_name: [String] - Nuevo nombre del modelo.
 
         :description: [String] - Nueva descripción del modelo.
-
-        :return: [boolean] - True si se ha guardado la modificación con exito, False en caso contrario.
         """
-        try:
-            Logger.log('L-0080')
-            updated_data = {
-                'model_name': model_name,
-                'description': description
-            }
-            update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}, updated_data).modified_count
-            return True if update_count > 0 else False
-        except Exception as e:
-            Logger.log('L-0079', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0080')
+        updated_data = {
+            'model_name': model_name,
+            'description': description
+        }
+        update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}, updated_data).modified_count
+        if update_count <= 0:
+            ErrorHandler.raise_error('E-0076')
 
     @staticmethod
     def remove_model_data(model_id):

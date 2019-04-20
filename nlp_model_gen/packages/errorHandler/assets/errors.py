@@ -360,4 +360,24 @@ ERROR_DATA = {
         'source': {'class': 'ModelDataManager', 'method': 'remove_model_data'},
         'log': 'L-0068'
     },
+    'E-0073': {
+        'description': 'El controlador del sistema no se ha inicializado correctamente',
+        'source': {'class': 'SystemController', 'method': '-'},
+        'log': None
+    },
+    'E-0074': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'AdminModuleController', 'method': 'edit_model_data'},
+        'log': 'L-0075'
+    },
+    'E-0075': {
+        'description': 'Los datos a actualizar son los mismos que los actuales',
+        'source': {'class': 'AdminModuleController', 'method': 'edit_model_data'},
+        'log': 'L-0076'
+    },
+    'E-0076': {
+        'description': 'Los datos del modelo no han podido ser actualizados en la base de datos',
+        'source': {'class': 'ModelDataManager', 'method': 'modify_model_data'},
+        'log': None
+    }
 }

@@ -180,20 +180,12 @@ class ModelManagerController(ObservableSingleton):
         :model_name: [String] - Nuevo nombre para el modelo.
 
         :description: [String] - Nueva descripción para el modelo.
-
-        :return: [boolean] - True si la modificación se ha realizado correctamente, False en caso contrario.
         """
         selected_model = self.get_model(model_id)
-        if selected_model is None:
-            Logger.log('L-0077')
-            return False
-        if not ModelDataManager.modify_model_data(model_id, model_name, description):
-            Logger.log('L-0078')
-            return False
+        ModelDataManager.modify_model_data(model_id, model_name, description)
         selected_model.set_model_name(model_name)
         selected_model.set_description(description)
         Logger.log('L-0082')
-        return True
 
     def remove_model(self, model_id):
         """

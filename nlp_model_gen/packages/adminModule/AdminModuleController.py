@@ -129,17 +129,11 @@ class AdminModuleController(metaclass=Singleton):
         :new_model_name: [String] - Nuevo nombre a asignar al modelo.
 
         :new_description: [String] - Nueva descripción para el modelo.
-
-        :return: [bool] - True si la edición se realizó correctamente, False en caso contrario.
         """
-        if not self.__init_success:
-            Logger.log('L-0097')
-            return None
         Logger.log('L-0074')
         current_model = self.__model_manager.get_model(model_id)
         if current_model is None:
-            Logger.log('L-0075')
-            return False
+            ErrorHandler.raise_error('E-0074')
         current_model_name = current_model.get_model_name()
         edited_model_name = new_model_name
         current_description = current_model.get_description()
@@ -149,9 +143,8 @@ class AdminModuleController(metaclass=Singleton):
         if new_description is None or new_description == '':
             edited_description = current_description
         if edited_model_name == current_model_name and edited_description == current_description:
-            Logger.log('L-0076')
-            return False
-        return self.__model_manager.edit_model(model_id, edited_model_name, edited_description)
+            ErrorHandler.raise_error('E-0075')
+        self.__model_manager.edit_model(model_id, edited_model_name, edited_description)
 
     def delete_model_data(self, model_id):
         """

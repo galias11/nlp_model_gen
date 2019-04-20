@@ -293,9 +293,12 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
-        results = self.__admin_module.edit_model_data(model_id, new_model_name, new_description)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
+        try:
+            self.__admin_module.edit_model_data(model_id, new_model_name, new_description)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def get_available_models(self):
         """

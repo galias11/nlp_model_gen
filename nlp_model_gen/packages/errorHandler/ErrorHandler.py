@@ -46,8 +46,7 @@ class ErrorHandler:
         :log_data: [List] - Datos adicionales de log
         """
         log_code = error_data['log']
-        if log_data:
-            Logger.log(log_code, log_data)
+        Logger.log(log_code, log_data)
 
     @staticmethod
     def get_error(code, log_data):
