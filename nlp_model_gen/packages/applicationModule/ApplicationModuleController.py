@@ -39,11 +39,8 @@ class ApplicationModuleController(metaclass=Singleton):
 
         :example: [Dict] - Ejemplo de enetranamiento, se trata de un diccionario con dos partes:
         una oración y un arreglo que contiene entidades y su posición en la oración.
-
-        :return: [boolean] - True si el ejemplo fue agregado exitosamente, False en caso 
-        contrario.
         """
-        return self.__model_trainer.add_training_examples(model_id, [example])
+        self.__model_trainer.add_training_examples(model_id, [example])
 
     def get_available_tagging_entities(self):
         """

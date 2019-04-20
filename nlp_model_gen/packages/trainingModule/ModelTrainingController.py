@@ -177,23 +177,13 @@ class ModelTrainingController(ObserverSingleton):
         :model_id: [String] - Id del modelo al cual se aplicará el ejemplo.
 
         :examples_list: [List(Dict)] - Listado de ejemplos de entrenamiento.
-
-        :return: [boolean] - True si el listado pudo ser agregado exitosamente, False en caso
-        contrario.
         """
         Logger.log('L-0292')
-        if not self.is_ready():
-            Logger.log('L-0293')
-            return False
         model = self.__model_manager.get_model(model_id)
         if model is None:
-            Logger.log('L-0294')
-            return False
-        if self.__train_data_manager.add_training_examples(model_id, examples_list):
-            Logger.log('L-0295')
-            return True
-        Logger.log('L-0296')
-        return False
+            ErrorHandler.raise_error('E-0084')
+        self.__train_data_manager.add_training_examples(model_id, examples_list)
+        Logger.log('L-0295')
 
     def approve_traning_examples(self, examples_id_list):
         """

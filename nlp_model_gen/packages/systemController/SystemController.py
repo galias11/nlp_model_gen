@@ -354,9 +354,12 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
-        results = self.__admin_module.submit_training_examples(model_id, examples)
-        return self.__build_response_object(True, {'results': results})
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
+        try:
+            self.__admin_module.submit_training_examples(model_id, examples)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def submit_single_training_example(self, model_id, example):
         """
@@ -369,9 +372,12 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
-        results = self.__application_module.submit_training_example(model_id, example)
-        return self.__build_response_object(True, {'results': results})
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
+        try:
+            self.__application_module.submit_training_example(model_id, example)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def apply_approved_training_examples(self, model_id):
         """

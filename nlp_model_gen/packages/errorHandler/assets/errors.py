@@ -415,4 +415,24 @@ ERROR_DATA = {
         'source': {'class': 'TrainDataManager', 'method': 'get_approved_examples'},
         'log': None
     },
+    'E-0084': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'ModelTrainingController', 'method': 'add_training_examples'},
+        'log': 'L-0294'
+    },
+    'E-0085': {
+        'description': 'No se ha encontrado el administrador de datos de entrenamiento para el modelo',
+        'source': {'class': 'TrainDataManager', 'method': 'add_training_examples'},
+        'log': 'L-0298'
+    },
+    'E-0086': {
+        'description': 'La estructura de alguno de los ejemplos no es válida',
+        'source': {'class': 'TrainDataManager', 'method': 'create_new_example_data'},
+        'log': None
+    },
+    'E-0087': {
+        'description': 'Alguna de las etiquetas personalizadas no existe',
+        'source': {'class': 'TrainDataManager', 'method': 'validate_examples'},
+        'log': None
+    }
 }
