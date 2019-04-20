@@ -266,7 +266,7 @@ class TrainDataManager:
         """
         model_train_data = self.__find_model(model_id)
         if not model_train_data:
-            return None
+            ErrorHandler.raise_error('E-0083')
         return model_train_data.get_pending_examples()
 
     def get_approved_examples(self, model_id):
@@ -279,7 +279,7 @@ class TrainDataManager:
         """
         model_train_data = self.__find_model(model_id)
         if not model_train_data:
-            return None
+            ErrorHandler.raise_error('E-0081')
         return model_train_data.get_approved_examples()
 
     def get_examples_history(self, model_id):
@@ -291,23 +291,18 @@ class TrainDataManager:
 
         :return: [List] - Listado de todos los ejemplos para el modelo solicitado.
         """
-        try:
-            if not self.__find_model(model_id):
-                Logger.log('L-0325')
-                return None
-            results = list([])
-            Logger.log('L-0326')
-            examples_data = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'model_id': model_id})
-            Logger.log('L-0327')
-            Logger.log('L-0328')
-            for example_data in examples_data:
-                example = TrainExample(example_data['example_id'], example_data['sentence'], example_data['tags'], example_data['type'], example_data['status'])
-                results.append(example)
-            Logger.log('L-0329')
-            return results
-        except Exception as e:
-            Logger.log('L-0330', [{'text': e, 'color': ERROR_COLOR}])
-            return None
+        if not self.__find_model(model_id):
+            ErrorHandler.raise_error('E-0082')
+        results = list([])
+        Logger.log('L-0326')
+        examples_data = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'model_id': model_id})
+        Logger.log('L-0327')
+        Logger.log('L-0328')
+        for example_data in examples_data:
+            example = TrainExample(example_data['example_id'], example_data['sentence'], example_data['tags'], example_data['type'], example_data['status'])
+            results.append(example)
+        Logger.log('L-0329')
+        return results
 
     def add_custom_entity(self, name, description):
         """

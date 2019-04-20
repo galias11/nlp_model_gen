@@ -85,8 +85,6 @@ class ModelTrainingController(ObserverSingleton):
         """
         results = list([])
         pending_examples = self.__train_data_manager.get_pending_examples(model_id)
-        if pending_examples is None:
-            return None
         for pending_example in pending_examples:
             results.append(pending_example.to_dict())
         return results
@@ -102,8 +100,6 @@ class ModelTrainingController(ObserverSingleton):
         """
         results = list([])
         pending_examples = self.__train_data_manager.get_approved_examples(model_id)
-        if pending_examples is None:
-            return None
         for pending_example in pending_examples:
             results.append(pending_example.to_dict())
         return results
@@ -121,8 +117,6 @@ class ModelTrainingController(ObserverSingleton):
         Logger.log('L-0323')
         results = list([])
         pending_examples = self.__train_data_manager.get_examples_history(model_id)
-        if pending_examples is None:
-            return None
         for pending_example in pending_examples:
             results.append(pending_example.to_dict())
         Logger.log('L-0324')

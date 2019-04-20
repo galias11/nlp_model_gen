@@ -328,7 +328,7 @@ class AdminModuleController(metaclass=Singleton):
             return self.__train_manager.get_training_examples_history(model_id)
         if status == TRAIN_EXAMPLE_STATUS_SUBMITTED:
             return self.__train_manager.get_pending_training_examples(model_id)
-        return None
+        ErrorHandler.raise_error('E-0080')
     
     def approve_training_examples(self, training_examples_list):
         """

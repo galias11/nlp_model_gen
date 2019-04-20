@@ -395,4 +395,24 @@ ERROR_DATA = {
         'source': {'class': 'TrainDataManager', 'method': 'approve_example'},
         'log': 'L-0312'
     },
+    'E-0080': {
+        'description': 'El estado solicitado no existe o no es válido para la solicitud',
+        'source': {'class': 'AdminModuleController', 'method': 'get_submitted_training_examples'},
+        'log': None
+    },
+    'E-0081': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'TrainDataManager', 'method': 'get_approved_examples'},
+        'log': None
+    },
+    'E-0082': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'TrainDataManager', 'method': 'get_approved_examples'},
+        'log': 'L-0325'
+    },
+    'E-0083': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'TrainDataManager', 'method': 'get_approved_examples'},
+        'log': None
+    },
 }

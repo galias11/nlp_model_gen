@@ -335,9 +335,12 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
-        submitted_training_examples = self.__admin_module.get_submitted_training_examples(model_id, status)
-        return self.__build_response_object(True, {'status': status, 'examples': submitted_training_examples})
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
+        try:
+            submitted_training_examples = self.__admin_module.get_submitted_training_examples(model_id, status)
+            return self.__build_response_object(True, {'status': status, 'examples': submitted_training_examples})
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def submit_training_examples(self, model_id, examples):
         """
