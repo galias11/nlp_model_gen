@@ -5,7 +5,7 @@ from spacy.util import minibatch, compounding
 
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
-from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR, SUCCESS_COLOR
+from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR, SUCCESS_COLOR
 
 # @Error handler
 from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
@@ -55,7 +55,7 @@ class ModelLoader:
             nlp_model = spacy.load(full_path)
             return nlp_model
         except:
-            return None
+            ErrorHandler.raise_error('E-0092')
 
     @staticmethod
     def initiate_default_model():
@@ -195,9 +195,6 @@ class ModelLoader:
         :model: [Model] - Modelo sobre el cual aplicar el entrenamiento.
 
         :training_data: [List(Dict)] - Conjunto de datos de entrenamiento.
-
-        :return: [boolean] - True si se ha realizado el entrenamiento correctamente, 
-        False en caso contrario.
         """
         model_ref = model.get_reference()
         model_path = model.get_path()
@@ -205,12 +202,7 @@ class ModelLoader:
         ModelLoader.add_ner_labels(ner, training_data)
         other_pipes = [pipe for pipe in model_ref.pipe_names if pipe != MODEL_NER]
         Logger.log('L-0347')
-        try:
-            with model_ref.disable_pipes(*other_pipes):
-                ModelLoader.apply_training_loop(model_ref, training_data)
-            ModelLoader.update_model_info(model_ref, model_path)
-            Logger.log('L-0348')
-            return True
-        except Exception as e:
-            Logger.log('L-0349', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        with model_ref.disable_pipes(*other_pipes):
+            ModelLoader.apply_training_loop(model_ref, training_data)
+        ModelLoader.update_model_info(model_ref, model_path)
+        Logger.log('L-0348')

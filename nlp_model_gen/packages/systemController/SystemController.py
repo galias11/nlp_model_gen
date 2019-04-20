@@ -50,6 +50,24 @@ class SystemController:
             'success': operation_success,
             'resource': resource
         }
+    
+    def __process_incoming_request(self, action, task_check=None):
+        """
+        Procesa una solicitud entrante al sistema.
+
+        :action: [Function] - Acción a realizar.
+
+        :task_check: [List] - Validaciones a realizar en el administrador de tareas.
+        """
+        if not self.is_ready():
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
+        if task_check:
+            if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
+                return self.__build_response_object(False, error=ErrorHandler.get_error('E-0031', []))
+        try:
+            return action()
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def retry_init(self):
         """
@@ -81,10 +99,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        task_id = self.__task_manager.create_model_creation_task(model_id, model_name, description, author, tokenizer_exceptions, max_dist)
-        return self.__build_response_object(True, {'task_id': task_id})
+        def action():
+            task_id = self.__task_manager.create_model_creation_task(model_id, model_name, description, author, tokenizer_exceptions, max_dist)
+            return self.__build_response_object(True, {'task_id': task_id})
+        return self.__process_incoming_request(action)
 
     def delete_word_processor_theme(self, module_key, theme_name):
         """
@@ -98,15 +116,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0031', []))
-        try:
+        def action():
             self.__admin_module.delete_word_processor_theme(module_key, theme_name)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action, [TASK_KEYS_WORD_PROCESSOR])
 
     def update_theme_conjugator_exceptions(self, theme_name, exception_key, exception_data):
         """
@@ -122,15 +135,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0044', []))
-        try:
+        def action():
             self.__admin_module.update_theme_conjugator_exceptions(theme_name, exception_key, exception_data)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action, [TASK_KEYS_WORD_PROCESSOR])
 
     def update_word_processor_config_theme(self, module_key, theme_name, config_mod, irregular_groups_mod=None):
         """
@@ -150,15 +158,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0045', []))
-        try:
+        def action():
             self.__admin_module.update_word_processor_config_theme(module_key, theme_name, config_mod, irregular_groups_mod)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action, [TASK_KEYS_WORD_PROCESSOR])
 
     def set_word_processor_active_theme(self, module_key, theme_name):
         """
@@ -172,15 +175,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0041', []))
-        try:
+        def action():
             self.__admin_module.set_word_processor_active_theme(module_key, theme_name)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action, [TASK_KEYS_WORD_PROCESSOR])
 
     def get_word_processor_active_themes(self): 
         """
@@ -188,10 +186,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        active_themes = self.__admin_module.get_word_processor_active_themes()
-        return self.__build_response_object(True, {'active_themes': active_themes})
+        def action():
+            active_themes = self.__admin_module.get_word_processor_active_themes()
+            return self.__build_response_object(True, {'active_themes': active_themes})
+        return self.__process_incoming_request(action)
 
     def add_theme_conjugator_exceptions(self, theme_name, exceptions):
         """
@@ -206,15 +204,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0058', []))
-        try:
+        def action():
             self.__admin_module.add_theme_conjugator_exceptions(theme_name, exceptions)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action, [TASK_KEYS_WORD_PROCESSOR])
 
     def add_word_processor_config_theme(self, module_key, theme_name, configs, irregular_groups=None):
         """
@@ -234,15 +227,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0062', []))
-        try:
+        def action():
             self.__admin_module.add_word_processor_config_theme(module_key, theme_name, configs, irregular_groups)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action, [TASK_KEYS_WORD_PROCESSOR])
 
     def get_word_processor_available_configs(self, module_key):
         """
@@ -253,10 +241,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False)
-        available_configs = self.__admin_module.get_word_processor_available_configs(module_key)
-        return self.__build_response_object(True, {'available_configs': available_configs})
+        def action():
+            available_configs = self.__admin_module.get_word_processor_available_configs(module_key)
+            return self.__build_response_object(True, {'available_configs': available_configs})
+        return self.__process_incoming_request(action)
 
     def delete_model(self, model_id):
         """
@@ -267,15 +255,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        if self.__task_manager.check_model_creation_tasks([TASK_KEYS_MODEL_UPDATE]):
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0070', []))
-        try:
+        def action():
             self.__admin_module.delete_model_data(model_id)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action, [TASK_KEYS_MODEL_UPDATE])
 
     def edit_model_data(self, model_id, new_model_name=None, new_description=None):
         """
@@ -292,13 +275,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        try:
+        def action():
             self.__admin_module.edit_model_data(model_id, new_model_name, new_description)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action)
 
     def get_available_models(self):
         """
@@ -306,10 +286,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        available_models = self.__admin_module.get_available_models()
-        return self.__build_response_object(True, available_models)
+        def action():
+            available_models = self.__admin_module.get_available_models()
+            return self.__build_response_object(True, available_models)
+        return self.__process_incoming_request(action)
 
     def approve_training_examples(self, training_examples_list):
         """
@@ -319,10 +299,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        results = self.__admin_module.approve_training_examples(training_examples_list)
-        return self.__build_response_object(True, {'results': results})
+        def action():
+            results = self.__admin_module.approve_training_examples(training_examples_list)
+            return self.__build_response_object(True, {'results': results})
+        return self.__process_incoming_request(action)
 
     def get_submitted_training_examples(self, model_id, status):
         """
@@ -334,13 +314,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        try:
+        def action():
             submitted_training_examples = self.__admin_module.get_submitted_training_examples(model_id, status)
             return self.__build_response_object(True, {'status': status, 'examples': submitted_training_examples})
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action)
 
     def submit_training_examples(self, model_id, examples):
         """
@@ -353,13 +330,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        try:
+        def action():
             self.__admin_module.submit_training_examples(model_id, examples)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action)
 
     def submit_single_training_example(self, model_id, example):
         """
@@ -371,13 +345,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
-        try:
+        def action():
             self.__application_module.submit_training_example(model_id, example)
             return self.__build_response_object(True)
-        except Exception as e:
-            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
+        return self.__process_incoming_request(action)
 
     def apply_approved_training_examples(self, model_id):
         """
@@ -388,10 +359,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False)
-        task_id = self.__task_manager.create_model_training_task(model_id)
-        return self.__build_response_object(True, {'task_id': task_id})
+        def action():
+            task_id = self.__task_manager.create_model_training_task(model_id)
+            return self.__build_response_object(True, {'task_id': task_id})
+        return self.__process_incoming_request(action, [TASK_KEYS_MODEL_UPDATE])
 
     def analyze_text(self, model_id, text, only_positives=False):
         """

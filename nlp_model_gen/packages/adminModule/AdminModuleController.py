@@ -361,10 +361,8 @@ class AdminModuleController(metaclass=Singleton):
         aplicados.
 
         :model_id: [String] - Id del modelo.
-
-        :return: [boolean] - True si la operación ha sido exitosa, False en caso contrario.
         """
-        return self.__train_manager.apply_training_approved_examples(model_id)
+        self.__train_manager.apply_training_approved_examples(model_id)
 
     def get_available_entities(self):
         """

@@ -331,8 +331,6 @@ class TrainDataManager:
         Cambia el estado de un set de ejemplos a aplicado.
 
         :examples_list: [List(TrainExample)] - Lista de ejemplos a los cuales cambiar el estado.
-
-        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
         """
         examples_id_list = list([example.get_example_id() for example in examples_list])
         updated_count = db_update_many(
@@ -343,6 +341,5 @@ class TrainDataManager:
         ).matched_count
         for example in examples_list:
             example.apply()
-        if len(examples_list) == updated_count:
-            return True
-        return False
+        if not len(examples_list) == updated_count:
+            ErrorHandler.raise_error('E-0093')

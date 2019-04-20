@@ -151,8 +151,8 @@ ERROR_DATA = {
         'log': 'L-0031'
     },
     'E-0031': {
-        'description': 'Hay una tarea de creación de modelos en curso',
-        'source': {'class': 'SystemController', 'method': 'delete_word_processor_theme'},
+        'description': 'La acción se bloqueo por que existe una tarea relacionada pendiente',
+        'source': {'class': 'SystemController', 'method': 'process_incoming_request'},
         'log': None
     },
     'E-0032': {
@@ -362,7 +362,7 @@ ERROR_DATA = {
     },
     'E-0073': {
         'description': 'El controlador del sistema no se ha inicializado correctamente',
-        'source': {'class': 'SystemController', 'method': '-'},
+        'source': {'class': 'SystemController', 'method': 'process_incoming_request'},
         'log': None
     },
     'E-0074': {
@@ -433,6 +433,36 @@ ERROR_DATA = {
     'E-0087': {
         'description': 'Alguna de las etiquetas personalizadas no existe',
         'source': {'class': 'TrainDataManager', 'method': 'validate_examples'},
+        'log': None
+    },
+    'E-0088': {
+        'description': 'El modelo seleccionado no existe',
+        'source': {'class': 'ModelTrainingController', 'method': 'apply_training_approved_examples'},
+        'log': 'L-0332'
+    },
+    'E-0089': {
+        'description': 'El modelo seleccionado no cuenta con ejemplos de entrenamiento aprobados',
+        'source': {'class': 'ModelTrainingController', 'method': 'apply_training_approved_examples'},
+        'log': 'L-0333'
+    },
+    'E-0090': {
+        'description': 'No se pudo encontrar el set de ejemplos del modelo',
+        'source': {'class': 'ModelTrainerManager', 'method': 'train_model'},
+        'log': 'L-0337'
+    },
+    'E-0091': {
+        'description': 'No se han encontrado datos de entrenamiento',
+        'source': {'class': 'Model', 'method': 'train_model'},
+        'log': None
+    },
+    'E-0092': {
+        'description': 'Error al cargar el modelo de Spacy',
+        'source': {'class': 'ModelLoader', 'method': 'load_model'},
+        'log': 'L-0341'
+    },
+    'E-0093': {
+        'description': 'Error al actualizar el estado de los ejemplos en la base de datos',
+        'source': {'class': 'TrainDataManager', 'method': 'set_applied_state'},
         'log': None
     }
 }

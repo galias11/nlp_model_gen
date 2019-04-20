@@ -1,3 +1,6 @@
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constants
 from nlp_model_gen.constants.constants import (
     TASK_KEYS_MODEL_UPDATE,
@@ -20,12 +23,13 @@ class ModelTrainingTask(Task):
         """
         Método que se ejecutará en el template del init de la task de la clase padre.
         """
-        admin = AdminModuleController()
-        results = admin.apply_approved_examples(self.__model_id)
-        if results:
+        try:
+            admin = AdminModuleController()
+            admin.apply_approved_examples(self.__model_id)
             self.set_results(self.get_task_data())
-        else:
-            self.set_error_data('0001', 'Generic error')
+        except Exception as e:
+            error = ErrorHandler.get_error_dict(e)
+            self.set_error_data(error)
 
     def check_model_relation(self, model_id, model_name):
         """
