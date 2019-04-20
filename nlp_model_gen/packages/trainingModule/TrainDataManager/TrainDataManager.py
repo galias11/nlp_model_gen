@@ -208,31 +208,21 @@ class TrainDataManager:
         ejemplo debe existir y no estar ya aprobado o aplicado.
 
         :example_id: [int] - Id del ejemplo de entrenamiento.
-
-        :return: [boolean] - True si el ejemplo fue aprobado, False en caso contrario.
         """
-        try:
-            Logger.log('L-0307', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
-            example = self.__find_example(example_id)
-            if example is None:
-                Logger.log('L-0308')
-                return False
-            if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
-                Logger.log('L-0354')
-                return False
-            example_id = example.get_example_id()
-            Logger.log('L-0309')
-            updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED})        
-            if updated_items.matched_count > 0:
-                Logger.log('L-0310')
-                example.approve()
-                Logger.log('L-0311', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
-                return True
-            Logger.log('L-0312')
-            return False
-        except Exception as e:
-            Logger.log('L-0313', [{'text': example_id, 'color': HIGHLIGHT_COLOR}, {'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0307', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
+        example = self.__find_example(example_id)
+        if example is None:
+            ErrorHandler.raise_error('E-0077')
+        if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
+            ErrorHandler.raise_error('E-0078')
+        example_id = example.get_example_id()
+        Logger.log('L-0309')
+        updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED}).modified_count    
+        if updated_items <= 0:
+            ErrorHandler.raise_error('E-0079')
+        Logger.log('L-0310')
+        example.approve()
+        Logger.log('L-0311', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
 
     def discard_example(self, example_id):
         """

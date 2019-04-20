@@ -5,6 +5,9 @@ from nlp_model_gen.constants.constants import EVENT_MODEL_CREATED, EVENT_MODEL_D
 from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Classes
 from nlp_model_gen.utils.classUtills import ObserverSingleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
@@ -212,7 +215,15 @@ class ModelTrainingController(ObserverSingleton):
         Logger.log('L-0305')
         results = list([])
         for example_id in examples_id_list:
-            results.append({'example_id': example_id, 'status': self.__train_data_manager.approve_example(example_id)})
+            status = False
+            error = None
+            try:
+                self.__train_data_manager.approve_example(example_id)
+                status = True
+            except Exception as e:
+                error = ErrorHandler.get_error_dict(e)
+            finally:
+                results.append({'example_id': example_id, 'status': status, 'error': error})
         Logger.log('L-0306')
         return results
 

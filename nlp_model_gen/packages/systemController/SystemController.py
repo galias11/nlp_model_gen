@@ -307,7 +307,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         available_models = self.__admin_module.get_available_models()
         return self.__build_response_object(True, available_models)
 
@@ -320,7 +320,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         results = self.__admin_module.approve_training_examples(training_examples_list)
         return self.__build_response_object(True, {'results': results})
 

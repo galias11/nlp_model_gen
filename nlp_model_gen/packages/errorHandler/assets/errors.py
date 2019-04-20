@@ -379,5 +379,20 @@ ERROR_DATA = {
         'description': 'Los datos del modelo no han podido ser actualizados en la base de datos',
         'source': {'class': 'ModelDataManager', 'method': 'modify_model_data'},
         'log': None
-    }
+    },
+    'E-0077': {
+        'description': 'No existe ningún ejemplo para el Id indicado',
+        'source': {'class': 'TrainDataManager', 'method': 'approve_example'},
+        'log': 'L-0308'
+    },
+    'E-0078': {
+        'description': 'El ejemplo indicado no se encuentra en estado <submitted>',
+        'source': {'class': 'TrainDataManager', 'method': 'approve_example'},
+        'log': 'L-0354'
+    },
+    'E-0079': {
+        'description': 'No se han podido actualizar los datos del ejemplo en la base de datos',
+        'source': {'class': 'TrainDataManager', 'method': 'approve_example'},
+        'log': 'L-0312'
+    },
 }
