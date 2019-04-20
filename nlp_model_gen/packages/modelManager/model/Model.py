@@ -4,6 +4,9 @@ from nlp_model_gen.utils.objectUtils import transform_dict_key_data_to_int
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Clases
 from ..modelLoader.ModelLoader import ModelLoader
 from ..token.Token import Token
@@ -71,9 +74,8 @@ class Model:
         if self.is_loaded():
             return
         model_reference = ModelLoader.load_model(self.__path)
-        if model_reference is not None:
-            Logger.log('L-0057')
-            self.__loaded = True
+        Logger.log('L-0057')
+        self.__loaded = True
         self.__reference = model_reference
 
     def __get_model_ner(self):
@@ -137,9 +139,6 @@ class Model:
         :return: [Dict()] - Resultados del análisis.
         """
         Logger.log('L-0059')
-        if not self.is_loaded():
-            Logger.log('L-0060')
-            return None
         doc = self.__reference(text)
         Logger.log('L-0061')
         results = {
@@ -168,17 +167,12 @@ class Model:
         Aplica los ejemplos de entrenamiento al entrenamiento del modelo.
 
         :training_data: [List(Dict)] - Lista de ejemplos de entrenamiento.
-
-        :return: [boolean] - True si el entrenamiento fue exitoso, False en caso contrario.
         """
         if training_data is None:
-            return False
+            ErrorHandler.raise_error('E-0091')
         if not self.is_loaded():
             Logger.log('L-0340')
             self.load()
-            if not self.is_loaded():
-                Logger.log('L-0341')
-                return False
             Logger.log('L-0342')
         return ModelLoader.apply_training_data(self, training_data)
 

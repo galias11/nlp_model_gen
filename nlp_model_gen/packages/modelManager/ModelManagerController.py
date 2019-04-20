@@ -1,6 +1,12 @@
 # @Utils
 from nlp_model_gen.utils.fileUtils import get_files_in_dir, load_json_file
 
+# @Logger
+from nlp_model_gen.packages.logger.Logger import Logger
+
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Contants
 from nlp_model_gen.constants.constants import TOKEN_RULES_GEN_RULES_EXT, EVENT_MODEL_CREATED, EVENT_MODEL_DELETED
 
@@ -9,7 +15,6 @@ from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Classes
 from nlp_model_gen.utils.classUtills import ObservableSingleton
-from nlp_model_gen.packages.logger.Logger import Logger
 from .modelDataManager.ModelDataManager import ModelDataManager
 from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
@@ -34,8 +39,8 @@ class ModelManagerController(ObservableSingleton):
             Logger.log('L-0052')
             self.__init_success = True
         except Exception as e:
-            Logger.log('L-0053', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
+            ErrorHandler.raise_error('E-0021', [{'text': e, 'color': ERROR_COLOR}])
 
     def is_ready(self):
         return self.__init_success
@@ -109,27 +114,11 @@ class ModelManagerController(ObservableSingleton):
         """
         Logger.log('L-0054')
         selected_model = self.get_model(model_id)
-        if selected_model is None or text is None:
-            Logger.log('L-0055')
-            return None
+        if selected_model is None:
+            ErrorHandler.raise_error('E-0095')
         if not selected_model.is_loaded():
             selected_model.load()
-        if not selected_model.is_loaded():
-            Logger.log('L-0058')
-            return None
-        return selected_model.analyse_text(text, only_positives)    
-
-    def train_model(self, model_id, training_data):
-        """
-        Aplica un set de datos de entrenamiento al modelo solicitado.
-
-        :model_id: [String] - Nombre del modelo a entrenar.
-
-        :training_data: [List(Dict)] - Set de datos de entrenamiento.
-
-        :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
-        """
-        pass
+        return selected_model.analyse_text(text, only_positives)
 
     def __apply_tokenizer_exceptions(self, model, tokenizer_exceptions_path):
         """
@@ -165,28 +154,18 @@ class ModelManagerController(ObservableSingleton):
         :tokenizer_exceptions_path: [List(Dict)] - Lista de excepciones del modulo tokenizer del modelo.
 
         :analyzer_rule_set: [List(Dict)] - Lista de reglas para el analizador.
-
-        :return: [boolean] - True si el proceso ha sido exitoso, False en caso contrario.
         """
-        if self.get_model(model_id) is not None:
-            Logger.log('L-0019')
-            return False
-        try:
-            Logger.log('L-0021')
-            custom_model = self.__initialize_custom_model()
-            new_model = Model(model_id, model_name, description, author, model_id, analyzer_rule_set)
-            new_model.set_reference(custom_model)
-            Logger.log('L-0022')
-            self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
-            ModelDataManager.save_model_data(model_id, model_name, description, author, model_id, analyzer_rule_set)
-            ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path)
-            self.__models.append(new_model)
-            Logger.log('L-0025')
-            self.notify({'event': EVENT_MODEL_CREATED, 'payload': new_model})
-            return True
-        except Exception as e:
-            Logger.log('L-0020', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0021')
+        custom_model = self.__initialize_custom_model()
+        new_model = Model(model_id, model_name, description, author, model_id, analyzer_rule_set)
+        new_model.set_reference(custom_model)
+        Logger.log('L-0022')
+        self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
+        ModelDataManager.save_model_data(model_id, model_name, description, author, model_id, analyzer_rule_set)
+        ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path)
+        self.__models.append(new_model)
+        Logger.log('L-0025')
+        self.notify({'event': EVENT_MODEL_CREATED, 'payload': new_model})
 
     def edit_model(self, model_id, model_name, description):
         """
@@ -197,20 +176,12 @@ class ModelManagerController(ObservableSingleton):
         :model_name: [String] - Nuevo nombre para el modelo.
 
         :description: [String] - Nueva descripción para el modelo.
-
-        :return: [boolean] - True si la modificación se ha realizado correctamente, False en caso contrario.
         """
         selected_model = self.get_model(model_id)
-        if selected_model is None:
-            Logger.log('L-0077')
-            return False
-        if not ModelDataManager.modify_model_data(model_id, model_name, description):
-            Logger.log('L-0078')
-            return False
+        ModelDataManager.modify_model_data(model_id, model_name, description)
         selected_model.set_model_name(model_name)
         selected_model.set_description(description)
         Logger.log('L-0082')
-        return True
 
     def remove_model(self, model_id):
         """
@@ -224,17 +195,11 @@ class ModelManagerController(ObservableSingleton):
         Logger.log('L-0064')
         selected_model = self.get_model(model_id)
         if selected_model is None:
-            Logger.log('L-0065')
-            return False
-        if not ModelDataManager.remove_model_data(selected_model.get_model_id()):
-            Logger.log('L-0068')
-            return False
+            ErrorHandler.raise_error('E-0071')
+        ModelDataManager.remove_model_data(selected_model.get_model_id())
         Logger.log('L-0069')
-        if not ModelLoader.delete_model_files(selected_model.get_path()):
-            Logger.log('L-0071')
-            return False
+        ModelLoader.delete_model_files(selected_model.get_path())
         Logger.log('L-0072')
         self.__models.remove(selected_model)
         self.notify({'event': EVENT_MODEL_DELETED, 'payload': model_id})
         Logger.log('L-0073')
-        return True

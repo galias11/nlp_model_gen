@@ -1,3 +1,6 @@
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constants
 from nlp_model_gen.constants.constants import (
     TASK_KEYS_MODEL_UPDATE,
@@ -41,12 +44,13 @@ class TextAnalysisTask(Task):
         """
         Método hook para completar el template de inicializadion en el padre.
         """
-        application_module = ApplicationModuleController()
-        results = application_module.analyse_text(self.__model_id, self.__text, self.__only_positives)
-        if results is not None:
+        try:
+            application_module = ApplicationModuleController()
+            results = application_module.analyse_text(self.__model_id, self.__text, self.__only_positives)
             self.set_results(results)
-        else:
-            self.set_error_data('0001', 'Generic error')
+        except Exception as e:
+            error = ErrorHandler.get_error_dict(e)
+            self.set_error_data(error)
 
     def get_task_data(self):
         """

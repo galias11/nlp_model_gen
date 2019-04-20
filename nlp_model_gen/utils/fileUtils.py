@@ -3,8 +3,8 @@ import os
 import json
 import shutil
 
-# @Logger
-from nlp_model_gen.packages.logger.Logger import Logger
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
 # @Logger colors
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
@@ -33,10 +33,13 @@ def load_json_file(path_from_root):
 
     :return: diccionario conteniendo el contenido del archivo json
     """
-    with open(path_from_root) as f:
-        parsedDict = json.loads(f.read())
-    f.close()
-    return parsedDict
+    try:
+        with open(path_from_root) as f:
+            parsedDict = json.loads(f.read())
+        f.close()
+        return parsedDict
+    except Exception as e:
+        ErrorHandler.raise_error('E-0013', [{'text': e, 'color': ERROR_COLOR}])
 
 # @Paths
 paths = load_json_file(get_absoulute_path('/paths.json'))
@@ -49,9 +52,13 @@ def overwrite_json_file(path_from_root, content):
 
     :content: diccionario con el contenido a escribir en el archivo.
     """
-    absolute_path = get_absoulute_path(path_from_root)
-    file = open(absolute_path, 'w')
-    file.write(content)
+    try:
+        absolute_path = get_absoulute_path(path_from_root)
+        file = open(absolute_path, 'w')
+        file.write(content)
+        file.close()
+    except Exception as e:
+        ErrorHandler.raise_error('E-0014', [{'text': e, 'color': ERROR_COLOR}])
 
 def get_path(element):
     """
@@ -120,10 +127,8 @@ def remove_dir(path_from_root, is_absolute_path=False):
             shutil.rmtree(absolute_path)
         else:
             shutil.rmtree(path_from_root)
-        return True
     except Exception as e:
-        Logger.log('L-0083', [{'text': e, 'color': ERROR_COLOR}])
-        return False
+        ErrorHandler.raise_error('E-0015', [{'text': e, 'color': ERROR_COLOR}])
 
 def dictionary_to_disk(path_from_root, dictionary):
     """
@@ -133,10 +138,13 @@ def dictionary_to_disk(path_from_root, dictionary):
 
     :dictionary: diccionario a guardar.
     """
-    absolute_path = get_absoulute_path(path_from_root)
-    arch = open(absolute_path, 'w')
-    arch.write(json.dumps(dictionary))
-    arch.close()
+    try:
+        absolute_path = get_absoulute_path(path_from_root)
+        arch = open(absolute_path, 'w')
+        arch.write(json.dumps(dictionary))
+        arch.close()
+    except Exception as e:
+        ErrorHandler.raise_error('E-0016', [{'text': e, 'color': ERROR_COLOR}])
 
 def create_dir_if_not_exist(path_from_root):
     """
@@ -178,13 +186,16 @@ def get_files_in_dir(absolute_path, extension):
 
     :return: [List(File)] - Lista con los punteros a cada uno de los archivos.
     """
-    files = list([])
-    for file in os.scandir(absolute_path):
-        if os.path.isdir(file):
-            files.extend(get_files_in_dir(file.path, extension))
-        if file.path.endswith(extension):
-            files.append(file.path)
-    return files
+    try:
+        files = list([])
+        for file in os.scandir(absolute_path):
+            if os.path.isdir(file):
+                files.extend(get_files_in_dir(file.path, extension))
+            if file.path.endswith(extension):
+                files.append(file.path)
+        return files
+    except Exception as e:
+        ErrorHandler.raise_error('E-0017', [{'text': e, 'color': ERROR_COLOR}])
 
 def copy_file(source, destination, is_absolute_path=False):
     """
@@ -197,10 +208,22 @@ def copy_file(source, destination, is_absolute_path=False):
 
     :destination: [String] - Ruta a donde copiar el archivo.
     """
-    abs_source_path = source
-    abs_destination_path = destination
-    if not is_absolute_path:
-        abs_source_path = get_absoulute_path(source)
-        abs_destination_path = get_absoulute_path(destination)
-    shutil.copyfile(abs_source_path, abs_destination_path)
-    
+    try:
+        abs_source_path = source
+        abs_destination_path = destination
+        if not is_absolute_path:
+            abs_source_path = get_absoulute_path(source)
+            abs_destination_path = get_absoulute_path(destination)
+        shutil.copyfile(abs_source_path, abs_destination_path)
+    except Exception as e:
+        ErrorHandler.raise_error('E-0018', [{'text': e, 'color': ERROR_COLOR}])
+
+def validate_file(file):
+    """
+    Valida que una variable refiera a una instancia de un archivo.
+
+    :file: [any] - Elemento a validar
+
+    :return: [Boolean] - True si es una instancia de archivo, False en caso contrario
+    """
+    return hasattr(file, 'read')

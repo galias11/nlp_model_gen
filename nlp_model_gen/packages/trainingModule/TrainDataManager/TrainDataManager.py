@@ -6,13 +6,15 @@ from nlp_model_gen.constants.constants import (
     TRAIN_EXAMPLE_STATUS_REJECTED,
     TRAIN_EXAMPLE_STATUS_SUBMITTED,
     TRAIN_MANAGER_DB,
-    TRAIN_MANAGER_SCHEMAS,
-    TRAIN_MANAGER_SCHEMA_VALIDATION_ERROR
+    TRAIN_MANAGER_SCHEMAS
 )
 
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR, HIGHLIGHT_COLOR
+
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
 # @Utils
 from nlp_model_gen.utils.dbUtils import db_get_items, db_insert_items, db_get_autoincremental_id, db_update_item, db_update_many
@@ -95,26 +97,22 @@ class TrainDataManager:
                 return
             Logger.log('L-0255')
         except Exception as e:
-            Logger.log('L-0256', [{'text': e, 'color': ERROR_COLOR}])
             self.__init_success = False
+            ErrorHandler.raise_error('E-0023', [{'text': e, 'color': ERROR_COLOR}])
 
     def __validate_examples(self, examples):
         """
         Valida un ejemplo de entrenamiento.
 
         :example: [List] - Ejemplo de entrenamiento a validar.
-
-        :return: [boolean] - True si el ejemplo es válido. False en caso contrario.
         """
         for example in examples:
+            if not validate_data(TRAIN_MANAGER_SCHEMAS['TRAIN_DATA'], example):
+                ErrorHandler.raise_error('E-0086')
             for tag in example['tags']:
                 tag_entity = tag['entity']
                 if not self.__custom_entity_manager.validate_tag(tag_entity):
-                    return False
-            example_data = {'sentence': example['sentence'], 'tags': example['tags'], 'type': example['type']}
-            if not validate_data(TRAIN_MANAGER_SCHEMAS['TRAIN_DATA'], example_data):
-                return False
-        return True
+                    ErrorHandler.raise_error('E-0087')
 
     def __create_new_example_data(self, examples, model_id):
         """
@@ -129,8 +127,7 @@ class TrainDataManager:
         :return: [List(dict)] - Datos de entrenamiento para insertar en la base de 
         datos.
         """
-        if not self.__validate_examples(examples):
-            raise Exception(TRAIN_MANAGER_SCHEMA_VALIDATION_ERROR)
+        self.__validate_examples(examples)
         examples_data = list([])
         for example in examples:
             examples_data.append({
@@ -176,28 +173,20 @@ class TrainDataManager:
         :model_id: [String] - Id. del modelo al cual se aplicará el ejemplo 
 
         :examples: [List(Dict)] - Datos del ejemplo de entrenamiento.
-
-        :return: [boolean] - True si el ejemplo es válido, False en caso contrario.
         """
         Logger.log('L-0297')
-        try:
-            model_train_data = self.__find_model(model_id)
-            if model_train_data is None:
-                Logger.log('L-0298')
-                return False
-            Logger.log('L-0299')
-            examples_data = self.__create_new_example_data(examples, model_id)
-            Logger.log('L-0300')
-            Logger.log('L-0301')
-            db_insert_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, examples_data)
-            Logger.log('L-0302')
-            for example in examples_data:
-                model_train_data.add_training_example(example)
-            Logger.log('L-0303')
-            return True
-        except Exception as e:
-            Logger.log('L-0304', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        model_train_data = self.__find_model(model_id)
+        if model_train_data is None:
+            ErrorHandler.raise_error('E-0085')
+        Logger.log('L-0299')
+        examples_data = self.__create_new_example_data(examples, model_id)
+        Logger.log('L-0300')
+        Logger.log('L-0301')
+        db_insert_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, examples_data)
+        Logger.log('L-0302')
+        for example in examples_data:
+            model_train_data.add_training_example(example)
+        Logger.log('L-0303')
 
     def approve_example(self, example_id):
         """
@@ -205,31 +194,21 @@ class TrainDataManager:
         ejemplo debe existir y no estar ya aprobado o aplicado.
 
         :example_id: [int] - Id del ejemplo de entrenamiento.
-
-        :return: [boolean] - True si el ejemplo fue aprobado, False en caso contrario.
         """
-        try:
-            Logger.log('L-0307', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
-            example = self.__find_example(example_id)
-            if example is None:
-                Logger.log('L-0308')
-                return False
-            if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
-                Logger.log('L-0354')
-                return False
-            example_id = example.get_example_id()
-            Logger.log('L-0309')
-            updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED})        
-            if updated_items.matched_count > 0:
-                Logger.log('L-0310')
-                example.approve()
-                Logger.log('L-0311', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
-                return True
-            Logger.log('L-0312')
-            return False
-        except Exception as e:
-            Logger.log('L-0313', [{'text': example_id, 'color': HIGHLIGHT_COLOR}, {'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0307', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
+        example = self.__find_example(example_id)
+        if example is None:
+            ErrorHandler.raise_error('E-0077')
+        if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
+            ErrorHandler.raise_error('E-0078')
+        example_id = example.get_example_id()
+        Logger.log('L-0309')
+        updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_APPROVED}).modified_count    
+        if updated_items <= 0:
+            ErrorHandler.raise_error('E-0079')
+        Logger.log('L-0310')
+        example.approve()
+        Logger.log('L-0311', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
 
     def discard_example(self, example_id):
         """
@@ -273,7 +252,7 @@ class TrainDataManager:
         """
         model_train_data = self.__find_model(model_id)
         if not model_train_data:
-            return None
+            ErrorHandler.raise_error('E-0083')
         return model_train_data.get_pending_examples()
 
     def get_approved_examples(self, model_id):
@@ -286,7 +265,7 @@ class TrainDataManager:
         """
         model_train_data = self.__find_model(model_id)
         if not model_train_data:
-            return None
+            ErrorHandler.raise_error('E-0081')
         return model_train_data.get_approved_examples()
 
     def get_examples_history(self, model_id):
@@ -298,23 +277,18 @@ class TrainDataManager:
 
         :return: [List] - Listado de todos los ejemplos para el modelo solicitado.
         """
-        try:
-            if not self.__find_model(model_id):
-                Logger.log('L-0325')
-                return None
-            results = list([])
-            Logger.log('L-0326')
-            examples_data = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'model_id': model_id})
-            Logger.log('L-0327')
-            Logger.log('L-0328')
-            for example_data in examples_data:
-                example = TrainExample(example_data['example_id'], example_data['sentence'], example_data['tags'], example_data['type'], example_data['status'])
-                results.append(example)
-            Logger.log('L-0329')
-            return results
-        except Exception as e:
-            Logger.log('L-0330', [{'text': e, 'color': ERROR_COLOR}])
-            return None
+        if not self.__find_model(model_id):
+            ErrorHandler.raise_error('E-0082')
+        results = list([])
+        Logger.log('L-0326')
+        examples_data = db_get_items(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'model_id': model_id})
+        Logger.log('L-0327')
+        Logger.log('L-0328')
+        for example_data in examples_data:
+            example = TrainExample(example_data['example_id'], example_data['sentence'], example_data['tags'], example_data['type'], example_data['status'])
+            results.append(example)
+        Logger.log('L-0329')
+        return results
 
     def add_custom_entity(self, name, description):
         """
@@ -357,8 +331,6 @@ class TrainDataManager:
         Cambia el estado de un set de ejemplos a aplicado.
 
         :examples_list: [List(TrainExample)] - Lista de ejemplos a los cuales cambiar el estado.
-
-        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
         """
         examples_id_list = list([example.get_example_id() for example in examples_list])
         updated_count = db_update_many(
@@ -369,6 +341,5 @@ class TrainDataManager:
         ).matched_count
         for example in examples_list:
             example.apply()
-        if len(examples_list) == updated_count:
-            return True
-        return False
+        if not len(examples_list) == updated_count:
+            ErrorHandler.raise_error('E-0093')

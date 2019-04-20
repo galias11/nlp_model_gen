@@ -5,6 +5,9 @@ from nlp_model_gen.constants.constants import EVENT_MODEL_CREATED, EVENT_MODEL_D
 from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Classes
 from nlp_model_gen.utils.classUtills import ObserverSingleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
@@ -39,20 +42,14 @@ class ModelTrainingController(ObserverSingleton):
         Inicializa el módulo.
         """
         Logger.log('L-0243')
+        self.__init_success = False
         self.__model_trainer = ModelTrainerManager()
         self.__model_manager = ModelManagerController()
         self.__model_manager.add_observer(self)
-        if not self.__model_manager.is_ready():
-            Logger.log('L-0244')
-            self.__init_success = False
-            return
         available_models = self.__model_manager.get_available_models()
         self.__train_data_manager = TrainDataManager(available_models)
-        if self.__train_data_manager.is_ready() and self.__model_manager.is_ready():
-            Logger.log('L-0245')
-            self.__init_success = True
-            return
-        Logger.log('L-0246')
+        Logger.log('L-0245')
+        self.__init_success = True
 
     def __add_model(self, model):
         """
@@ -88,8 +85,6 @@ class ModelTrainingController(ObserverSingleton):
         """
         results = list([])
         pending_examples = self.__train_data_manager.get_pending_examples(model_id)
-        if pending_examples is None:
-            return None
         for pending_example in pending_examples:
             results.append(pending_example.to_dict())
         return results
@@ -105,8 +100,6 @@ class ModelTrainingController(ObserverSingleton):
         """
         results = list([])
         pending_examples = self.__train_data_manager.get_approved_examples(model_id)
-        if pending_examples is None:
-            return None
         for pending_example in pending_examples:
             results.append(pending_example.to_dict())
         return results
@@ -124,8 +117,6 @@ class ModelTrainingController(ObserverSingleton):
         Logger.log('L-0323')
         results = list([])
         pending_examples = self.__train_data_manager.get_examples_history(model_id)
-        if pending_examples is None:
-            return None
         for pending_example in pending_examples:
             results.append(pending_example.to_dict())
         Logger.log('L-0324')
@@ -138,27 +129,19 @@ class ModelTrainingController(ObserverSingleton):
         el proceso de entrenamiento.
 
         :model_id: [String] - Id del modelo.
-
-        :return: [boolean] -  True si el entrenamiento se ha realizado exitosamente, False en 
-        caso contrario.
         """
         Logger.log('L-0331')
         model = self.__model_manager.get_model(model_id)
         if model is None:
-            Logger.log('L-0332')
-            return False
+            ErrorHandler.raise_error('E-0088')
         approved_examples_list = self.__train_data_manager.get_approved_examples(model_id)
         if approved_examples_list is None or not approved_examples_list:
-            Logger.log('L-0333')
-            return False
-        if self.__model_trainer.train_model(model, approved_examples_list):
-            Logger.log('L-0334')
-            self.__train_data_manager.set_applied_state(approved_examples_list)
-            Logger.log('L-0335')
-            Logger.log('L-0336')
-            return True
-        Logger.log('L-0337')
-        return False
+            ErrorHandler.raise_error('E-0089')
+        self.__model_trainer.train_model(model, approved_examples_list)
+        Logger.log('L-0334')
+        self.__train_data_manager.set_applied_state(approved_examples_list)
+        Logger.log('L-0335')
+        Logger.log('L-0336')
 
     def discard_training_examples(self, examples_id_list):
         """
@@ -186,23 +169,13 @@ class ModelTrainingController(ObserverSingleton):
         :model_id: [String] - Id del modelo al cual se aplicará el ejemplo.
 
         :examples_list: [List(Dict)] - Listado de ejemplos de entrenamiento.
-
-        :return: [boolean] - True si el listado pudo ser agregado exitosamente, False en caso
-        contrario.
         """
         Logger.log('L-0292')
-        if not self.is_ready():
-            Logger.log('L-0293')
-            return False
         model = self.__model_manager.get_model(model_id)
         if model is None:
-            Logger.log('L-0294')
-            return False
-        if self.__train_data_manager.add_training_examples(model_id, examples_list):
-            Logger.log('L-0295')
-            return True
-        Logger.log('L-0296')
-        return False
+            ErrorHandler.raise_error('E-0084')
+        self.__train_data_manager.add_training_examples(model_id, examples_list)
+        Logger.log('L-0295')
 
     def approve_traning_examples(self, examples_id_list):
         """
@@ -218,7 +191,15 @@ class ModelTrainingController(ObserverSingleton):
         Logger.log('L-0305')
         results = list([])
         for example_id in examples_id_list:
-            results.append({'example_id': example_id, 'status': self.__train_data_manager.approve_example(example_id)})
+            status = False
+            error = None
+            try:
+                self.__train_data_manager.approve_example(example_id)
+                status = True
+            except Exception as e:
+                error = ErrorHandler.get_error_dict(e)
+            finally:
+                results.append({'example_id': example_id, 'status': status, 'error': error})
         Logger.log('L-0306')
         return results
 

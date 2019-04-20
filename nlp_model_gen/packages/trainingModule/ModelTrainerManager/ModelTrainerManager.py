@@ -1,6 +1,9 @@
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 class ModelTrainerManager:
     def __init__(self):
         pass
@@ -27,9 +30,7 @@ class ModelTrainerManager:
         :examples: [List] - Lista de ejemplos de entrenamiento
         """
         if not model:
-            return False
+            ErrorHandler.raise_error('E-0090')
         annotations = self.__build_annotations(examples)
-        if model.train_model(annotations):
-            return True
-        return False
+        model.train_model(annotations)
         

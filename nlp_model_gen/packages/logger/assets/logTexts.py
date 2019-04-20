@@ -2138,5 +2138,35 @@ LOG_DATA = {
         'method_name': 'analyse_text',
         'main_text': 'El modulo de administración de modelos no fue inicializado correctamente',
         'type': TYPE_ERR
-    }
+    },
+    'L-0357': {
+        'class_name': '',
+        'method_name': 'load_json_file',
+        'main_text': 'Excepción al escribir archivo: %s',
+        'type': TYPE_INFO
+    },
+    'L-0358': {
+        'class_name': '',
+        'method_name': 'overwrite_json_file',
+        'main_text': 'Excepción al escribir archivo: %s',
+        'type': TYPE_INFO
+    },
+    'L-0359': {
+        'class_name': '',
+        'method_name': 'dictionary_to_disk',
+        'main_text': 'Excepción al escribir archivo: %s',
+        'type': TYPE_INFO
+    },
+    'L-0360': {
+        'class_name': '',
+        'method_name': 'get_files_in_dir',
+        'main_text': 'Excepción al obtener archivos: %s',
+        'type': TYPE_INFO
+    },
+    'L-0361': {
+        'class_name': '',
+        'method_name': 'copy_file',
+        'main_text': 'Excepción al copiar archivos: %s',
+        'type': TYPE_INFO
+    },
 }

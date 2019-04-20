@@ -1,11 +1,11 @@
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
-# @Constatns
-from nlp_model_gen.constants.constants import ( MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION )
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
-# @Log colors
-from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
+# @Constatns
+from nlp_model_gen.constants.constants import (MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION)
 
 # @Helpers
 from nlp_model_gen.utils.dbUtils import ( 
@@ -66,25 +66,19 @@ class ModelDataManager:
 
         :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
-        try:
-            Logger.log('L-0026')
-            if ModelDataManager.check_existing_model(model_id):
-                Logger.log('L-0027')
-                return False
-            data_dict = {
-                'model_id': model_id,
-                'model_name': model_name,
-                'description': description,
-                'author': author,
-                'path': path,
-                'analyzer_rules_set': analyser_rules_set
-            }
-            db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
-            Logger.log('L-0029')
-            return True
-        except Exception as e:
-            Logger.log('L-0028', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0026')
+        if ModelDataManager.check_existing_model(model_id):
+            ErrorHandler.raise_error('E-0029')
+        data_dict = {
+            'model_id': model_id,
+            'model_name': model_name,
+            'description': description,
+            'author': author,
+            'path': path,
+            'analyzer_rules_set': analyser_rules_set
+        }
+        db_insert_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, data_dict)
+        Logger.log('L-0029')
 
     @staticmethod
     def modify_model_data(model_id, model_name, description):
@@ -96,20 +90,15 @@ class ModelDataManager:
         :model_name: [String] - Nuevo nombre del modelo.
 
         :description: [String] - Nueva descripción del modelo.
-
-        :return: [boolean] - True si se ha guardado la modificación con exito, False en caso contrario.
         """
-        try:
-            Logger.log('L-0080')
-            updated_data = {
-                'model_name': model_name,
-                'description': description
-            }
-            update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}, updated_data).modified_count
-            return True if update_count > 0 else False
-        except Exception as e:
-            Logger.log('L-0079', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0080')
+        updated_data = {
+            'model_name': model_name,
+            'description': description
+        }
+        update_count = db_update_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}, updated_data).modified_count
+        if update_count <= 0:
+            ErrorHandler.raise_error('E-0076')
 
     @staticmethod
     def remove_model_data(model_id):
@@ -117,13 +106,8 @@ class ModelDataManager:
         Elimina la entrada para un modelo.
 
         :model_id: [String] - Id del modelo a eliminar.
-
-        :return: [boolean] - True si se ha eliminado con exito, False en caso contrario.
         """
-        try:
-            Logger.log('L-0066')
-            delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
-            return True if delete_count > 0 else False
-        except Exception as e:
-            Logger.log('L-0067', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0066')
+        delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
+        if delete_count <= 0:
+            ErrorHandler.raise_error('E-0072')

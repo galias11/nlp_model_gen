@@ -1,3 +1,6 @@
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constants
 from nlp_model_gen.constants.constants import (
     TASK_KEYS_MODEL_UPDATE,
@@ -50,12 +53,13 @@ class ModelCreationTask(Task):
         """
         Método hook para completar el template de inicializadion en el padre.
         """
-        admin = AdminModuleController()
-        results = admin.generate_model(self.__model_id, self.__model_name, self.__description, self.__author, self.__tokenizer_exceptions, self.__max_dist)
-        if results:
+        try:
+            admin = AdminModuleController()
+            admin.generate_model(self.__model_id, self.__model_name, self.__description, self.__author, self.__tokenizer_exceptions, self.__max_dist)
             self.set_results(self.get_task_data())
-        else:
-            self.set_error_data('0001', 'Generic error')
+        except Exception as e:
+            error = ErrorHandler.get_error_dict(e)
+            self.set_error_data(error)
 
     def get_task_data(self):
         """

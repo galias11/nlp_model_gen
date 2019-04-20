@@ -59,8 +59,8 @@ class Task(Thread, Observable, ABC):
                 return True
         return False
 
-    def set_error_data(self, code, description):
-        self.__error = {'active': True, 'code': code, 'description': description}
+    def set_error_data(self, error):
+        self.__error = {'active': True, 'description_data': error}
 
     def set_results(self, results):
         self.__results = {'resource': results}

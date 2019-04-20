@@ -4,6 +4,9 @@ from nlp_model_gen.utils.fileUtils import remove_dir
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constants
 from nlp_model_gen.constants.constants import (
     TRAIN_EXAMPLE_STATUS_APPROVED,
@@ -21,6 +24,9 @@ from nlp_model_gen.packages.wordProcessor.WordProcessorController import WordPro
 from nlp_model_gen.packages.trainingModule.ModelTrainingController import ModelTrainingController
 from .tokenizerRulesGenerator.TokenizerRulesGenerator import TokenizerRulesGenerator
 from .analyzerRulesGenerator.AnalyzerRulesGenerator import AnalyzerRulesGerator
+
+# @Validations
+from .packageUtils.validations import validate_model_seed
 
 class AdminModuleController(metaclass=Singleton):
     def __init__(self):
@@ -47,15 +53,9 @@ class AdminModuleController(metaclass=Singleton):
         self.__word_processor = WordProcessorController()
         if is_retry:
             self.__word_processor.retry_initialization()
-        if not self.__word_processor.is_ready():
-            return # Normalize when error handler is ready.
         self.__tokenizer_rules_generator = TokenizerRulesGenerator()
         self.__model_manager = ModelManagerController()
-        if not self.__model_manager.is_ready():
-            return # Normalize when error handler is ready.
         self.__train_manager = ModelTrainingController()
-        if not self.__train_manager.is_ready():
-            return # Normalize when error handler is ready.
         self.__analyzer_rules_generator = AnalyzerRulesGerator()
         self.__init_success = True
         Logger.log('L-0037')
@@ -82,22 +82,17 @@ class AdminModuleController(metaclass=Singleton):
 
         :tokenizer_exceptions: [Dict] - Conjunto de excepciones a agregar al tokenizer del nuevo modelo.
         """
-        if not self.__init_success:
-            Logger.log('L-0094')
-            return None
         Logger.log('L-0001')
         if self.__model_manager.get_model(model_id):
-            Logger.log('L-0002')
-            return False
+            ErrorHandler.raise_error('E-0025')
+        if not validate_model_seed(tokenizer_exceptions):
+            ErrorHandler.raise_error('E-0026')
         tokenizer_exceptions_path = self.__tokenizer_rules_generator.generate_model_data(tokenizer_exceptions, model_id, max_dist)
         analyzer_rule_set = self.__analyzer_rules_generator.create_analyzer_rule_set(tokenizer_exceptions)
-        if not tokenizer_exceptions_path or analyzer_rule_set is None:
-            return False
-        model_creation_success = self.__model_manager.create_model(model_id, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
+        self.__model_manager.create_model(model_id, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set)
         Logger.log('L-0034')
         if remove_dir(tokenizer_exceptions_path, True):
             Logger.log('L-0035')
-        return model_creation_success
 
     def get_available_models(self):
         """
@@ -134,17 +129,11 @@ class AdminModuleController(metaclass=Singleton):
         :new_model_name: [String] - Nuevo nombre a asignar al modelo.
 
         :new_description: [String] - Nueva descripción para el modelo.
-
-        :return: [bool] - True si la edición se realizó correctamente, False en caso contrario.
         """
-        if not self.__init_success:
-            Logger.log('L-0097')
-            return None
         Logger.log('L-0074')
         current_model = self.__model_manager.get_model(model_id)
         if current_model is None:
-            Logger.log('L-0075')
-            return False
+            ErrorHandler.raise_error('E-0074')
         current_model_name = current_model.get_model_name()
         edited_model_name = new_model_name
         current_description = current_model.get_description()
@@ -154,9 +143,8 @@ class AdminModuleController(metaclass=Singleton):
         if new_description is None or new_description == '':
             edited_description = current_description
         if edited_model_name == current_model_name and edited_description == current_description:
-            Logger.log('L-0076')
-            return False
-        return self.__model_manager.edit_model(model_id, edited_model_name, edited_description)
+            ErrorHandler.raise_error('E-0075')
+        self.__model_manager.edit_model(model_id, edited_model_name, edited_description)
 
     def delete_model_data(self, model_id):
         """
@@ -164,13 +152,8 @@ class AdminModuleController(metaclass=Singleton):
         tanto en la base de datos como en la carpeta de modelos del sistema.
 
         :model_id: [String] - Id del modelo.
-
-        :return: [boolean] - True si el modelo fue borrado exitosamente, False en caso contrario
         """
-        if not self.__init_success:
-            Logger.log('L-0097')
-            return None
-        return self.__model_manager.remove_model(model_id)
+        self.__model_manager.remove_model(model_id)
 
     def get_word_processor_available_configs(self, module_key):
         """
@@ -199,17 +182,18 @@ class AdminModuleController(metaclass=Singleton):
 
         :configs: [Dict] - Configuraciones básicas del tema.
 
-        :irregular_groups: [Dict] - Grupos irregulares del tema. 
-
-        :return: [boolean] - True si la operación fue exitosa, False en caso contrario
+        :irregular_groups: [Dict] - Grupos irregulares del tema.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.add_conjugator_config(theme_name, configs, irregular_groups)
+            self.__word_processor.add_conjugator_config(theme_name, configs, irregular_groups)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.add_fuzzy_gen_config(theme_name, configs)
+            self.__word_processor.add_fuzzy_gen_config(theme_name, configs)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.add_noun_conversor_config((theme_name, configs))
-        return False
+            self.__word_processor.add_noun_conversor_config(theme_name, configs)
+            return
+        ErrorHandler.raise_error('E-0063')
 
     def add_theme_conjugator_exceptions(self, theme_name, exceptions):
         """
@@ -218,10 +202,8 @@ class AdminModuleController(metaclass=Singleton):
         :theme_name: [String] - Nombre del tema.
 
         :exceptions: [List(Dict)] - Set de excepciones a agregar.
-
-        :return: [boolean] - True si las excepciones se agregaron exitosamente, False en caso contrario.
         """
-        return self.__word_processor.add_conjugator_exceptions(theme_name, exceptions)
+        self.__word_processor.add_conjugator_exceptions(theme_name, exceptions)
 
     def get_word_processor_active_themes(self):
         """
@@ -244,16 +226,17 @@ class AdminModuleController(metaclass=Singleton):
         :module_key: [String] - Nombre del submodulo del modulo de procesamiento a cambiar.
 
         :theme_name: [String] - Nombre del tema a activar para el conjugador.
-
-        :return: [boolean] - True si el tema se ha cambiado exitosamente, False en caso contrario.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.set_conjugator_active_theme(theme_name)
+            self.__word_processor.set_conjugator_active_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.set_fuzzy_generator_active_theme(theme_name)
+            self.__word_processor.set_fuzzy_generator_active_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.set_noun_conversor_active_theme(theme_name)
-        return False
+            self.__word_processor.set_noun_conversor_active_theme(theme_name)
+            return
+        ErrorHandler.raise_error('E-0042')
 
     def update_word_processor_config_theme(self, module_key, theme_name, config_mod, irregular_groups_mod=None):
         """
@@ -270,16 +253,17 @@ class AdminModuleController(metaclass=Singleton):
 
         :irregular_groups_mod: [Dict] - Opciones actualizadas de los grupos de verbos irregulares (no es
         necesario incluir los grupos que no tienen cambios).
-
-        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.update_conjugator_configs(theme_name, config_mod, irregular_groups_mod)
+            self.__word_processor.update_conjugator_configs(theme_name, config_mod, irregular_groups_mod)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.update_fuzzy_gen_config(theme_name, config_mod)
+            self.__word_processor.update_fuzzy_gen_config(theme_name, config_mod)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.update_noun_conversor_config(theme_name, config_mod)
-        return False
+            self.__word_processor.update_noun_conversor_config(theme_name, config_mod)
+            return
+        ErrorHandler.raise_error('E-0049')
 
     def update_theme_conjugator_exceptions(self, theme_name, exception_key, exception_data):
         """
@@ -291,10 +275,8 @@ class AdminModuleController(metaclass=Singleton):
         :exception_key: [String] - Clave de la excepción a modificar.
 
         :exception_data: [Dict] - Nueva configuración de la expceción irregular.
-
-        :returns: [boolean] - True si la operación fue exitosa, False en caso contrario.
         """
-        return self.__word_processor.update_conjugator_exception(theme_name, exception_key, exception_data)
+        self.__word_processor.update_conjugator_exception(theme_name, exception_key, exception_data)
 
     def delete_word_processor_theme(self, module_key, theme_name):
         """
@@ -304,16 +286,17 @@ class AdminModuleController(metaclass=Singleton):
         :module_key: [String] - Clave del modulo.
 
         :theme_name: [String] - Nombre del tema a eliminar.
-
-        :return: [boolean] - True si el modulo pudo ser eliminado, False en caso contrario.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.remove_conjugator_theme(theme_name)
+            self.__word_processor.remove_conjugator_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.remove_fuzzy_gen_theme(theme_name)
+            self.__word_processor.remove_fuzzy_gen_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.remove_noun_conversor_theme(theme_name)
-        return False
+            self.__word_processor.remove_noun_conversor_theme(theme_name)
+            return
+        ErrorHandler.raise_error('E-0043')
 
     def submit_training_examples(self, model_id, training_examples_list):
         """
@@ -345,7 +328,7 @@ class AdminModuleController(metaclass=Singleton):
             return self.__train_manager.get_training_examples_history(model_id)
         if status == TRAIN_EXAMPLE_STATUS_SUBMITTED:
             return self.__train_manager.get_pending_training_examples(model_id)
-        return None
+        ErrorHandler.raise_error('E-0080')
     
     def approve_training_examples(self, training_examples_list):
         """
@@ -378,10 +361,8 @@ class AdminModuleController(metaclass=Singleton):
         aplicados.
 
         :model_id: [String] - Id del modelo.
-
-        :return: [boolean] - True si la operación ha sido exitosa, False en caso contrario.
         """
-        return self.__train_manager.apply_training_approved_examples(model_id)
+        self.__train_manager.apply_training_approved_examples(model_id)
 
     def get_available_entities(self):
         """
