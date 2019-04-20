@@ -26,8 +26,7 @@ class SystemController:
             self.__application_module = ApplicationModuleController()
             self.__task_manager = TaskManager()
             self.__ready = True
-        except Exception as e:
-            print(e) # TODO: Remove this
+        except:
             self.__ready = False
 
     def __build_response_object(self, operation_success, payload=None, error=None):
@@ -83,7 +82,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         task_id = self.__task_manager.create_model_creation_task(model_id, model_name, description, author, tokenizer_exceptions, max_dist)
         return self.__build_response_object(True, {'task_id': task_id})
 
@@ -100,7 +99,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
             return self.__build_response_object(False, error=ErrorHandler.get_error('E-0031', []))
         try:
@@ -124,7 +123,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
             return self.__build_response_object(False, error=ErrorHandler.get_error('E-0044', []))
         try:
@@ -152,7 +151,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
             return self.__build_response_object(False, error=ErrorHandler.get_error('E-0045', []))
         try:
@@ -174,7 +173,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
             return self.__build_response_object(False, error=ErrorHandler.get_error('E-0041', []))
         try:
@@ -190,7 +189,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         active_themes = self.__admin_module.get_word_processor_active_themes()
         return self.__build_response_object(True, {'active_themes': active_themes})
 
@@ -208,7 +207,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
             return self.__build_response_object(False, error=ErrorHandler.get_error('E-0058', []))
         try:
@@ -236,7 +235,7 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
             return self.__build_response_object(False, error=ErrorHandler.get_error('E-0062', []))
         try:
@@ -269,11 +268,14 @@ class SystemController:
         :return: [Dict] - Resultados de la tarea.
         """
         if not self.is_ready():
-            return self.__build_response_object(False)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0073', []))
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_MODEL_UPDATE]):
-            return self.__build_response_object(False)
-        results = self.__admin_module.delete_model_data(model_id)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0070', []))
+        try:
+            self.__admin_module.delete_model_data(model_id)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def edit_model_data(self, model_id, new_model_name=None, new_description=None):
         """

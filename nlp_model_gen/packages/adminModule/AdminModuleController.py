@@ -159,13 +159,8 @@ class AdminModuleController(metaclass=Singleton):
         tanto en la base de datos como en la carpeta de modelos del sistema.
 
         :model_id: [String] - Id del modelo.
-
-        :return: [boolean] - True si el modelo fue borrado exitosamente, False en caso contrario
         """
-        if not self.__init_success:
-            Logger.log('L-0097')
-            return None
-        return self.__model_manager.remove_model(model_id)
+        self.__model_manager.remove_model(model_id)
 
     def get_word_processor_available_configs(self, module_key):
         """

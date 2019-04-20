@@ -114,13 +114,8 @@ class ModelDataManager:
         Elimina la entrada para un modelo.
 
         :model_id: [String] - Id del modelo a eliminar.
-
-        :return: [boolean] - True si se ha eliminado con exito, False en caso contrario.
         """
-        try:
-            Logger.log('L-0066')
-            delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
-            return True if delete_count > 0 else False
-        except Exception as e:
-            Logger.log('L-0067', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0066')
+        delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
+        if delete_count <= 0:
+            ErrorHandler.raise_error('E-0072')

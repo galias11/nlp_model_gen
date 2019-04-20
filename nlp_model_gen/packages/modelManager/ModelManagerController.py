@@ -207,17 +207,11 @@ class ModelManagerController(ObservableSingleton):
         Logger.log('L-0064')
         selected_model = self.get_model(model_id)
         if selected_model is None:
-            Logger.log('L-0065')
-            return False
-        if not ModelDataManager.remove_model_data(selected_model.get_model_id()):
-            Logger.log('L-0068')
-            return False
+            ErrorHandler.raise_error('E-0071')
+        ModelDataManager.remove_model_data(selected_model.get_model_id())
         Logger.log('L-0069')
-        if not ModelLoader.delete_model_files(selected_model.get_path()):
-            Logger.log('L-0071')
-            return False
+        ModelLoader.delete_model_files(selected_model.get_path())
         Logger.log('L-0072')
         self.__models.remove(selected_model)
         self.notify({'event': EVENT_MODEL_DELETED, 'payload': model_id})
         Logger.log('L-0073')
-        return True

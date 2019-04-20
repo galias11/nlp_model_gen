@@ -344,5 +344,20 @@ ERROR_DATA = {
         'description': 'Alguna de las configuraciones no posee la estructura correcta',
         'source': {'class': 'WordProcessorController', 'method': 'add_noun_conversor_config'},
         'log': 'L-0136'
-    }
+    },
+    'E-0070': {
+        'description': 'Hay una tarea de análisis o de actualización en curso',
+        'source': {'class': 'SystemController', 'method': 'delete_model'},
+        'log': None
+    },
+    'E-0071': {
+        'description': 'El modelo seleccionado no existe',
+        'source': {'class': 'ModelManagerController', 'method': 'remove_model'},
+        'log': 'L-0065'
+    },
+    'E-0072': {
+        'description': 'No se ha podido eliminar el modelo de la base de datos',
+        'source': {'class': 'ModelDataManager', 'method': 'remove_model_data'},
+        'log': 'L-0068'
+    },
 }
