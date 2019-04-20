@@ -114,14 +114,10 @@ class ModelManagerController(ObservableSingleton):
         """
         Logger.log('L-0054')
         selected_model = self.get_model(model_id)
-        if selected_model is None or text is None:
-            Logger.log('L-0055')
-            return None
+        if selected_model is None:
+            ErrorHandler.raise_error('E-0095')
         if not selected_model.is_loaded():
             selected_model.load()
-        if not selected_model.is_loaded():
-            Logger.log('L-0058')
-            return None
         return selected_model.analyse_text(text, only_positives)
 
     def __apply_tokenizer_exceptions(self, model, tokenizer_exceptions_path):

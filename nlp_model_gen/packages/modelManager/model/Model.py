@@ -139,9 +139,6 @@ class Model:
         :return: [Dict()] - Resultados del análisis.
         """
         Logger.log('L-0059')
-        if not self.is_loaded():
-            Logger.log('L-0060')
-            return None
         doc = self.__reference(text)
         Logger.log('L-0061')
         results = {

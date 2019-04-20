@@ -217,4 +217,13 @@ def copy_file(source, destination, is_absolute_path=False):
         shutil.copyfile(abs_source_path, abs_destination_path)
     except Exception as e:
         ErrorHandler.raise_error('E-0018', [{'text': e, 'color': ERROR_COLOR}])
-    
+
+def validate_file(file):
+    """
+    Valida que una variable refiera a una instancia de un archivo.
+
+    :file: [any] - Elemento a validar
+
+    :return: [Boolean] - True si es una instancia de archivo, False en caso contrario
+    """
+    return hasattr(file, 'read')

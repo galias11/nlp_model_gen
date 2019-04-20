@@ -1,11 +1,17 @@
 # @Vendors
 import time
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Constants
 from nlp_model_gen.constants.constants import (
     TASK_KEYS_MODEL_UPDATE,
     TASK_KEYS_WORD_PROCESSOR
 )
+
+# @Utils
+from nlp_model_gen.utils.fileUtils import validate_file
 
 # @Classes
 from nlp_model_gen.utils.classUtills import Observer
@@ -41,8 +47,12 @@ class FilesAnalysisTask(Task, Observer):
     def __build_results(self):
         results = list([])
         for task in self.__analysis_tasks:
-            task_status = {'file': task['file'], 'status': task['task'].get_results()}
-            results.append(task_status)
+            task_status = task['task'].get_task_status_data()
+            task_results = dict({})
+            task_results['file'] = task['file']
+            task_results['error'] = task_status['error']
+            task_results['results'] = task_status['results']
+            results.append(task_results)
         return results
 
     def update(self, data):
@@ -69,24 +79,23 @@ class FilesAnalysisTask(Task, Observer):
         """
         Método hook para completar el template de inicializadion en el padre.
         """
-        adminModule = AdminModuleController()
-        model_loaded = adminModule.load_model(self.__model_id)
-        if not model_loaded:
-            self.set_error_data('0001', 'Generic error')
-            return
         try:
+            adminModule = AdminModuleController()
+            adminModule.load_model(self.__model_id)
             for file in self.__files:
+                if not validate_file(file):
+                    ErrorHandler.raise_error('E-0096')
                 file_text = file.read()
                 analysis_task = TextAnalysisTask(-1, self.__model_id, file_text, self.__only_positives)
                 analysis_task.add_observer(self)
                 self.__analysis_tasks.append({'file': file.name, 'task': analysis_task})
                 analysis_task.init()
-        except:
-            self.set_error_data('0001', 'Generic error')
-            return
-        while not self.__check_task_finalized():
-            time.sleep(5)
-        self.set_results(self.__build_results())
+            while not self.__check_task_finalized():
+                time.sleep(5)
+            self.set_results(self.__build_results())
+        except Exception as e:
+            error = ErrorHandler.get_error_dict(e)
+            self.set_error_data(error)
 
     def get_task_data(self):
         """

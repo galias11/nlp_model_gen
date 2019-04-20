@@ -464,5 +464,20 @@ ERROR_DATA = {
         'description': 'Error al actualizar el estado de los ejemplos en la base de datos',
         'source': {'class': 'TrainDataManager', 'method': 'set_applied_state'},
         'log': None
+    },
+    'E-0094': {
+        'description': 'El texto a analizar no es valido',
+        'source': {'class': 'DataSanitizer', 'method': 'sanitize_text_for_analysis'},
+        'log': None
+    },
+    'E-0095': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'ModelManagerController', 'method': 'analyze_text'},
+        'log': 'L-0055'
+    },
+    'E-0096': {
+        'description': 'El archivo provisto no tiene el formato correcto',
+        'source': {'class': 'FilesAnalysisTask', 'method': 'task_init_hook'},
+        'log': None
     }
 }

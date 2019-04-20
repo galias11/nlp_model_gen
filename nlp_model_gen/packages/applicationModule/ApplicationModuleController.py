@@ -1,6 +1,3 @@
-# @Logger
-from nlp_model_gen.packages.logger.Logger import Logger
-
 # @Classes
 from nlp_model_gen.utils.classUtills import Singleton
 from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
@@ -24,9 +21,6 @@ class ApplicationModuleController(metaclass=Singleton):
 
         :return: [List(Dict)] - Resultados del analisis, None si ha ocurrido un error.
         """
-        if not self.__model_manager.is_ready():
-            Logger.log('L-0356')
-            return None
         sanitized_text = DataSanitizer.sanitize_text_for_analysis(text)
         return self.__model_manager.analyze_text(model_id, sanitized_text, only_positives)
 

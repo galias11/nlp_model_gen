@@ -379,10 +379,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False)
-        task_id = self.__task_manager.create_text_analysis_task(model_id, text, only_positives)
-        return self.__build_response_object(True, {'task_id': task_id})
+        def action():
+            task_id = self.__task_manager.create_text_analysis_task(model_id, text, only_positives)
+            return self.__build_response_object(True, {'task_id': task_id})
+        return self.__process_incoming_request(action)
 
     def get_task_status(self, task_id):
         """
@@ -424,8 +424,8 @@ class SystemController:
 
         :return: [Dict] - Diccionario con los resultados de la operación.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False)
-        task_id = self.__task_manager.create_files_analysis_task(model_id, files, only_positives)
-        return self.__build_response_object(True, {'task_id': task_id})
+        def action():
+            task_id = self.__task_manager.create_files_analysis_task(model_id, files, only_positives)
+            return self.__build_response_object(True, {'task_id': task_id})
+        return self.__process_incoming_request(action)
         
