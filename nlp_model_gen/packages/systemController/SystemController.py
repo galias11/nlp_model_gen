@@ -393,12 +393,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False)
-        task_status = self.__task_manager.get_task_status(task_id)
-        if not task_status:
-            return self.__build_response_object(False)
-        return self.__build_response_object(True, {'task_status': task_status})
+        def action():
+            task_status = self.__task_manager.get_task_status(task_id)
+            return self.__build_response_object(True, {'task_status': task_status})
+        return self.__process_incoming_request(action)
 
     def get_available_tagging_entities(self):
         """

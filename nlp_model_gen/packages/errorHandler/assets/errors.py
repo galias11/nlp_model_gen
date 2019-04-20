@@ -479,5 +479,10 @@ ERROR_DATA = {
         'description': 'El archivo provisto no tiene el formato correcto',
         'source': {'class': 'FilesAnalysisTask', 'method': 'task_init_hook'},
         'log': None
+    },
+    'E-0097': {
+        'description': 'La tarea solicitada no existe',
+        'source': {'class': 'TaskManager', 'method': 'get_task_status'},
+        'log': None
     }
 }

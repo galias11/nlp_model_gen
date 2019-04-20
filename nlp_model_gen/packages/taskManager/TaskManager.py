@@ -4,6 +4,9 @@ import time
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
+# @Error handler
+from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
+
 # @Logger colors
 from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
 
@@ -80,7 +83,7 @@ class TaskManager(Observer):
             return founded_task
         except:
             return None
-    
+
     def __get_task_from_finished_list(self, task_id):
         """
         Obtiene una tarea de la lista de tareas finalizadas.
@@ -223,7 +226,7 @@ class TaskManager(Observer):
         """
         founded_task = self.__get_task(task_id)
         if founded_task is None:
-            return None
+            ErrorHandler.raise_error('E-0097')
         return founded_task.get_task_status_data()
 
     def get_active_tasks(self):
