@@ -383,10 +383,8 @@ class AdminModuleController(metaclass=Singleton):
         :name: [String] - Nombre de la entidad personalizada, se utilizará como identificador.
 
         :description: [String] - Descripción de la entidad.
-
-        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
         """
-        return self.__train_manager.add_custom_entity(name, description)
+        self.__train_manager.add_custom_entity(name, description)
 
     def edit_custom_entity(self, name, description):
         """
@@ -398,4 +396,4 @@ class AdminModuleController(metaclass=Singleton):
 
         :return: [boolean] - True si la operación fue exitosa, False en caso contrario
         """
-        return self.__train_manager.edit_custom_entity(name, description)
+        self.__train_manager.edit_custom_entity(name, description)

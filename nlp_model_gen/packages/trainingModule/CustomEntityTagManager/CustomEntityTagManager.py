@@ -86,25 +86,16 @@ class CustomEntityTagManager:
         :name: [String] - Nombre del nuevo tag (actúa como identificador).
 
         :description: [String] - Descripción del nuevo tag.
-
-        :return: [boolean] - True si el nuevo tag se ha agregado con exito, False en 
-        contario.
         """
         Logger.log('L-0271')
         if self.__check_entity_existence(name):
-            Logger.log('L-0272')
-            return False
-        try:
-            Logger.log('L-0273')
-            db_insert_item(TRAIN_MANAGER_DB, CUSTOM_ENTITY_MANAGER_COLLECTION, {'name': name, 'description': description})
-            Logger.log('L-0274')
-            new_entity = CustomEntity(name, description)
-            self.__custom_entities.append(new_entity)
-            Logger.log('L-0275')
-            return True
-        except Exception as e:
-            Logger.log('L-0276', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+            ErrorHandler.raise_error('E-0099')
+        Logger.log('L-0273')
+        db_insert_item(TRAIN_MANAGER_DB, CUSTOM_ENTITY_MANAGER_COLLECTION, {'name': name, 'description': description})
+        Logger.log('L-0274')
+        new_entity = CustomEntity(name, description)
+        self.__custom_entities.append(new_entity)
+        Logger.log('L-0275')
     
     def edit_custom_tag_entity(self, name, description):
         """
@@ -114,31 +105,20 @@ class CustomEntityTagManager:
         :name: [String] - Nombre del tag a actualizar.
 
         :description: [String] - Descripción actualizada del tag.
-
-        :return: [boolean] - True si la edición se realizó con exito, False en caso 
-        contrario.
         """
         Logger.log('L-0284')
         entity = self.__get_entity(name)
         if entity is None:
-            Logger.log('L-0285')
-            return False
+            ErrorHandler.raise_error('E-0101')
         if entity.get_description() == description:
-            Logger.log('L-0286')
-            return False
-        try:
-            Logger.log('L-0287')
-            updated_entries = db_update_item(TRAIN_MANAGER_DB, CUSTOM_ENTITY_MANAGER_COLLECTION, {'name': name}, {'description': description})
-            if updated_entries == 0:
-                Logger.log('L-0289')
-                return False
-            Logger.log('L-0288')
-            entity.set_description(description)
-            Logger.log('L-0290')
-            return True
-        except Exception as e:
-            Logger.log('L-0291', [{'text': e, 'color': ERROR_COLOR}])
-            return False
+            ErrorHandler.raise_error('E-0102')
+        Logger.log('L-0287')
+        updated_entries = db_update_item(TRAIN_MANAGER_DB, CUSTOM_ENTITY_MANAGER_COLLECTION, {'name': name}, {'description': description}).modified_count
+        if updated_entries <= 0:
+            ErrorHandler.raise_error('E-103')
+        Logger.log('L-0288')
+        entity.set_description(description)
+        Logger.log('L-0290')
     
     def validate_tag(self, name):
         """

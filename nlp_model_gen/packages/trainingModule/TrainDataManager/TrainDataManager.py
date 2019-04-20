@@ -298,11 +298,8 @@ class TrainDataManager:
         :name: [String] - Nombre de la entidad.
 
         :description: [String] - Descripcion de la entidad.
-
-        :return: [boolean] - True si la entidad ha sido agregada exitosamente, False en caso
-        contrario.
         """
-        return self.__custom_entity_manager.add_custom_entity(name, description)
+        self.__custom_entity_manager.add_custom_entity(name, description)
 
     def edit_custom_entity(self, name, description):
         """
@@ -312,11 +309,8 @@ class TrainDataManager:
         :name: [String] - Nombre de la entidad.
 
         :description: [String] - Nueva descripción de la entidad.
-
-        :return: [boolean] - True si la entidad ha sido editada correctamente, False en caso
-        contrario.
         """
-        return self.__custom_entity_manager.edit_custom_tag_entity(name, description)
+        self.__custom_entity_manager.edit_custom_tag_entity(name, description)
 
     def get_available_entities(self):
         """
