@@ -404,10 +404,10 @@ class SystemController:
 
         :return: [Dict] - Resultados de la tarea.
         """
-        if not self.is_ready():
-            return self.__build_response_object(False)
-        tagging_entities = self.__application_module.get_available_tagging_entities()
-        return self.__build_response_object(True, {'custom_entities': tagging_entities})
+        def action():
+            tagging_entities = self.__application_module.get_available_tagging_entities()
+            return self.__build_response_object(True, {'custom_entities': tagging_entities})
+        return self.__process_incoming_request(action)
 
     def analyze_files(self, model_id, files, only_positives):
         """
