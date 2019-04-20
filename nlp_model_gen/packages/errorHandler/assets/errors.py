@@ -149,5 +149,200 @@ ERROR_DATA = {
         'description': 'El directorio donde debe guardarse el modelo ya existe',
         'source': {'class': 'ModelLoader', 'method': 'save_model'},
         'log': 'L-0031'
+    },
+    'E-0031': {
+        'description': 'Hay una tarea de creación de modelos en curso',
+        'source': {'class': 'SystemController', 'method': 'delete_word_processor_theme'},
+        'log': None
+    },
+    'E-0032': {
+        'description': 'El tema seleccionado no existe o es el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'remove_conjugator_theme'},
+        'log': 'L-0199'
+    },
+    'E-0033': {
+        'description': 'El tema seleccionado no existe o es el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'remove_fuzzy_gen_theme'},
+        'log': 'L-0208'
+    },
+    'E-0034': {
+        'description': 'El tema seleccionado no existe o es el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'remove_noun_conversor_theme'},
+        'log': 'L-0217'
+    },
+    'E-0035': {
+        'description': 'El tema seleccionado ya es el tema activo',
+        'source': {'class': 'WordProcessorController', 'method': 'set_conjugator_active_theme'},
+        'log': 'L-0142'
+    },
+    'E-0036': {
+        'description': 'El tema seleccionado no existe',
+        'source': {'class': 'WordProcessorController', 'method': 'set_conjugator_active_theme'},
+        'log': 'L-0143'
+    },
+    'E-0037': {
+        'description': 'El tema seleccionado ya es el tema activo',
+        'source': {'class': 'WordProcessorController', 'method': 'set_fuzzy_generator_active_theme'},
+        'log': 'L-0149'
+    },
+    'E-0038': {
+        'description': 'El tema seleccionado no existe',
+        'source': {'class': 'WordProcessorController', 'method': 'set_fuzzy_generator_active_theme'},
+        'log': 'L-0150'
+    },
+    'E-0039': {
+        'description': 'El tema seleccionado ya es el tema activo',
+        'source': {'class': 'WordProcessorController', 'method': 'set_noun_conversor_active_theme'},
+        'log': 'L-0156'
+    },
+    'E-0040': {
+        'description': 'El tema seleccionado no existe',
+        'source': {'class': 'WordProcessorController', 'method': 'set_noun_conversor_active_theme'},
+        'log': 'L-0157'
+    },
+    'E-0041': {
+        'description': 'Hay una tarea de creación de modelos en curso',
+        'source': {'class': 'SystemController', 'method': 'update_word_processor_config_theme'},
+        'log': None
+    },
+    'E-0042': {
+        'description': 'El modulo del procesador de palabras especificado no existe',
+        'source': {'class': 'AdminModuleController', 'method': 'set_word_processor_active_theme'},
+        'log': None
+    },
+    'E-0043': {
+        'description': 'El modulo del procesador de palabras especificado no existe',
+        'source': {'class': 'AdminModuleController', 'method': 'delete_word_processor_theme'},
+        'log': None
+    },
+    'E-0044': {
+        'description': 'Hay una tarea de creación de modelos en curso',
+        'source': {'class': 'SystemController', 'method': 'update_theme_conjugator_exceptions'},
+        'log': None
+    },
+    'E-0045': {
+        'description': 'Hay una tarea de creación de modelos en curso',
+        'source': {'class': 'SystemController', 'method': 'update_word_processor_config_theme'},
+        'log': None
+    },
+    'E-0046': {
+        'description': 'La excepción no existe o se esta intentando modificar el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'update_conjugator_exception'},
+        'log': 'L-0190'
+    },
+    'E-0047': {
+        'description': 'La configuración de la excepción no tiene la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'update_conjugator_exception'},
+        'log': 'L-0191'
+    },
+    'E-0048': {
+        'description': 'No se ha podido actualizar la excepción en la base de datos',
+        'source': {'class': 'WordProcessorController', 'method': 'update_conjugator_exception'},
+        'log': None
+    },
+    'E-0049': {
+        'description': 'El modulo del procesador de palabras especificado no existe',
+        'source': {'class': 'AdminModuleController', 'method': 'update_word_processor_config_theme'},
+        'log': None
+    },
+    'E-0050': {
+        'description': 'El tema a actualizar no existe o es el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'update_conjugator_configs'},
+        'log': 'L-0163'
+    },
+    'E-0051': {
+        'description': 'Las configuraciones provistas no tienen la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'update_conjugator_configs'},
+        'log': 'L-0164'
+    },
+    'E-0052': {
+        'description': 'El tema a actualizar no existe o es el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'update_fuzzy_gen_config'},
+        'log': 'L-0172'
+    },
+    'E-0053': {
+        'description': 'La configuración provista no tiene la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'update_fuzzy_gen_config'},
+        'log': 'L-0173'
+    },
+    'E-0054': {
+        'description': 'No se ha podido actualizar la configuración en la base de datos',
+        'source': {'class': 'WordProcessorController', 'method': 'update_fuzzy_gen_config'},
+        'log': None
+    },
+    'E-0055': {
+        'description': 'El tema a actualizar no existe o es el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'update_noun_conversor_config'},
+        'log': 'L-0181'
+    },
+    'E-0056': {
+        'description': 'La configuración provista no tiene la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'update_noun_conversor_config'},
+        'log': 'L-0182'
+    },
+    'E-0057': {
+        'description': 'No se ha podido actualizar la configuración en la base de datos',
+        'source': {'class': 'WordProcessorController', 'method': 'update_noun_conversor_config'},
+        'log': None
+    },
+    'E-0058': {
+        'description': 'Hay una tarea de creación de modelos en curso',
+        'source': {'class': 'SystemController', 'method': 'add_theme_conjugator_exceptions'},
+        'log': None
+    },
+    'E-0059': {
+        'description': 'El tema seleccionado no existe o es el tema por defecto',
+        'source': {'class': 'WordProcessorController', 'method': 'add_conjugator_exceptions'},
+        'log': 'L-0118'
+    },
+    'E-0060': {
+        'description': 'La configuración de la excepción no tiene la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'add_conjugator_exceptions'},
+        'log': 'L-0121'
+    },
+    'E-0061': {
+        'description': 'Ya existe una excepción con la clave seleccionada',
+        'source': {'class': 'WordProcessorController', 'method': 'add_conjugator_exceptions'},
+        'log': 'L-0122'
+    },
+    'E-0062': {
+        'description': 'Hay una tarea de creación de modelos en curso',
+        'source': {'class': 'SystemController', 'method': 'add_word_processor_config_theme'},
+        'log': None
+    },
+    'E-0063': {
+        'description': 'El modulo del procesador de palabras especificado no existe',
+        'source': {'class': 'AdminModuleController', 'method': 'add_word_processor_config_theme'},
+        'log': None
+    },
+    'E-0064': {
+        'description': 'El tema solicitado ya existe',
+        'source': {'class': 'WordProcessorController', 'method': 'add_conjugator_config'},
+        'log': None
+    },
+    'E-0065': {
+        'description': 'Alguna de las configuraciones no posee la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'add_conjugator_config'},
+        'log': 'L-0112'
+    },
+    'E-0066': {
+        'description': 'El tema solicitado ya existe',
+        'source': {'class': 'WordProcessorController', 'method': 'add_fuzzy_gen_config'},
+        'log': None
+    },
+    'E-0067': {
+        'description': 'Alguna de las configuraciones no posee la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'add_fuzzy_gen_config'},
+        'log': 'L-0130'
+    },
+    'E-0068': {
+        'description': 'El tema solicitado ya existe',
+        'source': {'class': 'WordProcessorController', 'method': 'add_noun_conversor_config'},
+        'log': None
+    },
+    'E-0069': {
+        'description': 'Alguna de las configuraciones no posee la estructura correcta',
+        'source': {'class': 'WordProcessorController', 'method': 'add_noun_conversor_config'},
+        'log': 'L-0136'
     }
 }

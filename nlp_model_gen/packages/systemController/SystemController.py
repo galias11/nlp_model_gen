@@ -102,9 +102,12 @@ class SystemController:
         if not self.is_ready():
             return self.__build_response_object(False)
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False)
-        results = self.__admin_module.delete_word_processor_theme(module_key, theme_name)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0031', []))
+        try:
+            self.__admin_module.delete_word_processor_theme(module_key, theme_name)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def update_theme_conjugator_exceptions(self, theme_name, exception_key, exception_data):
         """
@@ -123,9 +126,12 @@ class SystemController:
         if not self.is_ready():
             return self.__build_response_object(False)
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False)
-        results = self.__admin_module.update_theme_conjugator_exceptions(theme_name, exception_key, exception_data)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0044', []))
+        try:
+            self.__admin_module.update_theme_conjugator_exceptions(theme_name, exception_key, exception_data)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def update_word_processor_config_theme(self, module_key, theme_name, config_mod, irregular_groups_mod=None):
         """
@@ -148,9 +154,12 @@ class SystemController:
         if not self.is_ready():
             return self.__build_response_object(False)
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False)
-        results = self.__admin_module.update_word_processor_config_theme(module_key, theme_name, config_mod, irregular_groups_mod)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0045', []))
+        try:
+            self.__admin_module.update_word_processor_config_theme(module_key, theme_name, config_mod, irregular_groups_mod)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def set_word_processor_active_theme(self, module_key, theme_name):
         """
@@ -167,9 +176,12 @@ class SystemController:
         if not self.is_ready():
             return self.__build_response_object(False)
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False)
-        results = self.__admin_module.set_word_processor_active_theme(module_key, theme_name)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0041', []))
+        try:
+            self.__admin_module.set_word_processor_active_theme(module_key, theme_name)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def get_word_processor_active_themes(self): 
         """
@@ -198,9 +210,12 @@ class SystemController:
         if not self.is_ready():
             return self.__build_response_object(False)
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False)
-        results = self.__admin_module.add_theme_conjugator_exceptions(theme_name, exceptions)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0058', []))
+        try:
+            self.__admin_module.add_theme_conjugator_exceptions(theme_name, exceptions)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def add_word_processor_config_theme(self, module_key, theme_name, configs, irregular_groups=None):
         """
@@ -223,9 +238,12 @@ class SystemController:
         if not self.is_ready():
             return self.__build_response_object(False)
         if self.__task_manager.check_model_creation_tasks([TASK_KEYS_WORD_PROCESSOR]):
-            return self.__build_response_object(False)
-        results = self.__admin_module.add_word_processor_config_theme(module_key, theme_name, configs, irregular_groups)
-        return self.__build_response_object(results)
+            return self.__build_response_object(False, error=ErrorHandler.get_error('E-0062', []))
+        try:
+            self.__admin_module.add_word_processor_config_theme(module_key, theme_name, configs, irregular_groups)
+            return self.__build_response_object(True)
+        except Exception as e:
+            return self.__build_response_object(False, error=ErrorHandler.get_error_dict(e))
 
     def get_word_processor_available_configs(self, module_key):
         """

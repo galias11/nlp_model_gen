@@ -194,17 +194,18 @@ class AdminModuleController(metaclass=Singleton):
 
         :configs: [Dict] - Configuraciones básicas del tema.
 
-        :irregular_groups: [Dict] - Grupos irregulares del tema. 
-
-        :return: [boolean] - True si la operación fue exitosa, False en caso contrario
+        :irregular_groups: [Dict] - Grupos irregulares del tema.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.add_conjugator_config(theme_name, configs, irregular_groups)
+            self.__word_processor.add_conjugator_config(theme_name, configs, irregular_groups)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.add_fuzzy_gen_config(theme_name, configs)
+            self.__word_processor.add_fuzzy_gen_config(theme_name, configs)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.add_noun_conversor_config((theme_name, configs))
-        return False
+            self.__word_processor.add_noun_conversor_config(theme_name, configs)
+            return
+        ErrorHandler.raise_error('E-0063')
 
     def add_theme_conjugator_exceptions(self, theme_name, exceptions):
         """
@@ -213,10 +214,8 @@ class AdminModuleController(metaclass=Singleton):
         :theme_name: [String] - Nombre del tema.
 
         :exceptions: [List(Dict)] - Set de excepciones a agregar.
-
-        :return: [boolean] - True si las excepciones se agregaron exitosamente, False en caso contrario.
         """
-        return self.__word_processor.add_conjugator_exceptions(theme_name, exceptions)
+        self.__word_processor.add_conjugator_exceptions(theme_name, exceptions)
 
     def get_word_processor_active_themes(self):
         """
@@ -239,16 +238,17 @@ class AdminModuleController(metaclass=Singleton):
         :module_key: [String] - Nombre del submodulo del modulo de procesamiento a cambiar.
 
         :theme_name: [String] - Nombre del tema a activar para el conjugador.
-
-        :return: [boolean] - True si el tema se ha cambiado exitosamente, False en caso contrario.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.set_conjugator_active_theme(theme_name)
+            self.__word_processor.set_conjugator_active_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.set_fuzzy_generator_active_theme(theme_name)
+            self.__word_processor.set_fuzzy_generator_active_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.set_noun_conversor_active_theme(theme_name)
-        return False
+            self.__word_processor.set_noun_conversor_active_theme(theme_name)
+            return
+        ErrorHandler.raise_error('E-0042')
 
     def update_word_processor_config_theme(self, module_key, theme_name, config_mod, irregular_groups_mod=None):
         """
@@ -265,16 +265,17 @@ class AdminModuleController(metaclass=Singleton):
 
         :irregular_groups_mod: [Dict] - Opciones actualizadas de los grupos de verbos irregulares (no es
         necesario incluir los grupos que no tienen cambios).
-
-        :return: [boolean] - True si la operación fue exitosa, False en caso contrario.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.update_conjugator_configs(theme_name, config_mod, irregular_groups_mod)
+            self.__word_processor.update_conjugator_configs(theme_name, config_mod, irregular_groups_mod)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.update_fuzzy_gen_config(theme_name, config_mod)
+            self.__word_processor.update_fuzzy_gen_config(theme_name, config_mod)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.update_noun_conversor_config(theme_name, config_mod)
-        return False
+            self.__word_processor.update_noun_conversor_config(theme_name, config_mod)
+            return
+        ErrorHandler.raise_error('E-0049')
 
     def update_theme_conjugator_exceptions(self, theme_name, exception_key, exception_data):
         """
@@ -286,10 +287,8 @@ class AdminModuleController(metaclass=Singleton):
         :exception_key: [String] - Clave de la excepción a modificar.
 
         :exception_data: [Dict] - Nueva configuración de la expceción irregular.
-
-        :returns: [boolean] - True si la operación fue exitosa, False en caso contrario.
         """
-        return self.__word_processor.update_conjugator_exception(theme_name, exception_key, exception_data)
+        self.__word_processor.update_conjugator_exception(theme_name, exception_key, exception_data)
 
     def delete_word_processor_theme(self, module_key, theme_name):
         """
@@ -299,16 +298,17 @@ class AdminModuleController(metaclass=Singleton):
         :module_key: [String] - Clave del modulo.
 
         :theme_name: [String] - Nombre del tema a eliminar.
-
-        :return: [boolean] - True si el modulo pudo ser eliminado, False en caso contrario.
         """
         if module_key == WORD_PROCESSOR_MODULE_KEY_CONJUGATOR:
-            return self.__word_processor.remove_conjugator_theme(theme_name)
+            self.__word_processor.remove_conjugator_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN:
-            return self.__word_processor.remove_fuzzy_gen_theme(theme_name)
+            self.__word_processor.remove_fuzzy_gen_theme(theme_name)
+            return
         if module_key == WORD_PROCESSOR_MODULE_KEY_NOUN_CONV:
-            return self.__word_processor.remove_noun_conversor_theme(theme_name)
-        return False
+            self.__word_processor.remove_noun_conversor_theme(theme_name)
+            return
+        ErrorHandler.raise_error('E-0043')
 
     def submit_training_examples(self, model_id, training_examples_list):
         """
