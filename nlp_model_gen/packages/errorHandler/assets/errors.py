@@ -484,5 +484,35 @@ ERROR_DATA = {
         'description': 'La tarea solicitada no existe',
         'source': {'class': 'TaskManager', 'method': 'get_task_status'},
         'log': None
+    },
+    'E-0098': {
+        'description': 'La entidad personalizada no cumple con la estructura requerida',
+        'source': {'class': 'ModelTrainingController', 'method': 'add_custom_entity'},
+        'log': 'L-0267'
+    },
+    'E-0099': {
+        'description': 'Ya existe una entidad con el nombre solicitado',
+        'source': {'class': 'CustomEntityTagManager', 'method': 'add_custom_entity'},
+        'log': 'L-0272'
+    },
+    'E-0100': {
+        'description': 'La entidad personalizada no cumple con la estructura requerida',
+        'source': {'class': 'ModelTrainingController', 'method': 'edit_custom_entity'},
+        'log': 'L-0280'
+    },
+    'E-0101': {
+        'description': 'La entidad personalizada a editar no existe',
+        'source': {'class': 'CustomEntityTagManager', 'method': 'edit_custom_tag_entity'},
+        'log': 'L-0285'
+    },
+    'E-0102': {
+        'description': 'Los datos a modificar son iguales a los existentes',
+        'source': {'class': 'CustomEntityTagManager', 'method': 'edit_custom_tag_entity'},
+        'log': 'L-0286'
+    },
+    'E-0103': {
+        'description': 'Los datos no se han actualizado en la base de datos',
+        'source': {'class': 'CustomEntityTagManager', 'method': 'edit_custom_tag_entity'},
+        'log': 'L-0289'
     }
 }

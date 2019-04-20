@@ -426,4 +426,33 @@ class SystemController:
             task_id = self.__task_manager.create_files_analysis_task(model_id, files, only_positives)
             return self.__build_response_object(True, {'task_id': task_id})
         return self.__process_incoming_request(action)
-        
+
+    def add_custom_entity(self, name, description):
+        """
+        Agrega una nueva entidad personalizada al administrador de ejemplos de entrenamiento.
+
+        :name: [String] - Nombre de la entidad.
+
+        :description: [String] - Descripción de la entidad personalizada.
+
+        :return: [Dict] - Diccionario con los resultados de la operación
+        """
+        def action():
+            self.__admin_module.add_custom_entity(name, description)
+            return self.__build_response_object(True)
+        return self.__process_incoming_request(action)
+
+    def edit_custom_entity(self, name, description):
+        """
+        Edita una entidad personalizada del administrador de ejemplos de entrenamiento.
+
+        :name: [String] - Nombre de la entidad a editar.
+
+        .description: [String] - Nueva descripción para la entidad personalizada.
+
+        :return: [Dict] - Diccionario con los resultados de la operación
+        """
+        def action():
+            self.__admin_module.edit_custom_entity(name, description)
+            return self.__build_response_object(True)
+        return self.__process_incoming_request(action)

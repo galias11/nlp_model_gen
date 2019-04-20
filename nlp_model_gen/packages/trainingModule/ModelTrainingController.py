@@ -211,23 +211,14 @@ class ModelTrainingController(ObserverSingleton):
         :name: [String] - Nombre de la entidad, actuará como identificador de la misma.
 
         :description: [String] - Descripción de la entidad.
-
-        :return: [boolean] - True si se ha agregado correctamente, False en caso contrario.
         """
         Logger.log('L-0264')
-        if not self.is_ready():
-            Logger.log('L-0265')
-            return False
         Logger.log('L-0266')
         if not validate_data(TRAIN_MANAGER_SCHEMAS['CUSTOM_ENTITY'], {'name': name, 'description': description}):
-            Logger.log('L-0267')
-            return False
+            ErrorHandler.raise_error('E-0098')
         Logger.log('L-0268')
-        if self.__train_data_manager.add_custom_entity(name.upper(), description):
-            Logger.log('L-0269')
-            return True
-        Logger.log('L-0270')
-        return False
+        self.__train_data_manager.add_custom_entity(name.upper(), description)
+        Logger.log('L-0269')
 
     def edit_custom_entity(self, name, description):
         """
@@ -239,19 +230,12 @@ class ModelTrainingController(ObserverSingleton):
         :description: [String] - Descripción de la entidad.
         """
         Logger.log('L-0277', [{'text': name, 'color': HIGHLIGHT_COLOR}])
-        if not self.is_ready():
-            Logger.log('L-0278')
-            return False
         Logger.log('L-0279')
         if not validate_data(TRAIN_MANAGER_SCHEMAS['CUSTOM_ENTITY'], {'name': name, 'description': description}):
-            Logger.log('L-0280')
-            return False
+            ErrorHandler.raise_error('E-0100')
         Logger.log('L-0281')
-        if self.__train_data_manager.edit_custom_entity(name.upper(), description):
-            Logger.log('L-0282')
-            return True
-        Logger.log('L-0283')
-        return False
+        self.__train_data_manager.edit_custom_entity(name.upper(), description)
+        Logger.log('L-0282')
 
     def get_available_entities(self):
         """
