@@ -65,3 +65,20 @@
 
 - TFI-0007: Se pierde el color del log principal cuando se aplican textos insertados con otros colores.
 - TFI-0006: Se pueden aprobar / desaprobar ejemplos previamente aprobados / desaprobados.
+
+## Version 0.1.9:
+
+#### New features
+
+- TF-0047: Permitir el procesamiento concurrente de archivos.
+
+#### Tasks / Improvements
+
+- TF-0060: Integrar modulo de aplicación con el controlador de sistema.
+- TF-0059: Integrar modulo de administración con el controlador de sistema.
+- TF-0048: Implementar y aplicar modulo de manejo de errores
+
+#### Bugs fixed
+
+- TFI-0008: El elemento token_text esta devolviendo la oración completa en lugar del token.
+- TFI-0009: Implementar funcionalidades faltantes en el controlador de sistema
