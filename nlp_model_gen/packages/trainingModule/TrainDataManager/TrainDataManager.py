@@ -216,30 +216,20 @@ class TrainDataManager:
         estar ya rechazado o aplicado.
 
         :example_id: [int] - Id del ejemplo de entrenamiento.
-
-        :return: [boolean] - True si el ejemplo fue rechazado, False en caso contrario.
         """
-        try:
-            Logger.log('L-0316', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
-            example = self.__find_example(example_id)
-            if example is None:
-                Logger.log('L-0317')
-                return False
-            if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
-                Logger.log('L-0355')
-                return False
-            Logger.log('L-0318')
-            updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_REJECTED})
-            if updated_items.matched_count > 0:
-                Logger.log('L-0319')
-                example.reject()
-                Logger.log('L-0320', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
-                return True
-            Logger.log('L-0321')
-            return False
-        except Exception as e:
-            Logger.log('L-0322', [{'text': example_id, 'color': HIGHLIGHT_COLOR}, {'text': e, 'color': ERROR_COLOR}])
-            return False
+        Logger.log('L-0316', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
+        example = self.__find_example(example_id)
+        if example is None:
+            ErrorHandler.raise_error('E-0104')
+        if example.get_status() != TRAIN_EXAMPLE_STATUS_SUBMITTED:
+            ErrorHandler.raise_error('E-0105')
+        Logger.log('L-0318')
+        updated_items = db_update_item(TRAIN_MANAGER_DB, TRAIN_DATA_EXAMPLES_COLLECTION, {'example_id': example_id}, {'status': TRAIN_EXAMPLE_STATUS_REJECTED}).modified_count
+        if updated_items <= 0:
+            ErrorHandler.raise_error('E-0106')
+        Logger.log('L-0319')
+        example.reject()
+        Logger.log('L-0320', [{'text': example_id, 'color': HIGHLIGHT_COLOR}])
 
     def get_pending_examples(self, model_id):
         """
