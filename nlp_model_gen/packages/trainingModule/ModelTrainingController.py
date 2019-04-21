@@ -157,7 +157,15 @@ class ModelTrainingController(ObserverSingleton):
         Logger.log('L-0314')
         results = list([])
         for example_id in examples_id_list:
-            results.append({'example_id': example_id, 'status': self.__train_data_manager.discard_example(example_id)})
+            status = False
+            error = None
+            try:
+                self.__train_data_manager.discard_example(example_id)
+                status = True
+            except Exception as e:
+                error = ErrorHandler.get_error_dict(e)
+            finally:
+                results.append({'example_id': example_id, 'status': status, 'error': error})
         Logger.log('L-0315')
         return results
 
