@@ -41,6 +41,13 @@ class FilesAnalysisTask(Task, Observer):
     def is_only_positives(self):
         return self.__only_positives
 
+    def update(self, data):
+        """
+        Escucha cada una de las subtareas de analysis para controlar la finalización de
+        las mismas.
+        """
+        self.__completed_tasks = self.__completed_tasks + 1
+
     def __check_task_finalized(self):
         return len(self.__analysis_tasks) == self.__completed_tasks
 
@@ -54,13 +61,6 @@ class FilesAnalysisTask(Task, Observer):
             task_results['results'] = task_status['results']
             results.append(task_results)
         return results
-
-    def update(self, data):
-        """
-        Escucha cada una de las subtareas de analysis para controlar la finalización de
-        las mismas.
-        """
-        self.__completed_tasks = self.__completed_tasks + 1
 
     def check_model_relation(self, model_id, model_name):
         """

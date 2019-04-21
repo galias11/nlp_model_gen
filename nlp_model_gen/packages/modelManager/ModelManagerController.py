@@ -42,6 +42,14 @@ class ModelManagerController(ObservableSingleton):
             self.__init_success = False
             ErrorHandler.raise_error('E-0021', [{'text': e, 'color': ERROR_COLOR}])
 
+    def __initialize_custom_model(self):
+        """
+        Inicializa un nuevo modelo de spacy, cargando lo en memoria.
+
+        :return: [SpacyModelRef] - Referencia al nuevo modelo de spacy creado.
+        """
+        return ModelLoader.initiate_default_model()
+
     def is_ready(self):
         return self.__init_success
 
@@ -57,14 +65,6 @@ class ModelManagerController(ObservableSingleton):
             if model.get_model_id() == model_id:
                 return model
         return None
-
-    def __initialize_custom_model(self):
-        """
-        Inicializa un nuevo modelo de spacy, cargando lo en memoria.
-
-        :return: [SpacyModelRef] - Referencia al nuevo modelo de spacy creado.
-        """
-        return ModelLoader.initiate_default_model()
 
     def load_model(self, model_id):
         """
@@ -127,8 +127,6 @@ class ModelManagerController(ObservableSingleton):
         :model: [SpacyModelRef] - Modelo sobre el cual aplicar las excepc¡ones.
 
         :tokenizer_exceptions_path: [String] - Ruta al directorio de excepciones para el modelo.
-
-        :return: [bool] - True si la operación fue exitosa, False en caso contrario.
         """
         Logger.log('L-0023')
         tokenizer_exceptions_files = get_files_in_dir(tokenizer_exceptions_path, TOKEN_RULES_GEN_RULES_EXT)
@@ -189,8 +187,6 @@ class ModelManagerController(ObservableSingleton):
         del mismo del disco.
 
         :model_id: [String] - Id del modelo.
-
-        :return: [boolean] - True si el modelo fue exitosamente borrado, False en caso contrario.
         """
         Logger.log('L-0064')
         selected_model = self.get_model(model_id)

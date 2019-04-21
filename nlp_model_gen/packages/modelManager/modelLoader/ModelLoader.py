@@ -80,8 +80,6 @@ class ModelLoader:
         :path: [String] - Ruta en la cual guardar el modelo.
 
         :tmp_files_path: [String] - Ruta donde se encuentran los archivos temporales del modelo.
-
-        :return: [boolean] - True si el modelo fue cargado correctamente, False en caso contrario.
         """
         Logger.log('L-0030')
         base_path = build_path(MODEL_MANAGER_ROOT_DIR, path)

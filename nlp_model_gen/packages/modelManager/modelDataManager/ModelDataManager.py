@@ -39,7 +39,7 @@ class ModelDataManager:
 
         :model_id: [String] - id del modelo buscado. 
 
-        :return: [List(String)] - Listado con los identificadores de cada modelo guardado.
+        :return: [Boolean] - True si se ha encontrado el modelo, False en caso contrario
         """
         available_model_names = list(map(
             lambda model: model['model_id'], 
@@ -63,8 +63,6 @@ class ModelDataManager:
         :path: [String] - Ruta relativa para encontrar el modelo.
 
         :analyser_rules_set: [List(Dict)] - Lista de reglas para el analizador
-
-        :return: [boolean] - True si se han guardado los datos con exito, False en caso contrario.
         """
         Logger.log('L-0026')
         if ModelDataManager.check_existing_model(model_id):

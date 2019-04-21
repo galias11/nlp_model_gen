@@ -156,6 +156,26 @@ class TokenGenerator:
             tokenizer_exceptions_set.append(token_exception)
         return tokenizer_exceptions_set
 
+    def __create_custom_noun_token_rules(self, noun, base_noun, max_dist, is_plural=False):
+        """
+        A partir de un sustantivo crea un set de reglas para el tokenizer. 
+
+        :noun: [String] - Sustantivo.
+
+        :base_noun: [String] - Palabra base (lemma).
+
+        :max_dist: [int] - Distancia de demerau levenshtein máxima.
+
+        :is_plural: [bool] - True si la palabra es plural. 
+        """
+        Logger.log('L-0015', [{'text': noun, 'color': HIGHLIGHT_COLOR}])
+        fuzzy_set = self.__word_processor.get_fuzzy_set(noun, max_dist)
+        tag = TOKEN_RULES_GEN_NOUN_SING_TAG if not is_plural else TOKEN_RULES_GEN_NOUN_PLUR_TAG
+        noun_rule_set = list([])
+        for fuzzy_token in fuzzy_set:
+            noun_rule_set.append(self.__get_noun_token_rule(fuzzy_token, base_noun, tag))
+        return noun_rule_set
+
     def generate_verb_rules_set(self, infinitive, max_dist):
         """
         A partir del verbo recibido genera las conjugaciones posibles utilizando 
@@ -179,26 +199,6 @@ class TokenGenerator:
                 if verb != '':
                     verb_rules_dict[verb] = self.__create_custom_verb_token_rules(verb, infinitive, index, key, max_dist)
         return verb_rules_dict
-
-    def __create_custom_noun_token_rules(self, noun, base_noun, max_dist, is_plural=False):
-        """
-        A partir de un sustantivo crea un set de reglas para el tokenizer. 
-
-        :noun: [String] - Sustantivo.
-
-        :base_noun: [String] - Palabra base (lemma).
-
-        :max_dist: [int] - Distancia de demerau levenshtein máxima.
-
-        :is_plural: [bool] - True si la palabra es plural. 
-        """
-        Logger.log('L-0015', [{'text': noun, 'color': HIGHLIGHT_COLOR}])
-        fuzzy_set = self.__word_processor.get_fuzzy_set(noun, max_dist)
-        tag = TOKEN_RULES_GEN_NOUN_SING_TAG if not is_plural else TOKEN_RULES_GEN_NOUN_PLUR_TAG
-        noun_rule_set = list([])
-        for fuzzy_token in fuzzy_set:
-            noun_rule_set.append(self.__get_noun_token_rule(fuzzy_token, base_noun, tag))
-        return noun_rule_set
 
     def generate_noun_rules_set(self, singular, max_dist):
         """
