@@ -9,12 +9,6 @@ LOG_DATA = {
         'main_text': 'Iniciando creación de modelo',
         'type': TYPE_INFO
     },
-    'L-0002': {
-        'class_name': 'AdminModuleController',
-        'method_name': 'generate_model',
-        'main_text': 'Creación abortada, modelo existente',
-        'type': TYPE_ERR
-    },
     'L-0003': {
         'class_name': 'TokenizerRulesGenerator',
         'method_name': 'generate_model_data',
@@ -26,12 +20,6 @@ LOG_DATA = {
         'method_name': 'generate_model_data',
         'main_text': 'Archivos temporales generados',
         'type': TYPE_SUCCESS
-    },
-    'L-0005': {
-        'class_name': 'TokenizerRulesGenerator',
-        'method_name': 'generate_model_data',
-        'main_text': 'Excepción al generar temporales de modelo: %s',
-        'type': TYPE_INFO
     },
     'L-0006': {
         'class_name': 'TokenizerRulesGenerator',
@@ -69,18 +57,6 @@ LOG_DATA = {
         'main_text': 'Generando diccionario para el término %s...',
         'type': TYPE_INFO
     },
-    'L-0012': {
-        'class_name': 'TokenizerRulesGenerator',
-        'method_name': 'generate_noun_rules',
-        'main_text': 'Guardando semilla del modelo...',
-        'type': TYPE_INFO
-    },
-    'L-0013': {
-        'class_name': 'TokenizerRulesGenerator',
-        'method_name': 'generate_noun_rules',
-        'main_text': 'Semilla del modelo guardada',
-        'type': TYPE_SUCCESS
-    },
     'L-0014': {
         'class_name': 'TokenGenerator',
         'method_name': 'generate_verb_rules_set',
@@ -104,24 +80,6 @@ LOG_DATA = {
         'method_name': 'create_analyzer_rule_set',
         'main_text': 'Set de reglas creado.',
         'type': TYPE_SUCCESS
-    },
-    'L-0018': {
-        'class_name': 'AnalyzerRulesGenerator',
-        'method_name': 'create_analyzer_rule_set',
-        'main_text': 'Excepción al generar temporales de modelo: %s',
-        'type': TYPE_INFO
-    },
-    'L-0019': {
-        'class_name': 'ModelManager',
-        'method_name': 'create_model',
-        'main_text': 'Aborto: Modelo ya existe',
-        'type': TYPE_ERR
-    },
-    'L-0020': {
-        'class_name': 'ModelManager',
-        'method_name': 'create_model',
-        'main_text': 'Excepción al generar y guardar modelo de spacy: %s',
-        'type': TYPE_INFO
     },
     'L-0021': {
         'class_name': 'ModelManager',
@@ -165,12 +123,6 @@ LOG_DATA = {
         'main_text': 'Aborto: Modelo ya existe en base de datos',
         'type': TYPE_ERR
     },
-    'L-0028': {
-        'class_name': 'ModelDataManager',
-        'method_name': 'save_model_data',
-        'main_text': 'Excepción al guardar modelo en base de datos: %s',
-        'type': TYPE_INFO
-    },
     'L-0029': {
         'class_name': 'ModelDataManager',
         'method_name': 'save_model_data',
@@ -194,12 +146,6 @@ LOG_DATA = {
         'method_name': 'save_model',
         'main_text': 'Archivos de modelo guardados correctamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0033': {
-        'class_name': 'ModelLoader',
-        'method_name': 'save_model',
-        'main_text': 'Excepción al guardar archivos de modelo: %s',
-        'type': TYPE_INFO
     },
     'L-0034': {
         'class_name': 'AdminModuleController',
@@ -345,23 +291,11 @@ LOG_DATA = {
         'main_text': 'Modelo de spaCy cargado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0058': {
-        'class_name': 'ModelManagerController',
-        'method_name': 'analyze_text',
-        'main_text': 'Error al cargar el modelo de spaCy',
-        'type': TYPE_ERR
-    },
     'L-0059': {
         'class_name': 'Model',
         'method_name': 'analyze_text',
         'main_text': 'Analizando el texto con modelo de spaCy...',
         'type': TYPE_INFO
-    },
-    'L-0060': {
-        'class_name': 'Model',
-        'method_name': 'analyze_text',
-        'main_text': 'Error al intentar utilizar el modelo de spaCy',
-        'type': TYPE_ERR
     },
     'L-0061': {
         'class_name': 'Model',
@@ -399,12 +333,6 @@ LOG_DATA = {
         'main_text': 'Eliminando modelo de la base de datos...',
         'type': TYPE_INFO
     },
-    'L-0067': {
-        'class_name': 'ModelDataManager',
-        'method_name': 'remove_model_data',
-        'main_text': 'Excepción al intentar elimnar modelo de la base de datos: %s',
-        'type': TYPE_INFO
-    },
     'L-0068': {
         'class_name': 'ModelManagerController',
         'method_name': 'remove_model',
@@ -422,12 +350,6 @@ LOG_DATA = {
         'method_name': 'delete_model_files',
         'main_text': 'Eliminando archivos del modelo...',
         'type': TYPE_INFO
-    },
-    'L-0071': {
-        'class_name': 'ModelManagerController',
-        'method_name': 'remove_model',
-        'main_text': 'Error al eliminar los archivos del modelo',
-        'type': TYPE_ERR
     },
     'L-0072': {
         'class_name': 'ModelManagerController',
@@ -459,35 +381,11 @@ LOG_DATA = {
         'main_text': 'Error: Ningún dato que modificar',
         'type': TYPE_ERR
     },
-    'L-0077': {
-        'class_name': 'ModelManagerController',
-        'method_name': 'edit_model',
-        'main_text': 'Error: Modelo inexistente',
-        'type': TYPE_ERR
-    },
-    'L-0078': {
-        'class_name': 'ModelManagerController',
-        'method_name': 'edit_model',
-        'main_text': 'Error al modificar los datos en la base de datos',
-        'type': TYPE_ERR
-    },
-    'L-0079': {
-        'class_name': 'ModelDataManager',
-        'method_name': 'modify_model_data',
-        'main_text': 'Excepción al modificar datos en la base de datos: %s',
-        'type': TYPE_INFO
-    },
     'L-0080': {
         'class_name': 'ModelDataManager',
         'method_name': 'modify_model_data',
         'main_text': 'Modificando datos del modelo en la base de datos...',
         'type': TYPE_INFO
-    },
-    'L-0081': {
-        'class_name': 'ModelDataManager',
-        'method_name': 'modify_model_data',
-        'main_text': 'Ya existe un modelo con el nuevo nombre',
-        'type': TYPE_ERR
     },
     'L-0082': {
         'class_name': 'ModelDataManager',
@@ -499,12 +397,6 @@ LOG_DATA = {
         'class_name': '',
         'method_name': 'remove_dir',
         'main_text': 'Excepción al eliminar el directorio: %s',
-        'type': TYPE_INFO
-    },
-    'L-0084': {
-        'class_name': '',
-        'method_name': 'create_dir_if_not_exist',
-        'main_text': 'Excepción al crear el directorio: %s',
         'type': TYPE_INFO
     },
     'L-0085': {
@@ -561,12 +453,6 @@ LOG_DATA = {
         'main_text': 'Excepción al realizar operación en batch sobre la BD: %s',
         'type': TYPE_INFO
     },
-    'L-0094': {
-        'class_name': 'AdminModuleController',
-        'method_name': 'generate_model',
-        'main_text': 'El módulo no se ha inicializado correctamente.',
-        'type': TYPE_ERR
-    },
     'L-0095': {
         'class_name': 'AdminModuleController',
         'method_name': 'get_available_models',
@@ -576,24 +462,6 @@ LOG_DATA = {
     'L-0096': {
         'class_name': 'AdminModuleController',
         'method_name': 'load_model',
-        'main_text': 'El módulo no se ha inicializado correctamente.',
-        'type': TYPE_ERR
-    },
-    'L-0097': {
-        'class_name': 'AdminModuleController',
-        'method_name': 'edit_model_data',
-        'main_text': 'El módulo no se ha inicializado correctamente.',
-        'type': TYPE_ERR
-    },
-    'L-0098': {
-        'class_name': 'AdminModuleController',
-        'method_name': 'delete_model_data',
-        'main_text': 'El módulo no se ha inicializado correctamente.',
-        'type': TYPE_ERR
-    },
-    'L-0099': {
-        'class_name': 'AdminModuleController',
-        'method_name': 'analyse_text',
         'main_text': 'El módulo no se ha inicializado correctamente.',
         'type': TYPE_ERR
     },
@@ -693,12 +561,6 @@ LOG_DATA = {
         'main_text': 'Nuevo tema guardado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0116': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'add_conjugator_config',
-        'main_text': 'Excepción al guardar el nuevo tema: %s',
-        'type': TYPE_INFO
-    },
     'L-0117': {
         'class_name': 'WordProcessorController',
         'method_name': 'add_conjugator_exceptions',
@@ -765,12 +627,6 @@ LOG_DATA = {
         'main_text': 'Excepciones del tema actvo modificadas exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0128': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'add_conjugator_exceptions',
-        'main_text': 'Excepción al guardar nuevas configuraciones: %s',
-        'type': TYPE_INFO
-    },
     'L-0129': {
         'class_name': 'WordProcessorController',
         'method_name': 'add_fuzzy_gen_config',
@@ -801,12 +657,6 @@ LOG_DATA = {
         'main_text': 'Datos guardados exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0134': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'add_fuzzy_gen_config',
-        'main_text': 'Excepción al guardar nuevas configuraciones: %s',
-        'type': TYPE_INFO
-    },
     'L-0135': {
         'class_name': 'WordProcessorController',
         'method_name': 'add_noun_conversor_theme',
@@ -836,12 +686,6 @@ LOG_DATA = {
         'method_name': 'add_noun_conversor_theme',
         'main_text': 'Datos guardados exitosamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0140': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'add_noun_conversor_theme',
-        'main_text': 'Excepción al guardar nuevas configuraciones: %s',
-        'type': TYPE_INFO
     },
     'L-0141': {
         'class_name': 'WordProcessorController',
@@ -879,12 +723,6 @@ LOG_DATA = {
         'main_text': 'Tema cambiado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0147': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'set_conjugator_active_theme',
-        'main_text': 'Excepción al intentar cambiar el tema: %s',
-        'type': TYPE_INFO
-    },
     'L-0148': {
         'class_name': 'WordProcessorController',
         'method_name': 'set_fuzzy_generator_active_theme',
@@ -921,12 +759,6 @@ LOG_DATA = {
         'main_text': 'Tema cambiado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0154': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'set_fuzzy_generator_active_theme',
-        'main_text': 'Excepción al intentar cambiar el tema: %s',
-        'type': TYPE_INFO
-    },
     'L-0155': {
         'class_name': 'WordProcessorController',
         'method_name': 'set_noun_conversor_active_theme',
@@ -962,12 +794,6 @@ LOG_DATA = {
         'method_name': 'set_noun_conversor_active_theme',
         'main_text': 'Tema cambiado exitosamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0161': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'set_noun_conversor_active_theme',
-        'main_text': 'Excepción al intentar cambiar el tema: %s',
-        'type': TYPE_INFO
     },
     'L-0162': {
         'class_name': 'WordProcessorController',
@@ -1017,12 +843,6 @@ LOG_DATA = {
         'main_text': 'Datos del modelo en uso actualizados correctamente',
         'type': TYPE_SUCCESS
     },
-    'L-0170': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'update_conjugator_configs',
-        'main_text': 'Excepción al actualizar el tema de configuración: %s',
-        'type': TYPE_INFO
-    },
     'L-0171': {
         'class_name': 'WordProcessorController',
         'method_name': 'update_fuzzy_gen_config',
@@ -1070,12 +890,6 @@ LOG_DATA = {
         'method_name': 'update_fuzzy_gen_config',
         'main_text': 'Datos del modelo en uso actualizados correctamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0179': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'update_fuzzy_gen_config',
-        'main_text': 'Excepción al actualizar el tema de configuración: %s',
-        'type': TYPE_INFO
     },
     'L-0180': {
         'class_name': 'WordProcessorController',
@@ -1125,12 +939,6 @@ LOG_DATA = {
         'main_text': 'Datos del modelo en uso actualizados correctamente',
         'type': TYPE_SUCCESS
     },
-    'L-0188': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'update_noun_conversor_config',
-        'main_text': 'Excepción al actualizar el tema de configuración: %s',
-        'type': TYPE_INFO
-    },
     'L-0189': {
         'class_name': 'WordProcessorController',
         'method_name': 'update_conjugator_exception',
@@ -1179,12 +987,6 @@ LOG_DATA = {
         'main_text': 'Datos del modelo en uso actualizados correctamente',
         'type': TYPE_SUCCESS
     },
-    'L-0197': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'update_conjugator_exception',
-        'main_text': 'Excepción al actualizar el tema de configuración: %s',
-        'type': TYPE_INFO
-    },
     'L-0198': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_conjugator_theme',
@@ -1215,12 +1017,6 @@ LOG_DATA = {
         'main_text': 'Cambio de tema realizado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0203': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'remove_conjugator_theme',
-        'main_text': 'Error al cambiar el tema activo',
-        'type': TYPE_ERR
-    },
     'L-0204': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_conjugator_theme',
@@ -1232,12 +1028,6 @@ LOG_DATA = {
         'method_name': 'remove_conjugator_theme',
         'main_text': 'Exito al eliminar los datos',
         'type': TYPE_SUCCESS
-    },
-    'L-0206': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'remove_conjugator_theme',
-        'main_text': 'Excepción al borrar el tema de configuración: %s',
-        'type': TYPE_INFO
     },
     'L-0207': {
         'class_name': 'WordProcessorController',
@@ -1269,12 +1059,6 @@ LOG_DATA = {
         'main_text': 'Cambio de tema realizado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0212': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'remove_fuzzy_gen_theme',
-        'main_text': 'Error al cambiar el tema activo',
-        'type': TYPE_ERR
-    },
     'L-0213': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_fuzzy_gen_theme',
@@ -1286,12 +1070,6 @@ LOG_DATA = {
         'method_name': 'remove_fuzzy_gen_theme',
         'main_text': 'Exito al eliminar los datos',
         'type': TYPE_SUCCESS
-    },
-    'L-0215': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'remove_fuzzy_gen_theme',
-        'main_text': 'Excepción al borrar el tema de configuración: %s',
-        'type': TYPE_INFO
     },
     'L-0216': {
         'class_name': 'WordProcessorController',
@@ -1323,12 +1101,6 @@ LOG_DATA = {
         'main_text': 'Cambio de tema realizado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0221': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'remove_noun_conversor_theme',
-        'main_text': 'Error al cambiar el tema activo',
-        'type': TYPE_ERR
-    },
     'L-0222': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_noun_conversor_theme',
@@ -1340,12 +1112,6 @@ LOG_DATA = {
         'method_name': 'remove_noun_conversor_theme',
         'main_text': 'Exito al eliminar los datos',
         'type': TYPE_SUCCESS
-    },
-    'L-0224': {
-        'class_name': 'WordProcessorController',
-        'method_name': 'remove_noun_conversor_theme',
-        'main_text': 'Excepción al borrar el tema de configuración: %s',
-        'type': TYPE_INFO
     },
     'L-0225': {
         'class_name': 'TaskManager',
@@ -1473,12 +1239,6 @@ LOG_DATA = {
         'main_text': 'Módulo de entrenamiento inicializado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0246': {
-        'class_name': 'ModelTrainingController',
-        'method_name': 'init',
-        'main_text': 'Error al inicializar el modulo de entrenamiento',
-        'type': TYPE_ERR
-    },
     'L-0247': {
         'class_name': 'TrainDataManager',
         'method_name': 'init',
@@ -1587,12 +1347,6 @@ LOG_DATA = {
         'main_text': 'Agregando nueva entidad personalizada...',
         'type': TYPE_INFO
     },
-    'L-0265': {
-        'class_name': 'ModelTrainingController',
-        'method_name': 'add_custom_entity',
-        'main_text': 'El modulo no esta inicializado',
-        'type': TYPE_ERR
-    },
     'L-0266': {
         'class_name': 'ModelTrainingController',
         'method_name': 'add_custom_entity',
@@ -1616,12 +1370,6 @@ LOG_DATA = {
         'method_name': 'add_custom_entity',
         'main_text': 'Entidad personalizada agregada exitosamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0270': {
-        'class_name': 'ModelTrainingController',
-        'method_name': 'add_custom_entity',
-        'main_text': 'Error al agregar la entidad personalizada',
-        'type': TYPE_ERR
     },
     'L-0271': {
         'class_name': 'CustomEntityTagManager',
@@ -1653,23 +1401,11 @@ LOG_DATA = {
         'main_text': 'Nueva entidad creada exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0276': {
-        'class_name': 'CustomEntityTagManager',
-        'method_name': 'add_custom_entity',
-        'main_text': 'Ocurrio una excepción al crear la nueva entidad: %s',
-        'type': TYPE_INFO
-    },
     'L-0277': {
         'class_name': 'ModelTrainingController',
         'method_name': 'edit_custom_entity',
         'main_text': 'Edititando entidad personalizada: %s',
         'type': TYPE_INFO
-    },
-    'L-0278': {
-        'class_name': 'ModelTrainingController',
-        'method_name': 'edit_custom_entity',
-        'main_text': 'El modulo no esta inicializado',
-        'type': TYPE_ERR
     },
     'L-0279': {
         'class_name': 'ModelTrainingController',
@@ -1694,12 +1430,6 @@ LOG_DATA = {
         'method_name': 'edit_custom_entity',
         'main_text': 'Entidad personalizada editada exitosamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0283': {
-        'class_name': 'ModelTrainingController',
-        'method_name': 'edit_custom_entity',
-        'main_text': 'Error al editar entidad personalizada',
-        'type': TYPE_ERR
     },
     'L-0284': {
         'class_name': 'CustomEntityTagManager',
@@ -1743,23 +1473,11 @@ LOG_DATA = {
         'main_text': 'Datos de la entidad editados exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0291': {
-        'class_name': 'CustomEntityTagManager',
-        'method_name': 'edit_custom_entity',
-        'main_text': 'Ha ocurrido un excepción al editar los datos de la entidad: %s',
-        'type': TYPE_INFO
-    },
     'L-0292': {
         'class_name': 'ModelTrainingController',
         'method_name': 'add_training_examples',
         'main_text': 'Agregando lote de ejemplos de entrenamiento...',
         'type': TYPE_INFO
-    },
-    'L-0293': {
-        'class_name': 'ModelTrainingController',
-        'method_name': 'add_training_examples',
-        'main_text': 'El modulo no esta inicializado',
-        'type': TYPE_ERR
     },
     'L-0294': {
         'class_name': 'ModelTrainingController',
@@ -1772,12 +1490,6 @@ LOG_DATA = {
         'method_name': 'add_training_examples',
         'main_text': 'Ejemplos de entrenamiento agregados exitosamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0296': {
-        'class_name': 'ModelTrainingController',
-        'method_name': 'add_training_examples',
-        'main_text': 'Ha ocurrido un error al agregar los ejemplos de entrenamiento',
-        'type': TYPE_ERR
     },
     'L-0297': {
         'class_name': 'TrainDataManager',
@@ -1820,12 +1532,6 @@ LOG_DATA = {
         'method_name': 'add_training_examples',
         'main_text': 'Ejemplos de entrenamiento guardados exitosamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0304': {
-        'class_name': 'TrainDataManager',
-        'method_name': 'add_training_examples',
-        'main_text': 'Ha ocurrido una excepción al guardar los ejemplos de entrenamiento %s',
-        'type': TYPE_INFO
     },
     'L-0305': {
         'class_name': 'ModelTrainingController',
@@ -1874,12 +1580,6 @@ LOG_DATA = {
         'method_name': 'approve_traning_examples',
         'main_text': 'Error al aprobar el ejemplo de entrenamiento',
         'type': TYPE_ERR
-    },
-    'L-0313': {
-        'class_name': 'TrainDataManager',
-        'method_name': 'approve_traning_examples',
-        'main_text': 'Ocurrio una excepción al aprobar el ejemplo %s: %s',
-        'type': TYPE_INFO
     },
     'L-0314': {
         'class_name': 'ModelTrainingController',
@@ -1976,12 +1676,6 @@ LOG_DATA = {
         'method_name': 'get_training_examples_history',
         'main_text': 'Datos construidos exitosamente',
         'type': TYPE_SUCCESS
-    },
-    'L-0330': {
-        'class_name': 'TrainDataManager',
-        'method_name': 'get_training_examples_history',
-        'main_text': 'Excepción al obtener los ejemplos en la base de datos: %s',
-        'type': TYPE_INFO
     },
     'L-0331': {
         'class_name': 'ModelTrainingController',
@@ -2091,12 +1785,6 @@ LOG_DATA = {
         'main_text': 'Modelo entrenado exitosamente',
         'type': TYPE_SUCCESS
     },
-    'L-0349': {
-        'class_name': 'ModelLoader',
-        'method_name': 'apply_training_data',
-        'main_text': 'Ha ocurrido una excepción al entrenar el modelo: %s',
-        'type': TYPE_INFO
-    },
     'L-0350': {
         'class_name': 'ModelLoader',
         'method_name': 'apply_training_loop',
@@ -2131,12 +1819,6 @@ LOG_DATA = {
         'class_name': 'TrainDataManager',
         'method_name': 'discard_example',
         'main_text': 'El ejemplo ya ha sido aprobado, desaprobado o aplicado',
-        'type': TYPE_ERR
-    },
-    'L-0356': {
-        'class_name': 'ApplicationModuleController',
-        'method_name': 'analyse_text',
-        'main_text': 'El modulo de administración de modelos no fue inicializado correctamente',
         'type': TYPE_ERR
     },
     'L-0357': {

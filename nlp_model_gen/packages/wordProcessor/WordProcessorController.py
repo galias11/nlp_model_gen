@@ -152,6 +152,8 @@ class WordProcessorController(metaclass=Singleton):
         """
         [private] A partir de las excepciones almacenadas en el archivo de configuraciones por defecto
         crea una lista con todas las expceciones para insertar en la base de datos.
+
+        :return: [List] - Lista de excepciones
         """
         verb_exceptions = list([])
         for verb_exception in word_processor_default_cfg['conjugator_verb_exceptions']['exceptions']:
@@ -193,24 +195,6 @@ class WordProcessorController(metaclass=Singleton):
         db_insert_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_FUZZY_GEN_CFG_COLLECTION, word_processor_default_cfg['fuzzy_terms_generator_config'])
         self.__fuzzy_generator_cfg = word_processor_default_cfg['fuzzy_terms_generator_config']
 
-    # *************************************************************************************
-    # Getters
-    # *************************************************************************************
-
-    def is_ready(self):
-        return self.__init_success
-
-    def get_conjugator_active_theme(self):
-        return self.__conjugator_active_theme
-
-    def get_fuzzy_gen_active_theme(self):
-        return self.__fuzzy_gen_active_theme
-
-    def get_noun_converseor_active_theme(self):
-        return self.__noun_conversor_active_theme
-
-    # *************************************************************************************
-
     def __get_fuzzy_generator_cfg(self):
         """
         [private] Obtiene las configuraciones del generador de terminos distoricionados para
@@ -247,6 +231,24 @@ class WordProcessorController(metaclass=Singleton):
         el tema activo.
         """
         self.__noun_conversor_cfg = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': self.__noun_conversor_active_theme}, {'_id': 0, 'theme': 0})
+
+    # *************************************************************************************    
+    # Getters
+    # *************************************************************************************
+
+    def is_ready(self):
+        return self.__init_success
+
+    def get_conjugator_active_theme(self):
+        return self.__conjugator_active_theme
+
+    def get_fuzzy_gen_active_theme(self):
+        return self.__fuzzy_gen_active_theme
+
+    def get_noun_converseor_active_theme(self):
+        return self.__noun_conversor_active_theme
+
+    # *************************************************************************************
 
     def retry_initialization(self, mode=0):
         """
@@ -561,7 +563,7 @@ class WordProcessorController(metaclass=Singleton):
 
         :exception_key: [String] - Key de la excepción.
 
-        :return: [Bool] - True si la excepción existe, False en caso contrario.
+        :return: [Boolean] - True si la excepción existe, False en caso contrario.
         """
         exception_data = db_get_item(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION, {'theme': theme_name, 'key': exception_key}, {'_id': 0})
         return exception_data is not None
@@ -712,8 +714,6 @@ class WordProcessorController(metaclass=Singleton):
         elimnar el tema por defecto.
 
         :theme_name: [String] - Nombre del tema
-
-        :return: [bool] - True si el borrado se realizó exitosamente, False en caso contrario.
         """
         Logger.log('L-0216')
         existing_themes = self.__get_existing_themes(WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION)
@@ -727,7 +727,6 @@ class WordProcessorController(metaclass=Singleton):
         Logger.log('L-0222')
         db_delete_items(WORD_PROCESSOR_CONFIG_DB, WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION, {'theme': theme_name})
         Logger.log('L-0223')
-        return True
 
     def set_conjugator_active_theme(self, theme_name):
         """

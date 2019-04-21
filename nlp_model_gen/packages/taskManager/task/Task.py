@@ -33,7 +33,6 @@ class Task(Thread, Observable, ABC):
         self.__end_time = -1
         self.__results = None
         self.__blocking_data = blocking_data if blocking_data is not None else {TASK_KEYS_WORD_PROCESSOR: False, TASK_KEYS_MODEL_UPDATE: False}
-        self.__observers = list([])
 
     def get_id(self):
         return self.__id

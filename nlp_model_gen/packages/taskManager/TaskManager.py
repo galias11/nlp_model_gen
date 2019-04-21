@@ -27,6 +27,27 @@ class TaskManager(Observer):
         self.__completed_tasks = list([])
         self.__last_id = 0
 
+    def update(self, data):
+        """
+        Escucha a las tareas y realiza las actualizaciones necesarias
+        """
+        Logger.log('L-0235')
+        task = data
+        self.__move_completed_task(task)
+        if not self.__active_tasks:
+            Logger.log('L-0236')
+            return
+        for active_task in self.__active_tasks:
+            Logger.log('L-0237', [{'text': active_task.get_id(), 'color': HIGHLIGHT_COLOR}])
+            active_task_status = active_task.get_task_status_data()
+            active_task_data = active_task.get_task_data()
+            model_id = active_task_data.get('model_id', None)
+            model_name = active_task_data.get('model_name', None)
+            if active_task_status['status'] == TASK_STATUS_QUEUED and not self.__check_active_status_for_model(model_id, model_name):
+                active_task.init()
+            time.sleep(5)
+        Logger.log('L-0238')
+
     def __get_next_task_id(self):
         """
         Devuelve el proximo id disponible para colocar una tarea en cola.
@@ -110,28 +131,6 @@ class TaskManager(Observer):
         if founded_task is None:
             return self.__get_task_from_finished_list(task_id)
         return founded_task
-
-    def update(self, data):
-        """
-        Escucha a las tareas y realiza las actualizaciones necesarias
-        """
-        Logger.log('L-0235')
-        task = data
-        self.__move_completed_task(task)
-        if not self.__active_tasks:
-            Logger.log('L-0236')
-            return
-        for active_task in self.__active_tasks:
-            Logger.log('L-0237', [{'text': active_task.get_id(), 'color': HIGHLIGHT_COLOR}])
-            active_task_status = active_task.get_task_status_data()
-            active_task_data = active_task.get_task_data()
-            model_id = active_task_data.get('model_id', None)
-            model_name = active_task_data.get('model_name', None)
-            if active_task_status['status'] == TASK_STATUS_QUEUED and not self.__check_active_status_for_model(model_id, model_name):
-                active_task.init()
-            time.sleep(5)
-        Logger.log('L-0238')
-
 
     def create_model_training_task(self, model_id):
         """

@@ -13,6 +13,8 @@ class ModelTrainerManager:
         Crea el listado de ejemplos a partir de los ejemplos de entrenamiento.
 
         :examples: [List(TrainExample)] - Lista de ejemplos de entrenamiento.
+
+        :return: [List] - Listado con la anotaciones.
         """
         Logger.log('L-0338')
         annotations = list([])

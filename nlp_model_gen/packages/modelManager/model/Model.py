@@ -66,18 +66,6 @@ class Model:
     def is_loaded(self):
         return self.__loaded
 
-    def load(self):
-        """
-        Setea al modelo como cargado.
-        """
-        Logger.log('L-0056')
-        if self.is_loaded():
-            return
-        model_reference = ModelLoader.load_model(self.__path)
-        Logger.log('L-0057')
-        self.__loaded = True
-        self.__reference = model_reference
-
     def __get_model_ner(self):
         """
         Devuelve el NER del modelo si existe o un NER en blanco en caso que no exista.
@@ -88,7 +76,7 @@ class Model:
         if not self.is_loaded():
             return None
         return ModelLoader.get_model_ner(self.__reference)
-
+    
     def __process_tokenizer_results(self, doc, only_positives=False):
         """
         Procesa los resultados del analisis de un texto almacenados en un doc de spacy en función de los
@@ -127,6 +115,18 @@ class Model:
         for ent in doc.ents:
             results.append(Entity(ent.text, ent.start_char, ent.end_char, ent.label_))
         return results
+
+    def load(self):
+        """
+        Setea al modelo como cargado.
+        """
+        Logger.log('L-0056')
+        if self.is_loaded():
+            return
+        model_reference = ModelLoader.load_model(self.__path)
+        Logger.log('L-0057')
+        self.__loaded = True
+        self.__reference = model_reference
 
     def analyse_text(self, text, only_positives=False):
         """
@@ -174,7 +174,7 @@ class Model:
             Logger.log('L-0340')
             self.load()
             Logger.log('L-0342')
-        return ModelLoader.apply_training_data(self, training_data)
+        ModelLoader.apply_training_data(self, training_data)
 
     def to_dict(self):
         """
