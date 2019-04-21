@@ -514,5 +514,20 @@ ERROR_DATA = {
         'description': 'Los datos no se han actualizado en la base de datos',
         'source': {'class': 'CustomEntityTagManager', 'method': 'edit_custom_tag_entity'},
         'log': 'L-0289'
+    },
+    'E-0104': {
+        'description': 'No existe ningún ejemplo para el Id indicado',
+        'source': {'class': 'TrainDataManager', 'method': 'discard_example'},
+        'log': 'L-0317'
+    },
+    'E-0105': {
+        'description': 'El ejemplo indicado no se encuentra en estado <submitted>',
+        'source': {'class': 'TrainDataManager', 'method': 'discard_example'},
+        'log': 'L-0355'
+    },
+    'E-0106': {
+        'description': 'No se han podido actualizar los datos del ejemplo en la base de datos',
+        'source': {'class': 'TrainDataManager', 'method': 'discard_example'},
+        'log': 'L-0321'
     }
 }

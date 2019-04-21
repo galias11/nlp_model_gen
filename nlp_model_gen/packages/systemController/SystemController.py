@@ -295,12 +295,25 @@ class SystemController:
         """
         Aprueba un conjunto de ejemplos de entrenamiento. Los ejemplos deben existir.
 
-        :training_examples_list: [List(String)] - Lista de los ids de los ejemplos a aprobar.
+        :training_examples_list: [List(int)] - Lista de los ids de los ejemplos a aprobar.
 
         :return: [Dict] - Resultados de la tarea.
         """
         def action():
             results = self.__admin_module.approve_training_examples(training_examples_list)
+            return self.__build_response_object(True, {'results': results})
+        return self.__process_incoming_request(action)
+    
+    def discard_training_examples(self, training_examples_list):
+        """
+        Rechaza un conjunto de ejemplos de entrenamiento. Los ejemplos deben existir.
+
+        :training_examples_list: [List(int)] - Lista de los ids de los ejemplos a aprobar.
+
+        :return: [Dict] - Resultados de la tarea
+        """
+        def action():
+            results = self.__admin_module.discard_training_examples(training_examples_list)
             return self.__build_response_object(True, {'results': results})
         return self.__process_incoming_request(action)
 
