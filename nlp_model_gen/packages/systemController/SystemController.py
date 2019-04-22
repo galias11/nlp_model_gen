@@ -469,3 +469,64 @@ class SystemController:
             self.__admin_module.edit_custom_entity(name, description)
             return self.__build_response_object(True)
         return self.__process_incoming_request(action)
+
+    def add_analyzer_exception(self, model_id, base_form, token_text, enabled=True):
+        """
+        Agrega una excepción al analizador para un modelo particular.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+
+        :enabled: [boolean] - True si esta habilitada, False en caso contrario (por defecto
+        True)
+
+        :return: [Dict] - Diccionario con los resultados de la operación
+        """
+        def action():
+            self.__admin_module.add_analyzer_exception(model_id, base_form, token_text, enabled)
+            return self.__build_response_object(True)
+        return self.__process_incoming_request(action, [TASK_KEYS_MODEL_UPDATE])
+
+    def enable_analyzer_exception(self, model_id, base_form, token_text):
+        """
+        Habilita una excepción del analizador. La misma no debe estar habilitada
+        previamente.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+
+        :return: [Dict] - Diccionario con los resultados de la operación
+        """
+        pass
+
+    def disable_analyzer_exception(self, model_id, base_form, token_text):
+        """
+        Deshabilita una excepción del analizador. La misma no debe estar habilitada
+        previamente.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+
+        :return: [Dict] - Diccionario con los resultados de la operación
+        """
+        pass
+    
+    def get_analyzer_exceptions(self, model_id):
+        """
+        Obtiene un listado de todas las excepciones al analizador para un modelo
+        particular.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [Dict] - Diccionario con los resultados de la operación
+        """
+        pass

@@ -9,7 +9,7 @@ from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.constants.constants import STD_TIME_OUTPUT
 
 # @Assets
-from .assets.errors import ERROR_DATA, GENERIC_ERROR
+from .assets.errors import ERROR_DATA, GENERIC_ERROR, UNKNOWN_ERROR
 
 class ErrorHandler:
     def __init__(self):
@@ -34,7 +34,15 @@ class ErrorHandler:
 
         :return: [Dict] - Diccionario con los datos del error.
         """
-        return literal_eval(str(exception))
+        try:
+            return literal_eval(str(exception))
+        except:
+            return {
+                'code': UNKNOWN_ERROR['error_code'], 
+                'description': UNKNOWN_ERROR['description'],
+                'source': UNKNOWN_ERROR['source'],
+                'timestamp': ErrorHandler.get_timestamp()
+            }
 
     @staticmethod
     def log_error(error_data, log_data):

@@ -34,7 +34,7 @@ class ModelManagerController(ObservableSingleton):
             Logger.log('L-0051')
             stored_models_data = ModelDataManager.get_models()
             for model in stored_models_data:
-                model_object = Model(model['model_id'], model['model_name'], model['description'], model['author'], model['path'], model['analyzer_rules_set'])
+                model_object = Model(model['model_id'], model['model_name'], model['description'], model['author'], model['path'], model['analyzer_rules_set'], [])
                 self.__models.append(model_object)
             Logger.log('L-0052')
             self.__init_success = True
@@ -136,6 +136,21 @@ class ModelManagerController(ObservableSingleton):
                 model.add_tokenizer_rule_set(rule_set[key])
         Logger.log('L-0024')
 
+    def __check_exception_existence(self, model, base_form, token_text):
+        """
+        Valida la existencia de una excepción al analizador de un modelo que cumpla con la
+        combinación token_base / especifico provista.
+
+        :model: [Model] - Modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+
+        :return: [boolean] - True si se ha detectado, False en caso contrari
+        """
+        return model.check_exception(base_form, token_text)
+
     def create_model(self, model_id, model_name, description, author, tokenizer_exceptions_path, analyzer_rule_set):
         """
         Crea un nuevo modelo. Crea los datos necesarios y lo guarda tanto en disco como su
@@ -199,3 +214,62 @@ class ModelManagerController(ObservableSingleton):
         self.__models.remove(selected_model)
         self.notify({'event': EVENT_MODEL_DELETED, 'payload': model_id})
         Logger.log('L-0073')
+
+    def add_analyzer_exception(self, model_id, base_form, token_text, enabled=True):
+        """
+        Agrega una excepción al analizador para un modelo particular.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+
+        :enabled: [boolean] - True si esta habilitada, False en caso contrario (por defecto
+        True)
+        """
+        model = self.get_model(model_id)
+        if not model:
+            ErrorHandler.raise_error('E-0107')
+        if self.__check_exception_existence(model, base_form, token_text):
+            ErrorHandler.raise_error('E-0108')
+        ModelDataManager.add_analyzer_exception(model_id, base_form, token_text)
+        model.add_analyzer_exception(base_form, token_text, enabled)
+
+    def enable_analyzer_exception(self, model_id, base_form, token_text):
+        """
+        Habilita una excepción del analizador. La misma no debe estar habilitada
+        previamente.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+        """
+        pass
+
+    def disable_analyzer_exception(self, model_id, base_form, token_text):
+        """
+        Deshabilita una excepción del analizador. La misma no debe estar habilitada
+        previamente.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+        """
+        pass
+    
+    def get_analyzer_exceptions(self, model_id):
+        """
+        Obtiene un listado de todas las excepciones al analizador para un modelo
+        particular.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [List(Dict)] - Lista con todas las excepciones existentes para el
+        modelo y su detalle.
+        """
+        pass

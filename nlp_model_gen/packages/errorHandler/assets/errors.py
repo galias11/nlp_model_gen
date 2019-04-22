@@ -4,6 +4,12 @@ GENERIC_ERROR = {
     'source': {'class': 'N/A', 'method': 'N/A'},
     'log': None
 }
+UNKNOWN_ERROR = {
+    'error_code': 'E-0109', 
+    'description': 'Error desconocido', 
+    'source': {'class': 'N/A', 'method': 'N/A'},
+    'log': None
+}
 ERROR_DATA = {
     'E-0002': {
         'description': 'Error al obtener colección de datos en la base de datos',

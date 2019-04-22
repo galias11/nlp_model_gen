@@ -8,28 +8,21 @@ from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
 # @Clases
+from ..analyzerException.AnalyzerException import AnalyzerException
 from ..modelLoader.ModelLoader import ModelLoader
 from ..token.Token import Token
 from ..entity.Entity import Entity
 from ..analyzer.Analyzer import Analyzer
 
 class Model:
-    __model_id = ''
-    __model_name = ''
-    __description = ''
-    __author = ''
-    __path = ''
-    __analyzer_rules_set = []
-    __reference = None
-    __loaded = False
-
-    def __init__(self, model_id, model_name, description, author, path, __analyzer_rules_set):
+    def __init__(self, model_id, model_name, description, author, path, analyzer_rules_set, analyzer_exceptions_set):
         self.__model_id = model_id
         self.__model_name = model_name
         self.__description = description
         self.__author = author
         self.__path = path
-        self.__analyzer_rules_set = __analyzer_rules_set
+        self.__analyzer_rules_set = analyzer_rules_set
+        self.__analyzer_exceptions_set = analyzer_exceptions_set
         self.__reference = None
         self.__loaded = False
 
@@ -197,3 +190,47 @@ class Model:
         if other is None or not isinstance(other, Model):
             return False
         return self.__model_id == other.get_model_id()
+
+    def add_analyzer_exception(self, base_form, token_text, enabled):
+        """
+        Agrega una nueva excepción para el analizador al modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que se debe detectar
+        el token.
+
+        :enabled: [Boolean] - Indicador de si la excepción esta habilitada.
+        """
+        exception = AnalyzerException(base_form, token_text, enabled)
+        self.__analyzer_exceptions_set.append(exception)
+
+    def modify_analyzer_exception(self, base_form, token_text, enabled):
+        """
+        Modifica el estado de una excepción para el analizador del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que se debe detectar
+        el token.
+
+        :enabled: [Boolean] - Indicador de si la excepción esta habilitada.
+        """
+        pass
+
+    def check_exception(self, base_form, token_text):
+        """
+        Verifica si el modelo cuenta con una excepción al analyzador para la
+        combinación de forma base y especifica provista.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que se debe detectar
+        el token.
+
+        :return: [Boolean] - True si se ha encontrado, False en caso contrario.
+        """
+        for exception in self.__analyzer_exceptions_set:
+            if exception.match_exception(base_form, token_text):
+                return True
+        return False
