@@ -231,13 +231,17 @@ class ModelManagerController(ObservableSingleton):
         :enabled: [boolean] - True si esta habilitada, False en caso contrario (por defecto
         True)
         """
+        Logger.log('L-0002')
         model = self.get_model(model_id)
         if not model:
             ErrorHandler.raise_error('E-0107')
         if self.__check_exception_existence(model, base_form, token_text):
             ErrorHandler.raise_error('E-0108')
+        Logger.log('L-0013')
         ModelDataManager.add_analyzer_exception(model_id, base_form, token_text)
+        Logger.log('L-0018')
         model.add_analyzer_exception(base_form, token_text, enabled)
+        Logger.log('L-0019')
 
     def enable_analyzer_exception(self, model_id, base_form, token_text):
         """
@@ -250,14 +254,18 @@ class ModelManagerController(ObservableSingleton):
 
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
+        Logger.log('L-0020')
         model = self.get_model(model_id)
         if not model:
             ErrorHandler.raise_error('E-0111')
         analyzer_exception = model.find_exception(base_form, token_text)
         if not analyzer_exception or analyzer_exception.is_enabled():
             ErrorHandler.raise_error('E-0112')
+        Logger.log('L-0058')
         ModelDataManager.enable_analyzer_exception(model_id, base_form, token_text)
+        Logger.log('L-0060')
         analyzer_exception.enable()
+        Logger.log('L-0067')
 
     def disable_analyzer_exception(self, model_id, base_form, token_text):
         """
@@ -270,14 +278,18 @@ class ModelManagerController(ObservableSingleton):
 
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
+        Logger.log('L-0071')
         model = self.get_model(model_id)
         if not model:
             ErrorHandler.raise_error('E-0114')
         analyzer_exception = model.find_exception(base_form, token_text)
         if not analyzer_exception or not analyzer_exception.is_enabled():
             ErrorHandler.raise_error('E-0115')
+        Logger.log('L-0079')
         ModelDataManager.disable_analyzer_exception(model_id, base_form, token_text)
+        Logger.log('L-0081')
         analyzer_exception.disable()
+        Logger.log('L-0084')
 
     def get_analyzer_exceptions(self, model_id):
         """
@@ -289,10 +301,12 @@ class ModelManagerController(ObservableSingleton):
         :return: [List(Dict)] - Lista con todas las excepciones existentes para el
         modelo y su detalle.
         """
+        Logger.log('L-0094')
         model = self.get_model(model_id)
         if not model:
             ErrorHandler.raise_error('E-0110')
         analyzer_exceptions = list([])
         for found_exception in model.get_analyzer_exceptions_set():
             analyzer_exceptions.append(found_exception.to_dict())
+        Logger.log('L-0098')
         return analyzer_exceptions
