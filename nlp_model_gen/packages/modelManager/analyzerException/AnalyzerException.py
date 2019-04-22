@@ -1,11 +1,11 @@
-# @Error handler
-from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
-
 class AnalyzerException:
     def __init__(self, base_form, token_text, enabled):
         self.__base_form = base_form
         self.__token_text = token_text
         self.__enabled = enabled
+
+    def is_enabled(self):
+        return self.__enabled
 
     def check_exception(self, token_text, base_form):
         """
@@ -38,13 +38,13 @@ class AnalyzerException:
         """
         Activa la excepción, la misma no debe encontrarse ya activada
         """
-        pass
+        self.__enabled = True
 
     def disable(self):
         """
         Desactiva la excepción, la misma no debe estar desactivada previamente.
         """
-        pass
+        self.__enabled = False
 
     def to_dict(self):
         """

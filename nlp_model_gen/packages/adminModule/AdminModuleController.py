@@ -424,7 +424,7 @@ class AdminModuleController(metaclass=Singleton):
 
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
-        pass
+        self.__model_manager.enable_analyzer_exception(model_id, base_form, token_text)
 
     def disable_analyzer_exception(self, model_id, base_form, token_text):
         """
@@ -437,7 +437,7 @@ class AdminModuleController(metaclass=Singleton):
 
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
-        pass
+        self.__model_manager.disable_analyzer_exception(model_id, base_form, token_text)
     
     def get_analyzer_exceptions(self, model_id):
         """
