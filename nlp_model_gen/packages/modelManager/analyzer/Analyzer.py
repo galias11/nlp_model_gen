@@ -1,8 +1,18 @@
 class Analyzer:
-    __rule_set: None
-
-    def __init__(self, rule_set):
+    def __init__(self, rule_set, exceptions_set):
         self.__rule_set = rule_set
+        self.__exceptions_set  = exceptions_set
+
+    def validate_exception(self, token):
+        """
+        Valida que no exista una excepción activa para el token detectado.
+
+        :token: [Token] - Token detectado.
+
+        :return: [boolean] - True si se ha detectado una excepción activa,
+        False en caso contrario.
+        """
+        pass
 
     def analyze_token(self, token):
         """

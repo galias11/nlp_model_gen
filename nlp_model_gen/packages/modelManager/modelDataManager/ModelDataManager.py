@@ -5,7 +5,7 @@ from nlp_model_gen.packages.logger.Logger import Logger
 from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
 # @Constatns
-from nlp_model_gen.constants.constants import (MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION)
+from nlp_model_gen.constants.constants import (MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, ANALYZER_EXCEPTIONS_COLLECTION)
 
 # @Helpers
 from nlp_model_gen.utils.dbUtils import ( 
@@ -109,3 +109,50 @@ class ModelDataManager:
         delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
         if delete_count <= 0:
             ErrorHandler.raise_error('E-0072')
+
+    @staticmethod
+    def add_analyzer_exception(model_id, base_form, token_text, enabled=True):
+        """
+        Agrega a la base de datos una nueva excepción al analizador para un modelo particular.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token de la excepción.
+
+        :token_text: [String] - Texto particular del token a exceptuar.
+
+        :enabled: [Boolean] - Estado de la excepción (True habilitada, False deshabilitada)
+        """
+        analyzer_exception = {
+            'model_id': model_id,
+            'base_form': base_form,
+            'token_text': token_text,
+            'enabled': enabled
+        }
+        db_insert_item(MODEL_MANAGER_DB, ANALYZER_EXCEPTIONS_COLLECTION, analyzer_exception)
+
+    @staticmethod
+    def enable_analyzer_exception(model_id, base_form, token_text):
+        """
+        Habilita una excepción del analizador en la base de datos.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token de la excepción.
+
+        :token_text: [String] - Texto particular del token a exceptuar.
+        """
+        pass
+
+    @staticmethod
+    def disable_analyzer_exception(model_id, base_form, token_text):
+        """
+        Deshabilita una excepción del analizador en la base de datos.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token de la excepción.
+
+        :token_text: [String] - Texto particular del token a exceptuar.
+        """
+        pass

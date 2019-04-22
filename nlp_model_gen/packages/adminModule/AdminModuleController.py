@@ -397,3 +397,56 @@ class AdminModuleController(metaclass=Singleton):
         :return: [boolean] - True si la operación fue exitosa, False en caso contrario
         """
         self.__train_manager.edit_custom_entity(name, description)
+
+    def add_analyzer_exception(self, model_id, base_form, token_text, enabled=True):
+        """
+        Agrega una excepción al analizador para un modelo particular.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+
+        :enabled: [boolean] - True si esta habilitada, False en caso contrario (por defecto
+        True)
+        """
+        self.__model_manager.add_analyzer_exception(model_id, base_form, token_text, enabled)
+
+    def enable_analyzer_exception(self, model_id, base_form, token_text):
+        """
+        Habilita una excepción del analizador. La misma no debe estar habilitada
+        previamente.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+        """
+        pass
+
+    def disable_analyzer_exception(self, model_id, base_form, token_text):
+        """
+        Deshabilita una excepción del analizador. La misma no debe estar habilitada
+        previamente.
+
+        :model_id: [String] - Id del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que detectar el token.
+        """
+        pass
+    
+    def get_analyzer_exceptions(self, model_id):
+        """
+        Obtiene un listado de todas las excepciones al analizador para un modelo
+        particular.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [List(Dict)] - Lista con todas las excepciones existentes para el
+        modelo y su detalle.
+        """
+        pass
