@@ -539,27 +539,27 @@ ERROR_DATA = {
     'E-0107': {
         'description': 'El modelo solicitado no existe',
         'source': {'class': 'ModelManagerController', 'method': 'add_analyzer_exception'},
-        'log': None
+        'log': 'L-0005'
     },
     'E-0108': {
         'description': 'La excepción ya esta registrada para el modelo solicitado',
         'source': {'class': 'ModelManagerController', 'method': 'add_analyzer_exception'},
-        'log': None
+        'log': 'L-0012'
     },
     'E-0110': {
         'description': 'El modelo solicitado no existe',
         'source': {'class': 'ModelManagerController', 'method': 'get_analyzer_exceptions'},
-        'log': None
+        'log': 'L-0097'
     },
     'E-0111': {
         'description': 'El modelo solicitado no existe',
         'source': {'class': 'ModelManagerController', 'method': 'enable_analyzer_exception'},
-        'log': None
+        'log': 'L-0028'
     },
     'E-0112': {
         'description': 'La excepción no existe o ya se encuentra habilitada',
         'source': {'class': 'ModelManagerController', 'method': 'enable_analyzer_exception'},
-        'log': None
+        'log': 'L-0033'
     },
     'E-0113': {
         'description': 'No se han podido actualizar los datos del ejemplo en la base de datos',
@@ -569,12 +569,12 @@ ERROR_DATA = {
     'E-0114': {
         'description': 'El modelo solicitado no existe',
         'source': {'class': 'ModelManagerController', 'method': 'disable_analyzer_exception'},
-        'log': None
+        'log': 'L-0077'
     },
     'E-0115': {
         'description': 'La excepción no existe o ya se encuentra deshabilitada',
         'source': {'class': 'ModelManagerController', 'method': 'disable_analyzer_exception'},
-        'log': None
+        'log': 'L-0078'
     },
     'E-0116': {
         'description': 'No se han podido actualizar los datos del ejemplo en la base de datos',

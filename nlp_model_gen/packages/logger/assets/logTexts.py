@@ -9,6 +9,12 @@ LOG_DATA = {
         'main_text': 'Iniciando creación de modelo',
         'type': TYPE_INFO
     },
+    'L-0002': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'add_analyzer_exception',
+        'main_text': 'Agregando excepción para el analizador...',
+        'type': TYPE_INFO
+    },
     'L-0003': {
         'class_name': 'TokenizerRulesGenerator',
         'method_name': 'generate_model_data',
@@ -20,6 +26,12 @@ LOG_DATA = {
         'method_name': 'generate_model_data',
         'main_text': 'Archivos temporales generados',
         'type': TYPE_SUCCESS
+    },
+    'L-0005': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'add_analyzer_exception',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
     },
     'L-0006': {
         'class_name': 'TokenizerRulesGenerator',
@@ -57,6 +69,18 @@ LOG_DATA = {
         'main_text': 'Generando diccionario para el término %s...',
         'type': TYPE_INFO
     },
+    'L-0012': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'add_analyzer_exception',
+        'main_text': 'Ya existe una excepción identica para el modelo solicitado',
+        'type': TYPE_ERR
+    },
+    'L-0013': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'add_analyzer_exception',
+        'main_text': 'Guardando datos de la excepción en la base de datos...',
+        'type': TYPE_INFO
+    },
     'L-0014': {
         'class_name': 'TokenGenerator',
         'method_name': 'generate_verb_rules_set',
@@ -80,6 +104,24 @@ LOG_DATA = {
         'method_name': 'create_analyzer_rule_set',
         'main_text': 'Set de reglas creado.',
         'type': TYPE_SUCCESS
+    },
+    'L-0018': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'add_analyzer_exception',
+        'main_text': 'Datos actualizados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0019': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'add_analyzer_exception',
+        'main_text': 'Datos actualizados exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0020': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'enable_analyzer_exception',
+        'main_text': 'Activando excepción para el analizador...',
+        'type': TYPE_INFO
     },
     'L-0021': {
         'class_name': 'ModelManager',
@@ -123,6 +165,12 @@ LOG_DATA = {
         'main_text': 'Aborto: Modelo ya existe en base de datos',
         'type': TYPE_ERR
     },
+    'L-0028': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'enable_analyzer_exception',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
     'L-0029': {
         'class_name': 'ModelDataManager',
         'method_name': 'save_model_data',
@@ -146,6 +194,12 @@ LOG_DATA = {
         'method_name': 'save_model',
         'main_text': 'Archivos de modelo guardados correctamente',
         'type': TYPE_SUCCESS
+    },
+    'L-0033': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'enable_analyzer_exception',
+        'main_text': 'Excepción para el analizador inexistente o ya habilitada',
+        'type': TYPE_ERR
     },
     'L-0034': {
         'class_name': 'AdminModuleController',
@@ -291,11 +345,23 @@ LOG_DATA = {
         'main_text': 'Modelo de spaCy cargado exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0058': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'enable_analyzer_exception',
+        'main_text': 'Actualizando excepción en la base de datos...',
+        'type': TYPE_INFO
+    },
     'L-0059': {
         'class_name': 'Model',
         'method_name': 'analyze_text',
         'main_text': 'Analizando el texto con modelo de spaCy...',
         'type': TYPE_INFO
+    },
+    'L-0060': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'enable_analyzer_exception',
+        'main_text': 'Datos actualizados exitosamente en la base de datos',
+        'type': TYPE_SUCCESS
     },
     'L-0061': {
         'class_name': 'Model',
@@ -333,6 +399,12 @@ LOG_DATA = {
         'main_text': 'Eliminando modelo de la base de datos...',
         'type': TYPE_INFO
     },
+    'L-0067': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'enable_analyzer_exception',
+        'main_text': 'Excepción para el analizador activada correctamente',
+        'type': TYPE_SUCCESS
+    },
     'L-0068': {
         'class_name': 'ModelManagerController',
         'method_name': 'remove_model',
@@ -349,6 +421,12 @@ LOG_DATA = {
         'class_name': 'ModelLoader',
         'method_name': 'delete_model_files',
         'main_text': 'Eliminando archivos del modelo...',
+        'type': TYPE_INFO
+    },
+    'L-0071': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'disable_analyzer_exception',
+        'main_text': 'Deshabilitando excepción para el analizador...',
         'type': TYPE_INFO
     },
     'L-0072': {
@@ -381,11 +459,35 @@ LOG_DATA = {
         'main_text': 'Error: Ningún dato que modificar',
         'type': TYPE_ERR
     },
+    'L-0077': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'disable_analyzer_exception',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
+    'L-0078': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'disable_analyzer_exception',
+        'main_text': 'La excepcion para el analizador no existe o ya esta deshabilitada',
+        'type': TYPE_ERR
+    },
+    'L-0079': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'disable_analyzer_exception',
+        'main_text': 'Actualizando excepción en la base de datos...',
+        'type': TYPE_INFO
+    },
     'L-0080': {
         'class_name': 'ModelDataManager',
         'method_name': 'modify_model_data',
         'main_text': 'Modificando datos del modelo en la base de datos...',
         'type': TYPE_INFO
+    },
+    'L-0081': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'disable_analyzer_exception',
+        'main_text': 'Datos de la excepción actualizados correctamente',
+        'type': TYPE_SUCCESS
     },
     'L-0082': {
         'class_name': 'ModelDataManager',
@@ -398,6 +500,12 @@ LOG_DATA = {
         'method_name': 'remove_dir',
         'main_text': 'Excepción al eliminar el directorio: %s',
         'type': TYPE_INFO
+    },
+    'L-0084': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'disable_analyzer_exception',
+        'main_text': 'Excepción para el analizador desactivada exitosamente',
+        'type': TYPE_SUCCESS
     },
     'L-0085': {
         'class_name': '',
@@ -453,6 +561,12 @@ LOG_DATA = {
         'main_text': 'Excepción al realizar operación en batch sobre la BD: %s',
         'type': TYPE_INFO
     },
+    'L-0094': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'get_analyzer_exceptions',
+        'main_text': 'Obteniendo excepciones para el analizador...',
+        'type': TYPE_INFO
+    },
     'L-0095': {
         'class_name': 'AdminModuleController',
         'method_name': 'get_available_models',
@@ -464,6 +578,18 @@ LOG_DATA = {
         'method_name': 'load_model',
         'main_text': 'El módulo no se ha inicializado correctamente.',
         'type': TYPE_ERR
+    },
+    'L-0097': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'get_analyzer_exceptions',
+        'main_text': 'El modelo no existe',
+        'type': TYPE_ERR
+    },
+    'L-0098': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'get_analyzer_exceptions',
+        'main_text': 'Excepciones para el analizador obtenidas exitosamente',
+        'type': TYPE_SUCCESS
     },
     'L-0100': {
         'class_name': 'WordProcessorController',
