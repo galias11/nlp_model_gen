@@ -82,3 +82,20 @@
 
 - TFI-0008: El elemento token_text esta devolviendo la oración completa en lugar del token.
 - TFI-0009: Implementar funcionalidades faltantes en el controlador de sistema
+
+## Version 0.1.1':
+
+#### New features
+
+- TF-0075: Agregar excepciones para el analizador.
+- TF-0076: Habilitar / Deshabilitar excepciones para el analizador.
+- TF-0074: Aplicar excepciones al analizador al momento de analizar los tokens de un texto.
+- TF-0078: Consultar las excepciones al analizador para un modelo particular.
+
+#### Tasks / Improvements
+
+- TF-0077: Agregar logs a funcionalidades de manejo de excepciones del analizador
+
+#### Bugs fixed
+
+- TFI-0010: Funcionalidad de descartar un ejemplo de entrenamiento ausente en system controller.
