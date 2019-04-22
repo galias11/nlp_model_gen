@@ -112,6 +112,22 @@ class Model:
             results.append(Entity(ent.text, ent.start_char, ent.end_char, ent.label_))
         return results
 
+    def find_exception(self, base_form, token_text):
+        """
+        Busca una excepción al analizador en la lista de excepciones al analizador del modelo.
+
+        :base_form: [String] - Forma base del token.
+
+        :token_text: [String] - Forma especifica en la que se debe detectar
+        el token.
+
+        :return: [AnalyzerException] - Excepción al analizador
+        """
+        for analyzer_exception in self.__analyzer_exceptions_set:
+            if analyzer_exception.match_exception(token_text, base_form):
+                return analyzer_exception
+        return None
+
     def load(self):
         """
         Setea al modelo como cargado.
@@ -207,19 +223,6 @@ class Model:
         """
         exception = AnalyzerException(base_form, token_text, enabled)
         self.__analyzer_exceptions_set.append(exception)
-
-    def modify_analyzer_exception(self, base_form, token_text, enabled):
-        """
-        Modifica el estado de una excepción para el analizador del modelo.
-
-        :base_form: [String] - Forma base del token.
-
-        :token_text: [String] - Forma especifica en la que se debe detectar
-        el token.
-
-        :enabled: [Boolean] - Indicador de si la excepción esta habilitada.
-        """
-        pass
 
     def check_exception(self, base_form, token_text):
         """

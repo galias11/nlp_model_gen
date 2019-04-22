@@ -503,7 +503,10 @@ class SystemController:
 
         :return: [Dict] - Diccionario con los resultados de la operación
         """
-        pass
+        def action():
+            self.__admin_module.enable_analyzer_exception(model_id, base_form, token_text)
+            return self.__build_response_object(True)
+        return self.__process_incoming_request(action, [TASK_KEYS_MODEL_UPDATE])
 
     def disable_analyzer_exception(self, model_id, base_form, token_text):
         """
@@ -518,7 +521,10 @@ class SystemController:
 
         :return: [Dict] - Diccionario con los resultados de la operación
         """
-        pass
+        def action():
+            self.__admin_module.disable_analyzer_exception(model_id, base_form, token_text)
+            return self.__build_response_object(True)
+        return self.__process_incoming_request(action, [TASK_KEYS_MODEL_UPDATE])
 
     def get_analyzer_exceptions(self, model_id):
         """

@@ -250,7 +250,14 @@ class ModelManagerController(ObservableSingleton):
 
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
-        pass
+        model = self.get_model(model_id)
+        if not model:
+            ErrorHandler.raise_error('E-0111')
+        analyzer_exception = model.find_exception(base_form, token_text)
+        if not analyzer_exception or analyzer_exception.is_enabled():
+            ErrorHandler.raise_error('E-0112')
+        ModelDataManager.enable_analyzer_exception(model_id, base_form, token_text)
+        analyzer_exception.enable()
 
     def disable_analyzer_exception(self, model_id, base_form, token_text):
         """
@@ -263,7 +270,14 @@ class ModelManagerController(ObservableSingleton):
 
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
-        pass
+        model = self.get_model(model_id)
+        if not model:
+            ErrorHandler.raise_error('E-0114')
+        analyzer_exception = model.find_exception(base_form, token_text)
+        if not analyzer_exception or not analyzer_exception.is_enabled():
+            ErrorHandler.raise_error('E-0115')
+        ModelDataManager.disable_analyzer_exception(model_id, base_form, token_text)
+        analyzer_exception.disable()
 
     def get_analyzer_exceptions(self, model_id):
         """

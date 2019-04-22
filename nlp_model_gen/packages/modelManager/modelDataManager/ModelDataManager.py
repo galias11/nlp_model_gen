@@ -142,7 +142,14 @@ class ModelDataManager:
 
         :token_text: [String] - Texto particular del token a exceptuar.
         """
-        pass
+        update_count = db_update_item(
+            MODEL_MANAGER_DB, 
+            ANALYZER_EXCEPTIONS_COLLECTION, 
+            {'model_id': model_id, 'base_form': base_form, 'token_text': token_text}, 
+            {'enabled': True}
+        ).modified_count
+        if update_count <= 0:
+            ErrorHandler.raise_error('E-0113')
 
     @staticmethod
     def disable_analyzer_exception(model_id, base_form, token_text):
@@ -155,7 +162,14 @@ class ModelDataManager:
 
         :token_text: [String] - Texto particular del token a exceptuar.
         """
-        pass
+        update_count = db_update_item(
+            MODEL_MANAGER_DB, 
+            ANALYZER_EXCEPTIONS_COLLECTION, 
+            {'model_id': model_id, 'base_form': base_form, 'token_text': token_text}, 
+            {'enabled': False}
+        ).modified_count
+        if update_count <= 0:
+            ErrorHandler.raise_error('E-0116')
 
     @staticmethod
     def get_analyzer_exceptions_data(model_id):
