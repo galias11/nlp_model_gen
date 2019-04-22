@@ -87,7 +87,7 @@ class Model:
         results = list([])
         if doc is None:
             return results
-        token_analyzer = Analyzer(self.__analyzer_rules_set)
+        token_analyzer = Analyzer(self.__analyzer_rules_set, self.__analyzer_exceptions_set)
         for sent in doc.sents:
             for token in sent:
                 generated_token = Token(token.lemma_, token.is_oov, token.pos_, token.sent, token.sentiment, token.tag_, token.text)
