@@ -449,4 +449,4 @@ class AdminModuleController(metaclass=Singleton):
         :return: [List(Dict)] - Lista con todas las excepciones existentes para el
         modelo y su detalle.
         """
-        pass
+        return self.__model_manager.get_analyzer_exceptions(model_id)

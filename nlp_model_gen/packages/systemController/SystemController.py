@@ -519,7 +519,7 @@ class SystemController:
         :return: [Dict] - Diccionario con los resultados de la operación
         """
         pass
-    
+
     def get_analyzer_exceptions(self, model_id):
         """
         Obtiene un listado de todas las excepciones al analizador para un modelo
@@ -529,4 +529,7 @@ class SystemController:
 
         :return: [Dict] - Diccionario con los resultados de la operación
         """
-        pass
+        def action():
+            results = self.__admin_module.get_analyzer_exceptions(model_id)
+            return self.__build_response_object(True, results)
+        return self.__process_incoming_request(action)
