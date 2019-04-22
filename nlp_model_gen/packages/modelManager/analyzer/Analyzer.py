@@ -1,7 +1,7 @@
 class Analyzer:
     def __init__(self, rule_set, exceptions_set):
         self.__rule_set = rule_set
-        self.__exceptions_set  = exceptions_set
+        self.__exceptions_set = exceptions_set
 
     def validate_exception(self, token):
         """
@@ -12,7 +12,10 @@ class Analyzer:
         :return: [boolean] - True si se ha detectado una excepción activa,
         False en caso contrario.
         """
-        pass
+        for analyzer_exception in self.__exceptions_set:
+            if analyzer_exception.check_exception(token.get_token_text(), token.get_base_form()):
+                return False
+        return True
 
     def analyze_token(self, token):
         """
@@ -25,7 +28,7 @@ class Analyzer:
         if self.__rule_set is None:
             return
         for category in self.__rule_set:
-            if token.get_base_form() in category['lemma_list']:
+            if token.get_base_form() in category['lemma_list'] and self.validate_exception(token):
                 token.set_theme_detected(category['identifier'], category['alert_message'])
                 return
         

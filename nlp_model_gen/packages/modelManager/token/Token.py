@@ -21,6 +21,9 @@ class Token:
     def get_base_form(self):
         return self.__base_form
 
+    def get_token_text(self):
+        return self.__token_text
+
     def is_positive(self):
         return self.__positive
 
