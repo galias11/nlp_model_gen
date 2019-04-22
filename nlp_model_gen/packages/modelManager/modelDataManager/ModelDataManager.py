@@ -156,3 +156,16 @@ class ModelDataManager:
         :token_text: [String] - Texto particular del token a exceptuar.
         """
         pass
+
+    @staticmethod
+    def get_analyzer_exceptions_data(model_id):
+        """
+        Obtiene la lista de excepciones para el analizador de un modelo.
+
+        :model_id: [String] - Id del modelo.
+
+        :return: [List] - Listado con las excepciones encontradas para el
+        modelo solicitado
+        """
+        analyzer_exceptions = list(db_get_items(MODEL_MANAGER_DB, ANALYZER_EXCEPTIONS_COLLECTION, {'model_id': model_id}))
+        return analyzer_exceptions

@@ -44,6 +44,9 @@ class Model:
     def get_analyser_rules_set(self):
         return self.__analyzer_rules_set
 
+    def get_analyzer_exceptions_set(self):
+        return self.__analyzer_exceptions_set
+
     def get_reference(self):
         return self.__reference
 
@@ -231,6 +234,6 @@ class Model:
         :return: [Boolean] - True si se ha encontrado, False en caso contrario.
         """
         for exception in self.__analyzer_exceptions_set:
-            if exception.match_exception(base_form, token_text):
+            if exception.match_exception(token_text, base_form):
                 return True
         return False

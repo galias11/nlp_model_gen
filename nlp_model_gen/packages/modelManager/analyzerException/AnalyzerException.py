@@ -45,3 +45,15 @@ class AnalyzerException:
         Desactiva la excepción, la misma no debe estar desactivada previamente.
         """
         pass
+
+    def to_dict(self):
+        """
+        Devuelve un diccionario con los datos de la excepción.
+
+        :return: [Dict] - Diccionario que representa la excepción
+        """
+        return {
+            'base_form': self.__base_form,
+            'token_text': self.__token_text,
+            'enabled': self.__enabled
+        }

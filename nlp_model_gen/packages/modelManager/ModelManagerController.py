@@ -35,6 +35,9 @@ class ModelManagerController(ObservableSingleton):
             stored_models_data = ModelDataManager.get_models()
             for model in stored_models_data:
                 model_object = Model(model['model_id'], model['model_name'], model['description'], model['author'], model['path'], model['analyzer_rules_set'], [])
+                model_analyzer_exceptions = ModelDataManager.get_analyzer_exceptions_data(model['model_id'])
+                for analyzer_exception in model_analyzer_exceptions:
+                    model_object.add_analyzer_exception(analyzer_exception['base_form'], analyzer_exception['token_text'], analyzer_exception['enabled'])
                 self.__models.append(model_object)
             Logger.log('L-0052')
             self.__init_success = True
@@ -261,7 +264,7 @@ class ModelManagerController(ObservableSingleton):
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
         pass
-    
+
     def get_analyzer_exceptions(self, model_id):
         """
         Obtiene un listado de todas las excepciones al analizador para un modelo
@@ -272,4 +275,10 @@ class ModelManagerController(ObservableSingleton):
         :return: [List(Dict)] - Lista con todas las excepciones existentes para el
         modelo y su detalle.
         """
-        pass
+        model = self.get_model(model_id)
+        if not model:
+            ErrorHandler.raise_error('E-0110')
+        analyzer_exceptions = list([])
+        for found_exception in model.get_analyzer_exceptions_set():
+            analyzer_exceptions.append(found_exception.to_dict())
+        return analyzer_exceptions

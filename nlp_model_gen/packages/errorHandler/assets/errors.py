@@ -535,5 +535,20 @@ ERROR_DATA = {
         'description': 'No se han podido actualizar los datos del ejemplo en la base de datos',
         'source': {'class': 'TrainDataManager', 'method': 'discard_example'},
         'log': 'L-0321'
+    },
+    'E-0107': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'ModelManagerController', 'method': 'add_analyzer_exception'},
+        'log': None
+    },
+    'E-0108': {
+        'description': 'La excepción ya esta registrada para el modelo solicitado',
+        'source': {'class': 'ModelManagerController', 'method': 'add_analyzer_exception'},
+        'log': None
+    },
+    'E-0110': {
+        'description': 'El modelo solicitado no existe',
+        'source': {'class': 'ModelManagerController', 'method': 'get_analyzer_exceptions'},
+        'log': None
     }
 }
