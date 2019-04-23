@@ -83,7 +83,7 @@
 - TFI-0008: El elemento token_text esta devolviendo la oración completa en lugar del token.
 - TFI-0009: Implementar funcionalidades faltantes en el controlador de sistema
 
-## Version 0.1.1':
+## Version 0.1.10:
 
 #### New features
 
@@ -99,3 +99,9 @@
 #### Bugs fixed
 
 - TFI-0010: Funcionalidad de descartar un ejemplo de entrenamiento ausente en system controller.
+
+## Version 0.1.11:
+
+#### Hotfix
+
+- TF-0079: Hotfix: Model creation process
