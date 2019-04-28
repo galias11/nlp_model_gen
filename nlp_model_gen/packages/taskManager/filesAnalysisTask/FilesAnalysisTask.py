@@ -7,11 +7,12 @@ from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 # @Constants
 from nlp_model_gen.constants.constants import (
     TASK_KEYS_MODEL_UPDATE,
-    TASK_KEYS_WORD_PROCESSOR
+    TASK_KEYS_WORD_PROCESSOR,
+    TOKENIZER_RESULTS_PLACEHOLDER
 )
 
 # @Utils
-from nlp_model_gen.utils.fileUtils import validate_file
+from nlp_model_gen.utils.fileUtils import get_file_name, validate_file
 
 # @Classes
 from nlp_model_gen.utils.classUtills import Observer
@@ -58,7 +59,8 @@ class FilesAnalysisTask(Task, Observer):
             task_results = dict({})
             task_results['file'] = task['file']
             task_results['error'] = task_status['error']
-            task_results['results'] = task_status['results']
+            task_results['success'] = not task_results['error']['active']
+            task_results['findings'] = task_status['results'] if task_results['success'] else TOKENIZER_RESULTS_PLACEHOLDER
             results.append(task_results)
         return results
 
@@ -88,7 +90,7 @@ class FilesAnalysisTask(Task, Observer):
                 file_text = file.read()
                 analysis_task = TextAnalysisTask(-1, self.__model_id, file_text, self.__only_positives)
                 analysis_task.add_observer(self)
-                self.__analysis_tasks.append({'file': file.name, 'task': analysis_task})
+                self.__analysis_tasks.append({'file': get_file_name(file), 'task': analysis_task})
                 analysis_task.init()
             while not self.__check_task_finalized():
                 time.sleep(5)

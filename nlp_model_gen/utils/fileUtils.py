@@ -227,3 +227,13 @@ def validate_file(file):
     :return: [Boolean] - True si es una instancia de archivo, False en caso contrario
     """
     return hasattr(file, 'read')
+
+def get_file_name(file):
+    """
+    Obtiene el nombre de un archivo omitiendo el path.
+
+    :file: [file] - Archivo. Debe estar inicializado.
+
+    :return: [String] - Nombre del archivo
+    """
+    return os.path.basename(file.name)
