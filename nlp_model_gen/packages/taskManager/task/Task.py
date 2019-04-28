@@ -62,7 +62,7 @@ class Task(Thread, Observable, ABC):
         self.__error = {'active': True, 'description_data': error}
 
     def set_results(self, results):
-        self.__results = {'resource': results}
+        self.__results = results
 
     def run(self):
         """

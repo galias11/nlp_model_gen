@@ -77,6 +77,7 @@ TOKEN_RULES_GEN_VERB_CFG = {
     'condA': {'time_keys': ['COND', 'COND', 'COND', 'COND', 'COND', 'COND'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
     'condB': {'time_keys': ['SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP', 'SIMP'], 'tag_keys': TOKEN_RULES_GEN_VERB_GROUP_COMPLEX},
 }
+TOKENIZER_RESULTS_PLACEHOLDER = {'tokenizer_results': [], 'ner_results': []}
 TRAIN_DATA_EXAMPLES_COLLECTION = 'tm_training_examples'
 TRAIN_EXAMPLE_STATUS_APPLIED = 'applied'
 TRAIN_EXAMPLE_STATUS_APPROVED = 'approved'
