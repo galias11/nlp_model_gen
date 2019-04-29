@@ -98,6 +98,7 @@ WORD_PROCESSOR_MODULE_KEY_CONJUGATOR = 'conjugator'
 WORD_PROCESSOR_MODULE_KEY_FUZZY_GEN = 'fuzzy_gen'
 WORD_PROCESSOR_MODULE_KEY_NOUN_CONV = 'noun_conversor'
 WORD_PROCESSOR_NOUN_CONV_CFG_COLLECTION = 'wp_noun_conv_config'
+WORD_PROCESSOR_SPECIAL_CHARS = [('á', 'a'), ('é', 'e'), ('í', 'i'), ('ó', 'o'), ('ú', 'u'), ('ü', 'u')]
 WORD_PROCESSOR_VERB_EXCEPTIONS_COLLECTION = 'wp_conjugator_verb_exceptions'
 WORD_PROCESSOR_VERB_GROUPS_COLLECTION = 'wp_conjugator_verb_groups'
 WORD_PROCESOR_DEFAULT_MODE = 0
