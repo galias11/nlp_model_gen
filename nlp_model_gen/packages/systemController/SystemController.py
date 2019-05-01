@@ -399,8 +399,7 @@ class SystemController:
 
     def get_task_status(self, task_id):
         """
-        Devuelve el estado de una tarea particular. La tarea debe existir, de lo contrario se devolverá
-        None.
+        Devuelve el estado de una tarea particular. La tarea debe existir.
 
         :task_id: [int] - Id de la tarea.
 
@@ -461,7 +460,7 @@ class SystemController:
 
         :name: [String] - Nombre de la entidad a editar.
 
-        .description: [String] - Nueva descripción para la entidad personalizada.
+        :description: [String] - Nueva descripción para la entidad personalizada.
 
         :return: [Dict] - Diccionario con los resultados de la operación
         """

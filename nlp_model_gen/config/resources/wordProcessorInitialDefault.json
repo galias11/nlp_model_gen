@@ -758,9 +758,7 @@
         },
         "transformations": [
             "rnd_confuse_char", 
-            "rnd_char_del", 
-            "rnd_char_change", 
-            "rnd_duplicate_char"
+            "rnd_char_del"
         ],
         "char_confusions_max_length": 2
     },
