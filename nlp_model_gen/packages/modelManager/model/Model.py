@@ -7,6 +7,9 @@ from nlp_model_gen.packages.logger.Logger import Logger
 # @Error handler
 from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
+# @Constants
+from nlp_model_gen.constants.constants import TEXT_LENGTH_THRESHOLD
+
 # @Clases
 from ..analyzerException.AnalyzerException import AnalyzerException
 from ..modelLoader.ModelLoader import ModelLoader
@@ -72,7 +75,7 @@ class Model:
         if not self.is_loaded():
             return None
         return ModelLoader.get_model_ner(self.__reference)
-    
+
     def __process_tokenizer_results(self, doc, only_positives=False):
         """
         Procesa los resultados del analisis de un texto almacenados en un doc de spacy en función de los
@@ -151,6 +154,9 @@ class Model:
         :return: [Dict()] - Resultados del análisis.
         """
         Logger.log('L-0059')
+        text_length = len(text)
+        if text_length >= TEXT_LENGTH_THRESHOLD:
+            self.__reference.max_length = text_length
         doc = self.__reference(text)
         Logger.log('L-0061')
         results = {
