@@ -578,6 +578,8 @@ class WordProcessorController(metaclass=Singleton):
         :theme_name: [String] - Nombre del tema.
 
         :exception_key: [String] - Key o verbo del cual se eliminará la excepción.
+
+        :exception_new_data: [Dict] - Datos actualizados de la excepción.
         """
         Logger.log('L-0189')
         if not self.__check_exception_existence(theme_name, exception_key) or theme_name == WORD_PROCESSOR_DEFAULT_THEME:
