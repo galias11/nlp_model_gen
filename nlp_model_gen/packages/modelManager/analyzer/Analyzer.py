@@ -31,4 +31,16 @@ class Analyzer:
             if token.get_base_form() in category['lemma_list'] and self.validate_exception(token):
                 token.set_theme_detected(category['identifier'], category['alert_message'])
                 return
-        
+
+    def classify_token(self, token):
+        """
+        Devuelve la clasificación de un token.
+
+        :token: [SpacyToken] - Token a analizar.
+
+        :return: [Dict] - Diccionario con el la clasificación y su detalle.
+        """
+        return {
+            'orth': token.orth_,
+            'type': token.pos_
+        }

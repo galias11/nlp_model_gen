@@ -1,3 +1,6 @@
+# @Vendors
+from collections import defaultdict, Counter
+
 # @Utils
 from nlp_model_gen.utils.objectUtils import transform_dict_key_data_to_int
 
@@ -76,6 +79,25 @@ class Model:
             return None
         return ModelLoader.get_model_ner(self.__reference)
 
+    def __build_tokenizer_results(self, tokenizer_dectections, token_count):
+        """
+        Crea un diccionario con los resultados del procesamiento de los datos obtenidos
+        del análisis del tokenizer.
+
+        :tokenizer_detections: [List(Dict)] - Tokens detectados.
+
+        :token_count: [Dict(Counter)] - Conteo de tokens por categoria.
+
+        :return: [Dict] - Resultados procesados.
+        """
+        token_frequency = dict()
+        for key in token_count.keys():
+            token_frequency[key] = token_count[key].most_common()
+        return {
+            'token_frequency': dict(token_frequency),
+            'tokenizer_results': tokenizer_dectections
+        }
+
     def __process_tokenizer_results(self, doc, only_positives=False):
         """
         Procesa los resultados del analisis de un texto almacenados en un doc de spacy en función de los
@@ -85,19 +107,23 @@ class Model:
 
         :only_positives: [boolean] - Si esta activado, solo se devulven los resultados positivos.
 
-        :return: [List(Dict)] - Lista con los resultados del analisis del tokenizer.
+        :return: [Dict] - Diccionario con la lista con los resultados del analisis del tokenizer y 
+        el conteo de tokens.
         """
-        results = list([])
+        tokenizer_detections = list([])
+        token_count = defaultdict(Counter)
         if doc is None:
-            return results
+            return self.__build_tokenizer_results(tokenizer_detections, token_count)
         token_analyzer = Analyzer(self.__analyzer_rules_set, self.__analyzer_exceptions_set)
         for sent in doc.sents:
             for token in sent:
+                classified_token = token_analyzer.classify_token(token)
+                token_count[classified_token['type']][classified_token['orth']] += 1
                 generated_token = Token(token.lemma_, token.is_oov, token.pos_, token.sent, token.sentiment, token.tag_, token.text)
                 token_analyzer.analyze_token(generated_token)
                 if not only_positives or generated_token.is_positive():
-                    results.append(generated_token)
-        return results
+                    tokenizer_detections.append(generated_token)
+        return self.__build_tokenizer_results(tokenizer_detections, token_count)
 
     def __process_ner_results(self, doc):
         """
@@ -159,9 +185,11 @@ class Model:
             self.__reference.max_length = text_length
         doc = self.__reference(text)
         Logger.log('L-0061')
+        tokenizer_analysis_results = self.__process_tokenizer_results(doc, only_positives)
         results = {
-            'tokenizer_results': self.__process_tokenizer_results(doc, only_positives),
-            'ner_results': self.__process_ner_results(doc)
+            'ner_results': self.__process_ner_results(doc),
+            'token_frequency': tokenizer_analysis_results['token_frequency'],
+            'tokenizer_results': tokenizer_analysis_results['tokenizer_results']
         }
         Logger.log('L-0062')
         Logger.log('L-0063')
