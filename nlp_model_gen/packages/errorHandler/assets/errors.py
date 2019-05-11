@@ -580,5 +580,10 @@ ERROR_DATA = {
         'description': 'No se han podido actualizar los datos del ejemplo en la base de datos',
         'source': {'class': 'ModelDataManager', 'method': 'disable_analyzer_exception'},
         'log': None
+    },
+    'E-0117': {
+        'description': 'Error al acceder a la colleción de ids autoincrementales',
+        'source': {'class': '', 'method': 'db_get_autoincremental_id'},
+        'log': None
     }
 }
