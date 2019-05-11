@@ -100,13 +100,16 @@ def db_drop_collection(db_name, col_name):
         ErrorHandler.raise_error('E-0011', [{'text': e, 'color': ERROR_COLOR}])
 
 def db_get_autoincremental_id(col_name):
-    col = get_collection(DB_GENERAL_SETTINGS_DB, DB_AUTOINCREMENTAL_ID_COL)
-    next_entry = col.find_and_modify(
-        {'collection': col_name},
-        {'$inc': { 'next_id': 1}},
-        True
-    )
-    return next_entry['next_id']
+    try:
+        col = get_collection(DB_GENERAL_SETTINGS_DB, DB_AUTOINCREMENTAL_ID_COL)
+        next_entry = col.find_and_modify(
+            {'collection': col_name},
+            {'$inc': {'next_id': 1}},
+            True
+        )
+        return next_entry['next_id'] if next_entry else 1
+    except Exception as e:
+        ErrorHandler.raise_error('E-0117', [{'text': e, 'color': ERROR_COLOR}])
 
 def insert(db, collection_name, data=None, query=None):
     col = db[collection_name]
