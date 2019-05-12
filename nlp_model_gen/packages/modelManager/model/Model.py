@@ -231,9 +231,11 @@ class Model:
         return dict({
             'model_id': self.__model_id,
             'model_name': self.__model_name,
-            'descripcion': self.__description,
+            'description': self.__description,
             'author': self.__author,
-            'path': self.__path
+            'path': self.__path,
+            'analyzer_rules_set': self.__analyzer_rules_set,
+            'analyzer_exceptions_set': self.__analyzer_exceptions_set
         })
 
     def __eq__(self, other):

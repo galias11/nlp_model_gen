@@ -538,3 +538,37 @@ class SystemController:
             results = self.__admin_module.get_analyzer_exceptions(model_id)
             return self.__build_response_object(True, results)
         return self.__process_incoming_request(action)
+
+    def import_model(self, model_id, source=None):
+        """
+        Importa un modelo existente desde el repositorio de modelos. No debe existir
+        un modelo local con dicho id y, además, el módelo debe existir en el repositorio
+        remoto de modelos.
+
+        :model_id: [String] - Id del modelo a importar.
+
+        :source: [Dict] - Fuente de donde obtener el modelo, puede ser un repositorio
+        git o un directorio local.
+        """
+        def action():
+            self.__admin_module.import_model(model_id, source)
+            return self.__build_response_object(True)
+        return self.__process_incoming_request(action, [TASK_KEYS_MODEL_UPDATE])
+
+    def export_model(self, model_id, output_path, split=True):
+        """
+        Empaqueta un modelo para ser exportado. El paquete se guardara en la ruta
+        solicitada.
+
+        :model_id: [String] - Id del modelo a exportar (debe existir)
+
+        :output_path: [String] - Ruta absoluta a donde se desea guardar los datos
+        del modelo.
+
+        :split: [boolean] - Indica si se debe particionar el paquete del modelo.
+        Cuando esta habilitada se particionará en paquetes de 20mb
+        """
+        def action():
+            self.__admin_module.export_model(model_id, output_path, split)
+            return self.__build_response_object(True)
+        return self.__process_incoming_request(action, [TASK_KEYS_MODEL_UPDATE])

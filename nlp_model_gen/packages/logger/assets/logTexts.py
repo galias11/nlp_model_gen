@@ -591,6 +591,12 @@ LOG_DATA = {
         'main_text': 'Excepciones para el analizador obtenidas exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0099': {
+        'class_name': '',
+        'method_name': 'unzip_model',
+        'main_text': 'Excepción al descomprimir modelo: %s',
+        'type': TYPE_INFO
+    },
     'L-0100': {
         'class_name': 'WordProcessorController',
         'method_name': 'get_available_conjugator_configs',
@@ -686,6 +692,12 @@ LOG_DATA = {
         'method_name': 'add_conjugator_config',
         'main_text': 'Nuevo tema guardado exitosamente',
         'type': TYPE_SUCCESS
+    },
+    'L-0116': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'import_model',
+        'main_text': 'Importando modelo...',
+        'type': TYPE_INFO
     },
     'L-0117': {
         'class_name': 'WordProcessorController',
@@ -783,6 +795,12 @@ LOG_DATA = {
         'main_text': 'Datos guardados exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0134': {
+        'class_name': 'ModelLoader',
+        'method_name': 'import_model',
+        'main_text': 'Importando modelo desde repositorio remoto: %s...',
+        'type': TYPE_INFO
+    },
     'L-0135': {
         'class_name': 'WordProcessorController',
         'method_name': 'add_noun_conversor_theme',
@@ -812,6 +830,12 @@ LOG_DATA = {
         'method_name': 'add_noun_conversor_theme',
         'main_text': 'Datos guardados exitosamente',
         'type': TYPE_SUCCESS
+    },
+    'L-0140': {
+        'class_name': 'ModelLoader',
+        'method_name': 'import_model',
+        'main_text': 'Importando modelo desde directorio local: %s...',
+        'type': TYPE_INFO
     },
     'L-0141': {
         'class_name': 'WordProcessorController',
@@ -847,6 +871,12 @@ LOG_DATA = {
         'class_name': 'WordProcessorController',
         'method_name': 'set_conjugator_active_theme',
         'main_text': 'Tema cambiado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0147': {
+        'class_name': 'ModelLoader',
+        'method_name': 'import_model',
+        'main_text': 'Modelo obtenido correctamente',
         'type': TYPE_SUCCESS
     },
     'L-0148': {
@@ -885,6 +915,12 @@ LOG_DATA = {
         'main_text': 'Tema cambiado exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0154': {
+        'class_name': 'ModelLoader',
+        'method_name': 'import_model',
+        'main_text': 'Extrayendo modelo...',
+        'type': TYPE_INFO
+    },
     'L-0155': {
         'class_name': 'WordProcessorController',
         'method_name': 'set_noun_conversor_active_theme',
@@ -919,6 +955,12 @@ LOG_DATA = {
         'class_name': 'WordProcessorController',
         'method_name': 'set_noun_conversor_active_theme',
         'main_text': 'Tema cambiado exitosamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0161': {
+        'class_name': 'ModelLoader',
+        'method_name': 'import_model',
+        'main_text': 'Modelo extraído exitosamente',
         'type': TYPE_SUCCESS
     },
     'L-0162': {
@@ -969,6 +1011,12 @@ LOG_DATA = {
         'main_text': 'Datos del modelo en uso actualizados correctamente',
         'type': TYPE_SUCCESS
     },
+    'L-0170': {
+        'class_name': 'ModelLoader',
+        'method_name': 'import_model',
+        'main_text': 'Error al obtener modelo',
+        'type': TYPE_ERR
+    },
     'L-0171': {
         'class_name': 'WordProcessorController',
         'method_name': 'update_fuzzy_gen_config',
@@ -1017,6 +1065,12 @@ LOG_DATA = {
         'main_text': 'Datos del modelo en uso actualizados correctamente',
         'type': TYPE_SUCCESS
     },
+    'L-0179': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'import_model',
+        'main_text': 'Guardando modelo...',
+        'type': TYPE_INFO
+    },
     'L-0180': {
         'class_name': 'WordProcessorController',
         'method_name': 'update_noun_conversor_config',
@@ -1063,6 +1117,12 @@ LOG_DATA = {
         'class_name': 'WordProcessorController',
         'method_name': 'update_noun_conversor_config',
         'main_text': 'Datos del modelo en uso actualizados correctamente',
+        'type': TYPE_SUCCESS
+    },
+    'L-0188': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'import_model',
+        'main_text': 'Modelo guardado exitosamente',
         'type': TYPE_SUCCESS
     },
     'L-0189': {
@@ -1113,6 +1173,12 @@ LOG_DATA = {
         'main_text': 'Datos del modelo en uso actualizados correctamente',
         'type': TYPE_SUCCESS
     },
+    'L-0197': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'import_model',
+        'main_text': 'Modelo importado exitosamente',
+        'type': TYPE_SUCCESS
+    },
     'L-0198': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_conjugator_theme',
@@ -1143,6 +1209,12 @@ LOG_DATA = {
         'main_text': 'Cambio de tema realizado exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0203': {
+        'class_name': '',
+        'method_name': 'zip_model',
+        'main_text': 'Excepción al comprimir el modelo: %s',
+        'type': TYPE_ERR
+    },
     'L-0204': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_conjugator_theme',
@@ -1154,6 +1226,12 @@ LOG_DATA = {
         'method_name': 'remove_conjugator_theme',
         'main_text': 'Exito al eliminar los datos',
         'type': TYPE_SUCCESS
+    },
+    'L-0206': {
+        'class_name': 'ModelManageController',
+        'method_name': 'export_model',
+        'main_text': 'El modelo solicitado no existe',
+        'type': TYPE_ERR
     },
     'L-0207': {
         'class_name': 'WordProcessorController',
@@ -1185,6 +1263,12 @@ LOG_DATA = {
         'main_text': 'Cambio de tema realizado exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0212': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'export_model',
+        'main_text': 'Exportando modelo...',
+        'type': TYPE_INFO
+    },
     'L-0213': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_fuzzy_gen_theme',
@@ -1195,6 +1279,12 @@ LOG_DATA = {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_fuzzy_gen_theme',
         'main_text': 'Exito al eliminar los datos',
+        'type': TYPE_SUCCESS
+    },
+    'L-0215': {
+        'class_name': 'ModelManagerController',
+        'method_name': 'export_model',
+        'main_text': 'Modelo exportado exitosamente',
         'type': TYPE_SUCCESS
     },
     'L-0216': {
@@ -1227,6 +1317,12 @@ LOG_DATA = {
         'main_text': 'Cambio de tema realizado exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0221': {
+        'class_name': 'ModelLoader',
+        'method_name': 'export_model',
+        'main_text': 'Generando archivo de configuración del modelo...',
+        'type': TYPE_INFO
+    },
     'L-0222': {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_noun_conversor_theme',
@@ -1237,6 +1333,12 @@ LOG_DATA = {
         'class_name': 'WordProcessorController',
         'method_name': 'remove_noun_conversor_theme',
         'main_text': 'Exito al eliminar los datos',
+        'type': TYPE_SUCCESS
+    },
+    'L-0224': {
+        'class_name': 'ModelLoader',
+        'method_name': 'export_model',
+        'main_text': 'Archivo de configuración generado exitosamente',
         'type': TYPE_SUCCESS
     },
     'L-0225': {
@@ -1365,6 +1467,12 @@ LOG_DATA = {
         'main_text': 'Módulo de entrenamiento inicializado exitosamente',
         'type': TYPE_SUCCESS
     },
+    'L-0246': {
+        'class_name': 'ModelLoader',
+        'method_name': 'export_model',
+        'main_text': 'Empaquetando y exportando archivos del modelo...',
+        'type': TYPE_SUCCESS
+    },
     'L-0247': {
         'class_name': 'TrainDataManager',
         'method_name': 'init',
@@ -1472,6 +1580,12 @@ LOG_DATA = {
         'method_name': 'add_custom_entity',
         'main_text': 'Agregando nueva entidad personalizada...',
         'type': TYPE_INFO
+    },
+    'L-0265': {
+        'class_name': 'ModelLoader',
+        'method_name': 'export_model',
+        'main_text': 'Archivos empaquetados y exportados exitosamente',
+        'type': TYPE_SUCCESS
     },
     'L-0266': {
         'class_name': 'ModelTrainingController',

@@ -585,5 +585,30 @@ ERROR_DATA = {
         'description': 'Error al acceder a la colleción de ids autoincrementales',
         'source': {'class': '', 'method': 'db_get_autoincremental_id'},
         'log': None
+    },
+    'E-0118': {
+        'description': 'El modelo a importar ya existe',
+        'source': {'class': 'ModelManagerController', 'method': 'import_model'},
+        'log': 'L-0128'
+    },
+    'E-0119': {
+        'description': 'Error al obtener el modelo remoto',
+        'source': {'class': 'ModelManagerController', 'method': 'import_model'},
+        'log': 'L-0170'
+    },
+    'E-0120': {
+        'description': 'Error al descomprimir los archivos de modelo',
+        'source': {'class': '', 'method': 'unzip_model'},
+        'log': 'L-0099'
+    },
+    'E-0121': {
+        'description': 'Error al comprimir el modelo',
+        'source': {'class': '', 'method': 'zip_model'},
+        'log': 'L-0203'
+    },
+    'E-0122': {
+        'description': 'El modelo a exportar no existe',
+        'source': {'class': 'ModelManagerController', 'method': 'export_model'},
+        'log': 'L-0206'
     }
 }

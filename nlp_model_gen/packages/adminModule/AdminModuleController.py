@@ -438,7 +438,7 @@ class AdminModuleController(metaclass=Singleton):
         :token_text: [String] - Forma especifica en la que detectar el token.
         """
         self.__model_manager.disable_analyzer_exception(model_id, base_form, token_text)
-    
+
     def get_analyzer_exceptions(self, model_id):
         """
         Obtiene un listado de todas las excepciones al analizador para un modelo
@@ -450,3 +450,31 @@ class AdminModuleController(metaclass=Singleton):
         modelo y su detalle.
         """
         return self.__model_manager.get_analyzer_exceptions(model_id)
+
+    def import_model(self, model_id, source=None):
+        """
+        Importa un modelo existente desde el repositorio de modelos. No debe existir
+        un modelo local con dicho id y, además, el módelo debe existir en el repositorio
+        remoto de modelos.
+
+        :model_id: [String] - Id del modelo a importar.
+
+        :source: [Dict] - Fuente de donde obtener el modelo, puede ser un repositorio
+        git o un directorio local.
+        """
+        self.__model_manager.import_model(model_id, source)
+
+    def export_model(self, model_id, output_path, split=True):
+        """
+        Empaqueta un modelo para ser exportado. El paquete se guardara en la ruta
+        solicitada.
+
+        :model_id: [String] - Id del modelo a exportar (debe existir)
+
+        :output_path: [String] - Ruta absoluta a donde se desea guardar los datos
+        del modelo.
+
+        :split: [boolean] - Indica si se debe particionar el paquete del modelo.
+        Cuando esta habilitada se particionará en paquetes de 20mb
+        """
+        self.__model_manager.export_model(model_id, output_path, split)
