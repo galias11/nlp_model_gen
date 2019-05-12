@@ -1,20 +1,28 @@
-# @Utils
-from nlp_model_gen.utils.fileUtils import get_files_in_dir, load_json_file
-
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
 
 # @Error handler
 from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 
+# @Utils
+from nlp_model_gen.utils.fileUtils import get_files_in_dir, load_json_file
+
+# @Config
+from nlp_model_gen.base import REMOTE_MODEL_SOURCE
+
 # @Contants
-from nlp_model_gen.constants.constants import TOKEN_RULES_GEN_RULES_EXT, EVENT_MODEL_CREATED, EVENT_MODEL_DELETED
+from nlp_model_gen.constants.constants import (
+    EVENT_MODEL_CREATED, 
+    EVENT_MODEL_DELETED,
+    TOKEN_RULES_GEN_RULES_EXT
+)
 
 # @Log colors
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Classes
 from nlp_model_gen.utils.classUtills import ObservableSingleton
+from nlp_model_gen.packages.modelManager.analyzerException.AnalyzerException import AnalyzerException
 from .modelDataManager.ModelDataManager import ModelDataManager
 from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
@@ -178,7 +186,7 @@ class ModelManagerController(ObservableSingleton):
         Logger.log('L-0022')
         self.__apply_tokenizer_exceptions(new_model, tokenizer_exceptions_path)
         ModelDataManager.save_model_data(model_id, model_name, description, author, model_id, analyzer_rule_set)
-        ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path)
+        ModelLoader.save_model(custom_model, model_id, tokenizer_exceptions_path, new_model)
         self.__models.append(new_model)
         Logger.log('L-0025')
         self.notify({'event': EVENT_MODEL_CREATED, 'payload': new_model})
@@ -310,3 +318,56 @@ class ModelManagerController(ObservableSingleton):
             analyzer_exceptions.append(found_exception.to_dict())
         Logger.log('L-0098')
         return analyzer_exceptions
+
+    def import_model(self, model_id, source=None):
+        """
+        Importa un modelo existente desde el repositorio de modelos. No debe existir
+        un modelo local con dicho id y, además, el módelo debe existir en el repositorio
+        remoto de modelos.
+
+        :model_id: [String] - Id del modelo a importar.
+
+        :source: [Dict] - Fuente de donde obtener el modelo, puede ser un repositorio
+        git o un directorio local.
+        """
+        Logger.log('L-0116')
+        model = self.get_model(model_id)
+        if model:
+            ErrorHandler.raise_error('E-0118')
+        if not source:
+            source = REMOTE_MODEL_SOURCE
+        cfg = ModelLoader.import_model(model_id, source)
+        analyzer_exceptions_set_data = cfg['analyzer_exceptions_set']
+        analyzer_exceptions_set = [AnalyzerException(exception['base_form'], exception['token_text'], exception['enabled']) for exception in analyzer_exceptions_set_data]
+        Logger.log('L-0179')
+        ModelDataManager.save_model_data(model_id, cfg['model_name'], cfg['description'], cfg['author'], model_id, cfg['analyzer_rules_set'])
+        remote_model = Model(model_id, cfg['model_name'], cfg['description'], cfg['author'], model_id, cfg['analyzer_rules_set'], analyzer_exceptions_set)
+        self.__models.append(remote_model)
+        for exception in analyzer_exceptions_set_data:
+            try:
+                # No se desea que falle la importación por existir excepciones anteriores (ver TF-0017)
+                self.add_analyzer_exception(model_id, exception['base_form'], exception['token_text'], exception['enabled'])
+            except:
+                pass
+        Logger.log('L-0188')
+        Logger.log('L-0197')
+
+    def export_model(self, model_id, output_path, split=True):
+        """
+        Empaqueta un modelo para ser exportado. El paquete se guardara en la ruta
+        solicitada.
+
+        :model_id: [String] - Id del modelo a exportar (debe existir)
+
+        :output_path: [String] - Ruta absoluta a donde se desea guardar los datos
+        del modelo.
+
+        :split: [boolean] - Indica si se debe particionar el paquete del modelo.
+        Cuando esta habilitada se particionará en paquetes de 20mb
+        """
+        Logger.log('L-0212')
+        model = self.get_model(model_id)
+        if not model:
+            ErrorHandler.raise_error('E-0122')
+        ModelLoader.export_model(model, output_path, split)
+        Logger.log('L-0215')

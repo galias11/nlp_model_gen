@@ -2,6 +2,7 @@
 import os
 import json
 import shutil
+from zipfile import ZipFile
 
 # @Error handler
 from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
@@ -10,10 +11,18 @@ from nlp_model_gen.packages.errorHandler.ErrorHandler import ErrorHandler
 from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Constants
-from nlp_model_gen.constants.constants import DEFAULT_REPLACE_WILDCARD, DIR_PATH_SEPARATOR, PATH_SEPARATOR
+from nlp_model_gen.constants.constants import (
+    DEFAULT_REPLACE_WILDCARD, 
+    DIR_PATH_SEPARATOR,
+    MODEL_EXPORT_DEFAULT_SIZE,
+    MODEL_PACKAGING_EXTENSION,
+    MODEL_PARTITION_EXTENSION,
+    MODEL_TMP_JOINT_FILE_NAME,
+    PATH_SEPARATOR
+)
 
 # @Base cfg
-from nlp_model_gen.base import CURRENT_BASE_PATH
+from nlp_model_gen.base import CURRENT_BASE_PATH, FILE_JOIN_OPERATOR, EXPORT_FORMAT, SPLIT_FILE_OPERATOR
 
 def get_absoulute_path(path):
     """
@@ -130,7 +139,7 @@ def remove_dir(path_from_root, is_absolute_path=False):
     except Exception as e:
         ErrorHandler.raise_error('E-0015', [{'text': e, 'color': ERROR_COLOR}])
 
-def dictionary_to_disk(path_from_root, dictionary):
+def dictionary_to_disk(path_from_root, dictionary, is_absolute_path=False):
     """
     Guarda un diccionario a un archivo en disco.
 
@@ -139,7 +148,9 @@ def dictionary_to_disk(path_from_root, dictionary):
     :dictionary: diccionario a guardar.
     """
     try:
-        absolute_path = get_absoulute_path(path_from_root)
+        absolute_path = path_from_root
+        if not is_absolute_path:
+            absolute_path = get_absoulute_path(path_from_root)
         arch = open(absolute_path, 'w')
         arch.write(json.dumps(dictionary))
         arch.close()
@@ -237,3 +248,82 @@ def get_file_name(file):
     :return: [String] - Nombre del archivo
     """
     return os.path.basename(file.name)
+
+def join_zip_model(model_path, model_id):
+    """
+    Localiza y consolida los archivos de un modelo descargado como un único archivo.
+
+    :model_path: [String] - Ruta al directorio del modelo.
+
+    :model_id: [String] - Id del modelo a importar.
+    """
+    concat_operator = FILE_JOIN_OPERATOR
+    file_path_input = '%s%s%s%s*' % (model_path, DIR_PATH_SEPARATOR, model_id, MODEL_PACKAGING_EXTENSION)
+    file_path_output = '%s%s%s' % (model_path, DIR_PATH_SEPARATOR, MODEL_TMP_JOINT_FILE_NAME)
+    os.system('%s %s > %s' % (concat_operator, file_path_input, file_path_output))
+
+def unzip_model(model_path, model_id):
+    """
+    Descomprime un modelo importado a partir del directorio donde se encuentra
+    descargado.
+
+    :model_path: [String] - Directorio donde se encuentran los archivos de modelo.
+    """
+    try:
+        join_zip_model(model_path, model_id)
+        model_main_file = '%s%s%s' % (model_path, DIR_PATH_SEPARATOR, MODEL_TMP_JOINT_FILE_NAME)
+        zip_ref = ZipFile(model_main_file, 'r')
+        zip_ref.extractall(model_path)
+        zip_ref.close()
+    except Exception as e:
+        ErrorHandler.raise_error('E-0120', [{'text': e, 'color': ERROR_COLOR}])
+
+def zip_model(model_path, output_path, model_id, split):
+    """
+    Comprime un modelo para exportarlo.
+
+    :model_path: [String] - Ruta absoluta a la ubicación del modelo.
+
+    :output_path: [String] - Ruta absoluta donde guardar el modelo.
+
+    :model_id: [String] - Id del modelo.
+
+    :split: [boolean] - Indica si se debe particionar el modelo.
+    """
+    try:
+        model_output_path = build_path(output_path, '%s' % model_id)
+        shutil.make_archive(model_output_path, EXPORT_FORMAT, model_path)
+        if split:
+            os.system('%s %s %s%s %s%s' % (
+                SPLIT_FILE_OPERATOR,
+                MODEL_EXPORT_DEFAULT_SIZE, 
+                model_output_path, 
+                MODEL_PACKAGING_EXTENSION, 
+                model_output_path, 
+                MODEL_PARTITION_EXTENSION
+            ))
+    except Exception as e:
+        ErrorHandler.raise_error('E-0121', [{'text': e, 'color': ERROR_COLOR}])
+
+def remove_files(path, file_prefix):
+    """
+    Elimina un conjunto de archivos que tienen el mismo prefijo de la ruta seleccionada.
+
+    :path: [String] - Ruta al directorio donde se encuentran los archivos.
+
+    :file_prefix: [String] - Cadena de caracteres con la que comienza el nombre de los
+    archivos.
+    """
+    for filename in [filename for filename in os.listdir(path) if filename.startswith(file_prefix)]:
+        file_path = build_path(path, filename)
+        os.remove(file_path)
+
+def copy_dir(path_from, path_to):
+    """
+    Copia el contenido de un directorio dentro de otro.
+
+    :path_from: [String] - Directorio de origen.
+
+    :path_to: [String] - Directorio de destino.
+    """
+    shutil.copytree(path_from, path_to)

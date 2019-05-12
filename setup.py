@@ -26,6 +26,7 @@ setuptools.setup(
         'pymongo >=3.7.2',
         'schema >=0.6.8',
         'termcolor >=1.1.0',
-        'terminaltables >=3.1.0'
+        'terminaltables >=3.1.0',
+        'gitpython >=2.1.11'
     ]
 )
