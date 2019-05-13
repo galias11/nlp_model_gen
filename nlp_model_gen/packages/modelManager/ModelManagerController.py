@@ -22,7 +22,6 @@ from nlp_model_gen.packages.logger.assets.logColors import ERROR_COLOR
 
 # @Classes
 from nlp_model_gen.utils.classUtills import ObservableSingleton
-from nlp_model_gen.packages.modelManager.analyzerException.AnalyzerException import AnalyzerException
 from .modelDataManager.ModelDataManager import ModelDataManager
 from .modelLoader.ModelLoader import ModelLoader
 from .model.Model import Model
@@ -338,17 +337,12 @@ class ModelManagerController(ObservableSingleton):
             source = REMOTE_MODEL_SOURCE
         cfg = ModelLoader.import_model(model_id, source)
         analyzer_exceptions_set_data = cfg['analyzer_exceptions_set']
-        analyzer_exceptions_set = [AnalyzerException(exception['base_form'], exception['token_text'], exception['enabled']) for exception in analyzer_exceptions_set_data]
         Logger.log('L-0179')
         ModelDataManager.save_model_data(model_id, cfg['model_name'], cfg['description'], cfg['author'], model_id, cfg['analyzer_rules_set'])
-        remote_model = Model(model_id, cfg['model_name'], cfg['description'], cfg['author'], model_id, cfg['analyzer_rules_set'], analyzer_exceptions_set)
+        remote_model = Model(model_id, cfg['model_name'], cfg['description'], cfg['author'], model_id, cfg['analyzer_rules_set'], [])
         self.__models.append(remote_model)
         for exception in analyzer_exceptions_set_data:
-            try:
-                # No se desea que falle la importación por existir excepciones anteriores (ver TF-0017)
-                self.add_analyzer_exception(model_id, exception['base_form'], exception['token_text'], exception['enabled'])
-            except:
-                pass
+            self.add_analyzer_exception(model_id, exception['base_form'], exception['token_text'], exception['enabled'])
         Logger.log('L-0188')
         Logger.log('L-0197')
 
