@@ -10,7 +10,8 @@ from nlp_model_gen.constants.constants import (MODEL_MANAGER_DB, MODEL_MANAGER_M
 # @Helpers
 from nlp_model_gen.utils.dbUtils import ( 
     db_delete_item,
-    db_get_items, 
+    db_delete_items,
+    db_get_items,
     db_insert_item,
     db_update_item
 )
@@ -106,9 +107,10 @@ class ModelDataManager:
         :model_id: [String] - Id del modelo a eliminar.
         """
         Logger.log('L-0066')
-        delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
-        if delete_count <= 0:
+        model_delete_count = db_delete_item(MODEL_MANAGER_DB, MODEL_MANAGER_MODELS_COLLECTION, {'model_id': model_id}).deleted_count
+        if model_delete_count <= 0:
             ErrorHandler.raise_error('E-0072')
+        db_delete_items(MODEL_MANAGER_DB, ANALYZER_EXCEPTIONS_COLLECTION, {'model_id': model_id})
 
     @staticmethod
     def add_analyzer_exception(model_id, base_form, token_text, enabled=True):
