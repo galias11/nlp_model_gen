@@ -9,6 +9,7 @@ from nlp_model_gen.constants.constants import (
 
 # @Classes
 from nlp_model_gen.packages.applicationModule.ApplicationModuleController import ApplicationModuleController
+from nlp_model_gen.packages.modelManager.ModelManagerController import ModelManagerController
 from ..task.Task import Task
 
 class TextAnalysisTask(Task):
@@ -38,7 +39,9 @@ class TextAnalysisTask(Task):
 
         :return: [boolean] - True si el modelo esta releacionado, False en caso contrario.
         """
-        return model_id == self.__model_id
+        model_manager = ModelManagerController()
+        model = model_manager.get_model(self.__model_id)
+        return model_id == self.__model_id and not model.is_loaded()
 
     def task_init_hook(self):
         """
