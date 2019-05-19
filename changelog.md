@@ -105,3 +105,22 @@
 #### Hotfix
 
 - TF-0079: Hotfix: Model creation process
+
+## Version 0.1.12:
+
+#### New features
+
+- TF-0085: Feature: Importar y exportar modelos.
+
+#### Tasks /  Improvements
+
+- TF-0081: Mejorar la estructura de los objetos de respuesta de las tareas de análisis.
+
+#### Bugs fixed
+
+- TFI-0012: La generación de palabras con acento omite muchos términos útiles.
+- TFI-0013: Corregir la configuración por defecto del fuzzy term generator.
+- TFI-0014: Corregir la longitud máxima del texto a analizar.
+- TFI-0016: Corregir initicialización de los ids incrementales.
+- TFI-0017: Corregir proceso de borrado d emodelos para que borre las excepciones al analizador.
+- TFI-0015: Permitir el análisis paralelo cuando el modelo a utilizar ya esta cargado en memoria.
