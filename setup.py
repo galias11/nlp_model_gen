@@ -6,7 +6,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='nlp_model_gen',
-    version='0.1.12.1',
+    version='0.1.12.2',
     author='Gerardo Alias',
     author_email='alias_gerardo@yahoo.com.ar',
     description='A spaCy model customizer and management tool',
@@ -22,7 +22,7 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-        'spacy >=2.0.18',
+        'spacy ==2.0.18 ',
         'pymongo >=3.7.2',
         'schema >=0.6.8',
         'termcolor >=1.1.0',
