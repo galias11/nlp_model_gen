@@ -13,3 +13,4 @@ tmp
 dist
 build
 nlp_model_gen.egg-info
+logs
