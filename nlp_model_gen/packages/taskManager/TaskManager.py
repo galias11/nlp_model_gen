@@ -1,5 +1,5 @@
 # @Vendors
-import time
+from threading import Lock
 
 # @Logger
 from nlp_model_gen.packages.logger.Logger import Logger
@@ -12,6 +12,9 @@ from nlp_model_gen.packages.logger.assets.logColors import HIGHLIGHT_COLOR
 
 # @Constants
 from nlp_model_gen.constants.constants import TASK_STATUS_QUEUED, TASK_STATUS_RUNNING
+
+# @Base config
+from nlp_model_gen.base import MAX_CONCURRENT_TASKS
 
 # @Classes
 from nlp_model_gen.utils.classUtills import Observer
@@ -26,27 +29,36 @@ class TaskManager(Observer):
         self.__active_tasks = list([])
         self.__completed_tasks = list([])
         self.__last_id = 0
+        self.__lock = Lock()
 
     def update(self, data):
         """
         Escucha a las tareas y realiza las actualizaciones necesarias
         """
-        Logger.log('L-0235')
-        task = data
-        self.__move_completed_task(task)
-        if not self.__active_tasks:
-            Logger.log('L-0236')
-            return
-        for active_task in self.__active_tasks:
-            Logger.log('L-0237', [{'text': active_task.get_id(), 'color': HIGHLIGHT_COLOR}])
-            active_task_status = active_task.get_task_status_data()
-            active_task_data = active_task.get_task_data()
-            model_id = active_task_data.get('model_id', None)
-            model_name = active_task_data.get('model_name', None)
-            if active_task_status['status'] == TASK_STATUS_QUEUED and not self.__check_active_status_for_model(model_id, model_name):
-                active_task.init()
-            time.sleep(5)
-        Logger.log('L-0238')
+        try:
+            self.__lock.acquire()
+            Logger.log('L-0235')
+            task = data
+            self.__move_completed_task(task)
+            if not self.__active_tasks:
+                Logger.log('L-0236')
+                return
+            running_tasks_count = len([task for task in self.__active_tasks if task.get_task_status_data()['status'] == TASK_STATUS_RUNNING])
+            for active_task in self.__active_tasks:
+                if not running_tasks_count <= MAX_CONCURRENT_TASKS:
+                    break
+                active_task_status = active_task.get_task_status_data()
+                active_task_data = active_task.get_task_data()
+                model_id = active_task_data.get('model_id', None)
+                model_name = active_task_data.get('model_name', None)
+                if active_task_status['status'] == TASK_STATUS_QUEUED and not self.__check_active_status_for_model(model_id, model_name):
+                    running_tasks_count += 1
+                    active_task.init()
+            Logger.log('L-0238')
+        except:
+            pass
+        finally:
+            self.__lock.release()
 
     def __get_next_task_id(self):
         """
