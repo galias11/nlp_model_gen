@@ -41,6 +41,8 @@ class TextAnalysisTask(Task):
         """
         model_manager = ModelManagerController()
         model = model_manager.get_model(self.__model_id)
+        if not model:
+            return False
         return model_id == self.__model_id and not model.is_loaded()
 
     def task_init_hook(self):
