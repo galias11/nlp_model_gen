@@ -87,12 +87,19 @@ class TaskManager(Observer):
         :is_able_to_start: [boolean] - Indica si la tarea se puede inicializar inmediatamente 
         después de creada.
         """
-        Logger.log('L-0227')
-        self.__active_tasks.append(task)
-        task.add_observer(self)
-        Logger.log('L-0228')
-        if is_able_to_start:
-            task.init()
+        try:
+            self.__lock.acquire()
+            Logger.log('L-0227')
+            self.__active_tasks.append(task)
+            task.add_observer(self)
+            Logger.log('L-0228')
+            running_tasks_count = len([task for task in self.__active_tasks if task.get_task_status_data()['status'] == TASK_STATUS_RUNNING])
+            if is_able_to_start and running_tasks_count <= MAX_CONCURRENT_TASKS and not task.is_alive():
+                task.init()
+        except:
+            pass
+        finally:
+            self.__lock.release()
 
     def __move_completed_task(self, task):
         """
